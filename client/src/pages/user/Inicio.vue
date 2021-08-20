@@ -81,7 +81,8 @@
         <div class="text-h6 text-bold text-primary q-mt-sm">Nuestro Blog</div>
         <div class="row justify-between">
           <div class="col text-caption text-grey-8">Lee nuestro blog para potenciar tu aprendizaje</div>
-          <div class="col-2 text-caption text-primary cursor-pointer">Ver todo</div>
+          <div class="col-2 text-caption text-primary cursor-pointer"
+          @click="$router.push('/blog_user')">Ver todo</div>
         </div>
         <q-scroll-area v-if="blogs.length" horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 270px; width: 100%;">
           <div class="row no-wrap q-gutter-md">

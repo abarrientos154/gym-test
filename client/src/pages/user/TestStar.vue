@@ -32,19 +32,24 @@
                     </q-card>
 
                     <q-card clickable v-ripple class="bordes q-pa-none q-my-sm row items-center" v-for="(option, index2) in item.respuestas" :key="index2" style="width: 100%; border-radius: 10px;"
-                    @click="answerSelected(option, item)">
+                    @click="!listo ? answerSelected(option, item) : ''">
                       <q-item class="q-pa-none row" style="width:100%">
                         <q-item-section side class="q-py-sm q-px-md q-ma-none text-h6 bg-primary text-white"
                         style="border-top-left-radius: 10px; border-bottom-left-radius: 10px">{{index2 + 1}}</q-item-section>
-                        <q-item-section :class="option.isActive ? 'bg-primary text-white' : 'bg-white text-primary'" class="q-px-sm q-ma-none"
+                        <q-item-section :class="!listo ? option.isActive ? 'bg-primary text-white' : 'bg-white text-primary' : (option.isActive && item.selected) || (option.value === item.result) ? 'bg-positive text-white' : option.isActive && !item.selected ? 'bg-negative text-white' : 'bg-white text-primary'" class="q-px-sm q-ma-none"
                         style="border-top-right-radius: 10px; border-bottom-right-radius: 10px">{{option.title}}</q-item-section>
                       </q-item>
                     </q-card>
 
                     <div class="column items-center q-pt-md" style="width:100%;">
-                        <q-btn no-caps color="primary" :label="index + 1 === preguntas.length ? 'Terminar' : 'Responder'" style="width:90%" size="md"
+                        <q-btn :loading="loading" no-caps color="primary" :label="index + 1 === preguntas.length ? 'Terminar' : 'Responder'" style="width:90%" size="md"
                         :disable="index + 1 === preguntas.length ? false : item.isActive ? false : true"
-                        @click="$refs.carousel.next()" />
+                        @click="!listo ? responder(index + 1 === preguntas.length ? true : false) : ''" >
+                          <template v-slot:loading>
+                            <q-spinner-hourglass class="on-left" />
+                            Procesando...
+                          </template>
+                        </q-btn>
                     </div>
                 </div>
             </q-carousel-slide>
@@ -56,6 +61,10 @@
 export default {
   data () {
     return {
+      timeCounter1: null,
+      timeCounter2: null,
+      listo: false,
+      loading: false,
       slide: 1,
       preguntas: [
         {
@@ -98,6 +107,33 @@ export default {
         pregunta.selected = true
       } else {
         pregunta.selected = false
+      }
+    },
+    responder (bool) {
+      this.$q.loading.show()
+      this.loading = true
+      this.timeCounter1 = setInterval(ver, 2000)
+      const vm = this
+
+      function ver () {
+        vm.listo = true
+        clearInterval(vm.timeCounter1)
+        vm.$q.loading.hide()
+        vm.timeCounter2 = setInterval(timer, 3000)
+        return true
+      }
+
+      function timer () {
+        if (bool) {
+          clearInterval(vm.timeCounter2)
+          vm.$router.go(-1)
+        } else {
+          vm.$refs.carousel.next()
+          vm.listo = false
+          clearInterval(vm.timeCounter2)
+        }
+        vm.loading = false
+        return true
       }
     }
   }
