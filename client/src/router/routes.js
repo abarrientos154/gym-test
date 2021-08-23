@@ -16,7 +16,9 @@ const routes = [
       { path: '/date_exams', component: () => import('pages/admin/DateExams.vue') }, */
       // User
       { path: '/inicio', component: () => import('pages/user/Inicio.vue') },
+      { path: '/perfil', component: () => import('pages/user/Perfil.vue') },
       { path: '/blog_user', component: () => import('pages/user/Blog.vue') },
+      { path: '/blog/:id', component: () => import('pages/user/PublicidadBlog.vue') },
       { path: '/examen/:id', component: () => import('pages/user/Examen.vue') },
       { path: '/temas', component: () => import('pages/user/Temas.vue') },
       { path: '/tema/:id', component: () => import('pages/user/TestStar.vue') }

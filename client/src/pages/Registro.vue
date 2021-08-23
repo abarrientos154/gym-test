@@ -9,7 +9,7 @@
         </div>
         <div class="q-pa-md absolute-full" v-else>
           <q-img src="gymtest 1.png" style="width: 150px; margin-left: -15px;"/>
-          <div class="text-h6 text-white">Bienvenido {{form.email}}</div>
+          <div class="text-h6 text-white">Bienvenido {{form.name}}</div>
           <div class="text-white">Queremos conocerte más</div>
           <div class="column items-center justify-center q-pt-md">
             <q-avatar size="140px" class="bg-grey-5">

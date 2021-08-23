@@ -63,14 +63,14 @@
 
         <div class="text-h6 text-bold text-primary q-mt-sm">Materias</div>
         <div class="text-caption text-grey-8">Todas nuestras materias</div>
-        <q-scroll-area v-if="materias.length" horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 160px; width: 100%;">
+        <q-scroll-area v-if="materias.length" horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 140px; width: 100%;">
           <div class="row no-wrap q-gutter-md">
-            <q-card flat style="width: 150px; height: 150px" clickable v-ripple v-for="(item, index) in materias" :key="index"
+            <q-card flat style="width: 130px; height: 130px" clickable v-ripple v-for="(item, index) in materias" :key="index"
             @click="$router.push('/examen/' + item)">
               <q-img src="materia1 1.png" style="height: 100%; width: 100%; border-radius: 10px">
                 <div class="absolute-full column justify-center items-center">
-                  <q-icon name="person" color="white" size="50px" />
-                  <div class="text-h6">Nombre</div>
+                  <q-icon name="image" color="white" size="50px" />
+                  <div class="text-subtitle1">Nombre</div>
                 </div>
               </q-img>
             </q-card>
@@ -87,7 +87,7 @@
         <q-scroll-area v-if="blogs.length" horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 270px; width: 100%;">
           <div class="row no-wrap q-gutter-md">
             <q-card flat style="width: 200px; height: 200px" clickable v-ripple v-for="(item, index) in blogs" :key="index"
-            >
+            @click="$router.push('/blog/' + item)">
               <q-img src="materia1 1.png" style="height: 100%; width: 100%; border-radius: 10px">
                 <div class="absolute-full column justify-end">
                   <div class="text-h6 text-center">Nombre del blog</div>
@@ -122,7 +122,6 @@ export default {
   },
   mounted () {
     this.baseuPerfil = env.apiUrl + 'perfil_img/'
-    console.log(this.baseuPerfil)
     this.getUser()
   },
   methods: {
@@ -130,7 +129,6 @@ export default {
       this.$api.get('user_info').then(v => {
         if (v) {
           this.user = v
-          console.log('usuario', v)
         }
       })
     }

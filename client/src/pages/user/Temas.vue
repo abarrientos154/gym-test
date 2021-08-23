@@ -4,7 +4,7 @@
     <q-img src="image 5.png" style="height: 350px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
         <div class="row items-center q-mb-xl absolute-bottom bg-transparent">
           <img src="balance 3.png" style="width: 50px" >
-          <div class="text-h5 text-bold q-pl-sm">Test</div>
+          <div class="text-h4 text-bold q-pl-sm">Test</div>
         </div>
     </q-img>
 
@@ -80,3 +80,9 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.bordes {
+  border: 1px solid $primary;
+}
+</style>

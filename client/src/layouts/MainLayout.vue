@@ -112,13 +112,13 @@ export default {
         },
         {
           icon: 'apps',
-          label: 'Desafios',
-          ruta: ''
+          label: 'Blog',
+          ruta: 'blog_user'
         },
         {
           icon: 'person',
-          label: 'Desafios',
-          ruta: ''
+          label: 'Perfil',
+          ruta: '/perfil'
         },
         {
           icon: 'logout',
