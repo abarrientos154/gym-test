@@ -170,7 +170,7 @@ export default {
       this.$api.get('examen').then(res => {
         if (res) {
           this.examenes = res
-          console.log(this.examenes)
+          // console.log(this.examenes)
         }
         this.$q.loading.hide()
       })

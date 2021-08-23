@@ -20,6 +20,10 @@ class AnswerController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
+  async indexAnswer ({ response }) {
+    let data = await Answer.all()
+    response.send(data)
+  }
   async index ({ request, response, auth }) {
     const user = (await auth.getUser()).toJSON()
     let desafio = (await Desafios.query().where({status2: 0, desafiado_id: user._id}).first())

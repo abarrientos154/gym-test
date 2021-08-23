@@ -50,8 +50,6 @@ addPrefixToGroup(
     Route.get("user_info", "UserController.userInfo")
     Route.get("all_user", "UserController.index")
     Route.put('updateUser/:id', 'UserController.update')
-    Route.put('update_user_info/:id', 'UserController.updateUserInfo')
-    Route.put('update_perfilImg', 'UserController.updatePerfilImg')
 
     Route.get('course', 'AsignaturaController.index')
     Route.get('asignatura_by_id/:id', 'AsignaturaController.getAsignaturaById')
@@ -60,6 +58,21 @@ addPrefixToGroup(
 
     Route.get('topics', 'TopicController.index')
     Route.post('excel_topic', 'TopicController.excelTopic')
+
+    Route.post('excel_law', 'UploadController.excelLaw')
+    Route.get('laws', 'LawController.index')
+
+    Route.post('excel_answer', 'UploadController.excelAnswer')
+    Route.get('answers', 'AnswerController.indexAnswer')
+
+    Route.post('excel_subTopic', 'UploadController.excelSubTopic')
+    Route.get('subTopics', 'SubTopicController.index')
+
+    Route.post('excel_type', 'UploadController.excelType')
+    Route.get('types', 'TypeController.index')
+
+    Route.post('excel_article', 'UploadController.excelArticle')
+    Route.get('articles', 'ArticleController.index')
 
     /* Route.get('test_by_course/:id', 'NivelesController.testByCourse')
     Route.get('testbByCourse/:id', 'NivelesController.testByCourseId')
@@ -81,8 +94,6 @@ addPrefixToGroup(
 
     Route.get('placesByCommunityId/:id', 'PlaceController.show')
 
-    Route.post('uploadExcel', 'UploadController.excel')
-    Route.post('bigData', 'UploadController.bigData')
 
     Route.post('newQuest', 'QuestionController.store')
     Route.post('excel_question', 'QuestionController.excelQuestion')

@@ -165,7 +165,7 @@ export default {
       this.$api.get('blogs').then(res => {
         if (res) {
           this.blogs = res
-          console.log(this.blogs)
+          // console.log(this.blogs)
         }
         this.$q.loading.hide()
       })

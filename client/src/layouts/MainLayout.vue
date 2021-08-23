@@ -87,6 +87,36 @@ export default {
           ruta: '/exams'
         },
         {
+          src: '',
+          src2: '',
+          label: 'Articulos',
+          ruta: '/articles'
+        },
+        {
+          src: '',
+          src2: '',
+          label: 'Leyes',
+          ruta: '/laws'
+        },
+        {
+          src: '',
+          src2: '',
+          label: 'Respuestas',
+          ruta: '/answers'
+        },
+        {
+          src: '',
+          src2: '',
+          label: 'Sub Temas',
+          ruta: '/subTopics'
+        },
+        {
+          src: '',
+          src2: '',
+          label: 'Tipos',
+          ruta: '/types'
+        },
+        {
           src: 'blog 1.png',
           src2: 'blog 12.png',
           label: 'Blog',
