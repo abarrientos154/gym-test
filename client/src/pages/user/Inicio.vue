@@ -66,11 +66,11 @@
         <q-scroll-area v-if="materias.length" horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 140px; width: 100%;">
           <div class="row no-wrap q-gutter-md">
             <q-card flat style="width: 130px; height: 130px" clickable v-ripple v-for="(item, index) in materias" :key="index"
-            @click="$router.push('/examen/' + item)">
+            @click="$router.push('/examen/' + item._id)">
               <q-img src="materia1 1.png" style="height: 100%; width: 100%; border-radius: 10px">
-                <div class="absolute-full column justify-center items-center">
-                  <q-icon name="image" color="white" size="50px" />
-                  <div class="text-subtitle1">Nombre</div>
+                <div class="absolute-full column justify-end items-center q-pa-none">
+                  <!-- <q-icon name="image" color="white" size="50px" /> -->
+                  <div class="text-subtitle1 ellipsis-2-lines">{{item.name}}</div>
                 </div>
               </q-img>
             </q-card>
@@ -123,6 +123,7 @@ export default {
   mounted () {
     this.baseuPerfil = env.apiUrl + 'perfil_img/'
     this.getUser()
+    this.getTemas()
   },
   methods: {
     getUser () {
@@ -130,6 +131,17 @@ export default {
         if (v) {
           this.user = v
         }
+      })
+    },
+    getTemas () {
+      this.$q.loading.show({
+        message: 'Cargando datos...'
+      })
+      this.$api.get('topics').then(res => {
+        if (res) {
+          this.materias = res
+        }
+        this.$q.loading.hide()
       })
     }
   }

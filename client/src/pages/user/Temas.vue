@@ -49,7 +49,7 @@
                     <div class="q-pr-xs ellipsis">10ptos/10ptos</div>
                     <q-card clickable v-ripple class="bg-primary q-px-sm">
                         <div class="text-center text-white text-caption"
-                        @click="$router.push('/tema/idtema')">Realizar</div>
+                        >Realizar</div>
                     </q-card>
                 </div>
             </div>
