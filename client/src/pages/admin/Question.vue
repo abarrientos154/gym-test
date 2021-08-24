@@ -4,18 +4,18 @@
     <!-- <q-img src="noimg.png" style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; height: 265px; width: 100%;"/> -->
     <div class="column q-pa-lg no-wrap" style="margin-top: -200px">
       <div class="text-h4 text-white text-bold q-mb-xl q-px-xl">Preguntas</div>
-      <div>
-        <div class="text-h5 text-white q-mb-sm q-px-md">Preguntas recientes</div>
-        <q-scroll-area horizontal style="height: 175px">
+      <div class="text-h5 text-white q-mb-sm q-px-md">Preguntas recientes</div>
+      <div class="column">
+        <q-scroll-area horizontal style="height: 280px;">
           <div class="full-width row no-wrap">
-            <q-card class="q-mr-md column bordes" v-for="(item, index) in questions" :key="index" style="width: 275px;">
+            <q-card class="q-mr-md column bordes" v-for="(item, index) in questions" :key="index" style="min-width: 275px; max-width: 400px">
               <q-card-section class="col" horizontal>
                 <q-card-section class="col column justify-between">
-                  <div class="text-subtitle1 text-bold text-primary">{{item.title}}</div>
+                  <div class="text-subtitle1 text-bold text-primary" style="min-width: 275px; max-width: 400px">{{item.title}}</div>
                   <div class="column justify-between">
                     <div class="row items-center text-grey">
                       <q-icon size="20px" name="date_range" class="q-mr-xs"/>
-                      <div>{{item.tema}}</div>
+                      <div>{{item.topic}}</div>
                     </div>
                     <div class="row items-center text-grey">
                       <q-icon size="20px" name="account_tree" class="q-mr-xs"/>
@@ -28,8 +28,8 @@
                   </div>
                 </q-card-section>
                 <q-separator color="primary" vertical/>
-                <q-card-section class="column">
-                  <div class="col column items-center justify-between">
+                <q-card-section class="column" style="width: 90px">
+                  <div class="col column items-center justify-around">
                     <q-btn flat dense>
                       <q-img src="visibility.png" style="height: 25px; width: 35px;"/>
                     </q-btn>
@@ -261,7 +261,7 @@ export default {
       })
       this.$api.get('getQuestions').then(res => {
         if (res) {
-          this.questions = res.slice(0, 10)
+          this.questions = res.slice(0, 20)
           // console.log(this.questions)
         }
         this.$q.loading.hide()
