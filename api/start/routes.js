@@ -58,6 +58,10 @@ addPrefixToGroup(
 
     Route.get('topics', 'TopicController.index')
     Route.get('topic_by_id/:id', 'TopicController.getTopicById')
+    Route.post('topic_test', 'TopicController.testCreate')
+    Route.put('topic_test/:id', 'TopicController.testUpdate')
+    Route.get('topic_test_by_id/:id', 'TopicController.getTestById')
+    Route.get('topic_result_by_id/:id', 'TopicController.getTestResult')
     Route.post('excel_topic', 'TopicController.excelTopic')
 
     Route.post('excel_law', 'UploadController.excelLaw')

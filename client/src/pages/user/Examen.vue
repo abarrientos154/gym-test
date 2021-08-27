@@ -13,16 +13,16 @@
             <div class="col-6">
                 <div class="text-bold text-primary">Tema</div>
                 <div class="text-caption text-grey-8">Tema seleccionado</div>
-                <div class="q-pt-sm">
-                    <q-img src="image 5.png" style="width: 100px; height: 100px;" ></q-img>
-                </div>
+                <div class="q-pt-sm q-pr-xs text-italic text-grey-9 text-caption">{{tema.long_name}}</div>
             </div>
             <div class="col-6">
                 <div class="text-bold text-primary">Sub temas</div>
                 <div class="text-caption text-grey-8">Sub temas incluidos</div>
                 <div v-if="subTemas.length">
-                  <q-card clickable v-ripple class="bg-primary q-px-xs q-mb-sm" v-for="(item, index) in subTemas" :key="index" style="border-radius: 5px">
-                    <div class="text-caption text-center text-white ellipsis">{{item.process}}</div>
+                  <q-card clickable v-ripple v-for="(item, index) in subTemas" :key="index" style="border-radius: 5px"
+                    :class="selectedSubTemas.find(v => v._id === item._id) ? 'bg-primary text-white' : 'bg-white text-primary'" class="bordes q-px-xs q-mb-sm"
+                    @click="selecSub(item)">
+                    <div class="text-caption text-center">{{item.process}}</div>
                 </q-card>
                 </div>
                 <div v-else class="text-center text-grey-8 q-pt-md">Sin sub temas</div>
@@ -36,23 +36,20 @@
 
         <div class="row item-start q-my-md">
             <div class="col-6">
-                <div class="text-caption text-bold text-primary">Tiempo</div>
-                <div class="text-caption text-grey-8">Tiempo disponible 30min</div>
-                <div class="text-caption text-bold text-primary q-mt-md">Resultado anterior</div>
-                <div class="text-caption text-grey-8">10ptos de 10ptos</div>
-                <div class="text-caption text-bold text-primary q-mt-md">Año del examen</div>
-                <div class="text-caption text-grey-8">2021</div>
+                <div class="text-caption text-bold text-primary">Preguntas</div>
+                <div class="text-caption text-grey-8">Cantidad {{preguntas.length}} preguntas</div>
+                <div class="text-caption text-bold text-primary q-mt-md">Fecha de realización</div>
+                <div class="text-caption text-grey-8">{{resultado.fecha ? resultado.fecha : 'Nunca'}}</div>
             </div>
             <div class="col-6">
-                <div class="text-caption text-bold text-primary">Preguntas</div>
-                <div class="text-caption text-grey-8">Cantidad {{tema.questions ? tema.questions.length : ''}} preguntas</div>
-                <div class="text-caption text-bold text-primary q-mt-md">Fecha de realización</div>
-                <div class="text-caption text-grey-8">10/10/2021</div>
+                <div class="text-caption text-bold text-primary">Resultados del test</div>
+                <div class="text-caption text-grey-8">Respondidas: {{resultado.total_quest}}</div>
+                <div class="text-caption text-grey-8">Correctas: {{resultado.correctas}}</div>
             </div>
         </div>
         <div class="row justify-center">
           <q-btn no-caps color="primary" label="Iniciar test" style="width:80%"
-          @click="$router.push('/tema/' + tema._id)" />
+          @click="iniciarTest()" />
         </div>
     </div>
   </div>
@@ -63,7 +60,10 @@ export default {
   data () {
     return {
       tema: {},
-      subTemas: []
+      resultado: {},
+      subTemas: [],
+      selectedSubTemas: [],
+      preguntas: []
     }
   },
   mounted () {
@@ -77,12 +77,64 @@ export default {
       this.$api.get('topic_by_id/' + this.$route.params.id).then(res => {
         if (res) {
           this.tema = res
+          this.preguntas = res.questions
           this.subTemas = res.subTemas
-          console.log(res)
+          this.$api.get('topic_result_by_id/' + this.tema.tema).then(v => {
+            if (v) {
+              this.resultado = v
+            }
+          })
+          this.$q.loading.hide()
         }
-        this.$q.loading.hide()
       })
+    },
+    selecSub (item) {
+      if (this.selectedSubTemas.find(v => v._id === item._id)) {
+        this.selectedSubTemas = this.selectedSubTemas.filter(v => v._id !== item._id)
+      } else {
+        this.selectedSubTemas.push(item)
+      }
+      if (this.selectedSubTemas.length) {
+        this.preguntas = this.tema.questions.filter(v => {
+          if (this.selectedSubTemas.find(x => x.process === v.process)) {
+            return v
+          } else {
+            return false
+          }
+        })
+      } else {
+        this.preguntas = this.tema.questions
+      }
+    },
+    iniciarTest () {
+      if (this.preguntas.length) {
+        this.$q.loading.show()
+        const data = {
+          tema_id: this.tema.tema,
+          tema_name: this.tema.name,
+          subTemas: this.selectedSubTemas
+        }
+        this.$api.post('topic_test', data).then(res => {
+          if (res) {
+            this.$router.push('/tema/' + res._id)
+            this.$q.loading.hide()
+          } else {
+            this.$q.loading.hide()
+          }
+        })
+      } else {
+        this.$q.notify({
+          message: 'No hay preguntas para iniciar el test',
+          color: 'black'
+        })
+      }
     }
   }
 }
 </script>
+
+<style scoped lang="scss">
+.bordes {
+  border: 1px solid $primary;
+}
+</style>

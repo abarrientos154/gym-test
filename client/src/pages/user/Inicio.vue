@@ -67,16 +67,47 @@
           <div class="row no-wrap q-gutter-md">
             <q-card flat style="width: 130px; height: 130px" clickable v-ripple v-for="(item, index) in materias" :key="index"
             @click="$router.push('/examen/' + item._id)">
-              <q-img src="materia1 1.png" style="height: 100%; width: 100%; border-radius: 10px">
-                <div class="absolute-full column justify-end items-center q-pa-none">
-                  <!-- <q-icon name="image" color="white" size="50px" /> -->
-                  <div class="text-subtitle1 ellipsis-2-lines">{{item.name}}</div>
+              <q-img src="materia2 2.png" style="height: 100%; width: 100%; border-radius: 10px">
+                <div class="absolute-full row items-end">
+                  <div class="text-subtitle2 ellipsis-2-lines">{{item.name}}</div>
                 </div>
               </q-img>
             </q-card>
           </div>
         </q-scroll-area>
         <div v-else class="text-center text-bold text-grey-9 q-py-lg">Sin materias actualmente</div>
+
+        <div class="text-h6 text-bold text-primary q-mt-sm">Gym</div>
+        <div class="text-caption text-grey-8">Todas nuestras materias</div>
+        <q-scroll-area v-if="gym.length" horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 140px; width: 100%;">
+          <div class="row no-wrap q-gutter-md">
+            <q-card flat style="width: 130px; height: 130px" clickable v-ripple v-for="(item, index) in gym" :key="index"
+            >
+              <q-img src="materia3 1.png" style="height: 100%; width: 100%; border-radius: 10px">
+                <div class="absolute-full row items-end justify-center">
+                  <div class="text-subtitle1 text-bold ellipsis-2-lines">{{item.type_name}}</div>
+                </div>
+              </q-img>
+            </q-card>
+          </div>
+        </q-scroll-area>
+        <div v-else class="text-center text-bold text-grey-9 q-py-lg">Sin entrenamiento actualmente</div>
+
+        <div class="text-h6 text-bold text-primary q-mt-sm">Examenes</div>
+        <div class="text-caption text-grey-8">Todas nuestras materias</div>
+        <q-scroll-area v-if="examenes.length" horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 140px; width: 100%;">
+          <div class="row no-wrap q-gutter-md">
+            <q-card flat style="width: 130px; height: 130px" clickable v-ripple v-for="(item, index) in examenes" :key="index"
+            >
+              <q-img src="materia1 1.png" style="height: 100%; width: 100%; border-radius: 10px">
+                <div class="absolute-full row items-end">
+                  <div class="text-subtitle2 ellipsis-2-lines">{{item.name}}</div>
+                </div>
+              </q-img>
+            </q-card>
+          </div>
+        </q-scroll-area>
+        <div v-else class="text-center text-bold text-grey-9 q-py-lg">Sin examenes actualmente</div>
 
         <div class="text-h6 text-bold text-primary q-mt-sm">Nuestro Blog</div>
         <div class="row justify-between">
@@ -117,6 +148,8 @@ export default {
         opacity: 0
       },
       materias: [1, 2, 3],
+      gym: [],
+      examenes: [],
       blogs: [1, 2, 3]
     }
   },
@@ -124,6 +157,8 @@ export default {
     this.baseuPerfil = env.apiUrl + 'perfil_img/'
     this.getUser()
     this.getTemas()
+    this.getGym()
+    this.getExamenes()
   },
   methods: {
     getUser () {
@@ -134,14 +169,24 @@ export default {
       })
     },
     getTemas () {
-      this.$q.loading.show({
-        message: 'Cargando datos...'
-      })
       this.$api.get('topics').then(res => {
         if (res) {
           this.materias = res
         }
-        this.$q.loading.hide()
+      })
+    },
+    getGym () {
+      this.$api.get('types').then(res => {
+        if (res) {
+          this.gym = res
+        }
+      })
+    },
+    getExamenes () {
+      this.$api.get('examen').then(res => {
+        if (res) {
+          this.examenes = res
+        }
       })
     }
   }

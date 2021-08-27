@@ -2,9 +2,11 @@
 const ExcelJS = require('exceljs');
 const MoveFileService = use("App/Services/MoveFileService")
 const Topic = use("App/Models/Topic")
+const TopicTest = use("App/Models/TopicTest")
 const Question = use("App/Models/Question")
 const Helpers = use('Helpers')
 const mkdirp = use('mkdirp')
+const moment = require('moment')
 var ObjectId = require('mongodb').ObjectId;
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
@@ -45,6 +47,54 @@ class TopicController {
     response.send(tema)
   }
 
+  async getTestById ({ request, response, params }) {
+    try {
+      let tema = (await TopicTest.query().where({_id: params.id}).first()).toJSON()
+      let allQuestions = (await Question.query().where({topic: tema.tema_id}).with('answers').fetch()).toJSON()
+      let questions = []
+      if (tema.subTemas.length) {
+        questions = allQuestions.filter(v => {
+          if (tema.subTemas.find(x => x.process === v.process)) {
+            return v
+          } else {
+            return false
+          }
+        })
+      } else {
+        questions = allQuestions
+      }
+      for (let i = 0; i < questions.length; i++) {
+        questions[i].answers = questions[i].answers.map(v => {
+          questions[i].selected = false
+          return {
+            ...v,
+            isActive: false
+          }
+        })
+      }
+      tema.questions = questions
+      response.send(tema)
+    } catch (error) {
+      console.error('metodo store:' + error.name + ':' + error.message);
+    }
+  }
+
+  async getTestResult ({ request, response, params }) {
+    let tests = (await TopicTest.query().where({tema_id: params.id}).fetch()).toJSON()
+    let totalQuest = 0
+    let correctas = 0
+    for (let i = 0; i < tests.length; i++) {
+      totalQuest = totalQuest + tests[i].total_quest
+      correctas = correctas + tests[i].correctas
+    }
+    let data = {
+      total_quest: totalQuest,
+      correctas: correctas,
+      fecha: tests.length ? moment(tests[tests.length - 1].created_at).format('DD/MM/YYYY') : null
+    }
+    response.send(data)
+  }
+
   /**
    * Render a form to be used for creating a new test.
    * GET tests/create
@@ -55,6 +105,37 @@ class TopicController {
    * @param {View} ctx.view
    */
   async create ({ request, response, view }) {
+  }
+
+  async testCreate ({ request, response, view }) {
+    try {
+      var data = request.all()
+      data.total_quest = 0
+      data.correctas = 0
+      let save = await TopicTest.create(data)
+
+      response.send(save)
+    } catch (error) {
+      console.error('metodo store:' + error.name + ':' + error.message);
+    }
+  }
+
+  async testUpdate ({ params, request, response }) {
+    try {
+      var respuesta = request.all()
+      let tema = await TopicTest.find(params.id)
+      tema.total_quest = tema.total_quest + 1
+      if (respuesta.selected) {
+        tema.correctas = tema.correctas + 1
+      }
+      tema.save()
+      /* let tema = (await TopicTest.query().where({_id: params.id}).first()).toJSON()
+      let update = await TopicTest.query().where('_id', params.id).update(data) */
+
+      response.send(tema)
+    } catch (error) {
+      console.error('metodo store:' + error.name + ':' + error.message);
+    }
   }
 
   /**
