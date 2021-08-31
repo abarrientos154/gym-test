@@ -22,11 +22,15 @@ const routes = [
       // User
       { path: '/inicio', component: () => import('pages/user/Inicio.vue') },
       { path: '/perfil', component: () => import('pages/user/Perfil.vue') },
+      { path: '/temas', component: () => import('pages/user/Temas.vue') },
       { path: '/blog_user', component: () => import('pages/user/Blog.vue') },
       { path: '/blog/:id', component: () => import('pages/user/PublicidadBlog.vue') },
-      { path: '/examen/:id', component: () => import('pages/user/Examen.vue') },
-      { path: '/temas', component: () => import('pages/user/Temas.vue') },
-      { path: '/tema/:id', component: () => import('pages/user/TestStar.vue') }
+      { path: '/tema/:idTema', component: () => import('pages/user/Examen.vue') },
+      { path: '/examen/:idExamen', component: () => import('pages/user/Examen.vue') },
+      { path: '/gym/:idType', component: () => import('pages/user/Examen.vue') },
+      { path: '/tema/test/:idTema', component: () => import('pages/user/TestStar.vue') },
+      { path: '/examen/test/:idExamen', component: () => import('pages/user/TestStar.vue') },
+      { path: '/gym/test/:idType', component: () => import('pages/user/TestStar.vue') }
       /* { path: '/tienda', component: () => import('pages/user/Tienda.vue') },
       { path: '/carro_de_compra/:compra', component: () => import('pages/user/CarroCompra.vue') } */
     ]

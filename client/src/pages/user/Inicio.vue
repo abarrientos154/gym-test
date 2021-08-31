@@ -66,7 +66,7 @@
         <q-scroll-area v-if="materias.length" horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 140px; width: 100%;">
           <div class="row no-wrap q-gutter-md">
             <q-card flat style="width: 130px; height: 130px" clickable v-ripple v-for="(item, index) in materias" :key="index"
-            @click="$router.push('/examen/' + item._id)">
+            @click="$router.push('/tema/' + item._id)">
               <q-img src="materia2 2.png" style="height: 100%; width: 100%; border-radius: 10px">
                 <div class="absolute-full row items-end">
                   <div class="text-subtitle2 ellipsis-2-lines">{{item.name}}</div>
@@ -82,7 +82,7 @@
         <q-scroll-area v-if="gym.length" horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 140px; width: 100%;">
           <div class="row no-wrap q-gutter-md">
             <q-card flat style="width: 130px; height: 130px" clickable v-ripple v-for="(item, index) in gym" :key="index"
-            >
+            @click="$router.push('/gym/' + item._id)">
               <q-img src="materia3 1.png" style="height: 100%; width: 100%; border-radius: 10px">
                 <div class="absolute-full row items-end justify-center">
                   <div class="text-subtitle1 text-bold ellipsis-2-lines">{{item.type_name}}</div>
@@ -98,7 +98,7 @@
         <q-scroll-area v-if="examenes.length" horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 140px; width: 100%;">
           <div class="row no-wrap q-gutter-md">
             <q-card flat style="width: 130px; height: 130px" clickable v-ripple v-for="(item, index) in examenes" :key="index"
-            >
+            @click="$router.push('/examen/' + item._id)">
               <q-img src="materia1 1.png" style="height: 100%; width: 100%; border-radius: 10px">
                 <div class="absolute-full row items-end">
                   <div class="text-subtitle2 ellipsis-2-lines">{{item.name}}</div>

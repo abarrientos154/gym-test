@@ -10,7 +10,7 @@
                 <q-btn v-if="slide > 1" class="absolute-top" round flat color="white" icon="arrow_back" @click="$refs.carousel.previous()" />
                 <div class="row justify-center">
                     <q-img src="image 5.png" style="height: 350px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
-                        <div class="row justify-end bg-transparent" style="width:100%">
+                        <div v-if="!esExamen" class="row justify-end bg-transparent" style="width:100%">
                           <q-btn :loading="loading" rounded no-caps color="primary" label="Terminar test" class="q-px-sm"
                           @click="!listo ? responder(true, item) : ''" >
                             <template v-slot:loading>
@@ -21,7 +21,7 @@
                         </div>
                         <div class="row no-wrap items-center q-mb-xl absolute-bottom bg-transparent">
                             <img src="balance 3.png" style="width: 50px" >
-                            <div class="text-h5 text-bold q-pl-sm">{{test.tema_name}}</div>
+                            <div class="text-h5 text-bold q-pl-sm">{{esTema ? test.tema_name : esExamen ? test.examen_name : test.type_name}}</div>
                         </div>
                     </q-img>
                 </div>
@@ -41,13 +41,18 @@
                     @click="!listo ? answerSelected(option, item, index + 1 === preguntas.length ? true : false) : ''">
                       <q-item class="q-pa-none row" style="width:100%">
                         <q-item-section side class="q-py-sm q-px-md q-ma-none text-h6 bg-primary text-white"
-                        style="border-top-left-radius: 10px; border-bottom-left-radius: 10px">{{index2 + 1}}</q-item-section>
+                        style="border-top-left-radius: 10px; border-bottom-left-radius: 10px">{{index2 === 0 ? 'A' : index2 === 1 ? 'B' : index2 === 2 ? 'C' : 'D'}}</q-item-section>
                         <q-item-section :class="!listo ? option.isActive ? 'bg-primary text-white' : 'bg-white text-primary' : (option.isActive && item.selected) || option.isCorrect ? 'bg-positive text-white' : option.isActive && !item.selected ? 'bg-negative text-white' : 'bg-white text-primary'" class="q-px-sm q-ma-none"
                         style="border-top-right-radius: 10px; border-bottom-right-radius: 10px">{{option.answer_name}}</q-item-section>
                       </q-item>
                     </q-card>
 
-                    <div class="row justify-between q-mt-md">
+                    <div class="row justify-end q-pb-xs">
+                      <q-btn flat no-caps color="orange" label="Ver ley"
+                      @click="infoSelec = item, verLey = true" />
+                    </div>
+
+                    <div class="row justify-between">
                       <div>
                         <q-btn v-if="index > 0 && !atras && !listo" flat no-caps color="primary" label="Respuesta anterior"
                         @click="anterior()" />
@@ -60,6 +65,15 @@
                 </div>
             </q-carousel-slide>
         </q-carousel>
+
+        <q-dialog v-model="verLey" v-if="verLey">
+          <q-card class="q-pa-md" style="width: 100%; border-radius: 15px">
+            <div class="text-bold text-primary">Ley</div>
+            <div class="text-caption text-grey-8">{{infoSelec.leyInfo.acronym_law ? '(' + infoSelec.leyInfo.acronym_law + ')' : ''}} {{infoSelec.leyInfo.law_name}}</div>
+            <div class="text-bold text-primary q-pt-md">{{infoSelec.articuloInfo.article_name}}</div>
+            <div class="text-caption text-grey-8">{{infoSelec.articuloInfo.paragraph_text}}</div>
+          </q-card>
+        </q-dialog>
   </div>
 </template>
 
@@ -72,15 +86,31 @@ export default {
       listo: false,
       atras: false,
       loading: false,
+      verLey: false,
+      esTema: false,
+      esExamen: false,
+      idTest: '',
       slide: 1,
       user: {},
       test: {},
+      infoSelec: {},
       preguntas: []
     }
   },
   mounted () {
     this.getUser()
-    this.getTestById()
+    if (this.$route.params.idTema) {
+      this.idTest = this.$route.params.idTema
+      this.esTema = true
+      this.getTestById('topic_test_by_id/', this.idTest)
+    } else if (this.$route.params.idType) {
+      this.idTest = this.$route.params.idType
+      this.getTestById('type_test_by_id/', this.idTest)
+    } else if (this.$route.params.idExamen) {
+      this.idTest = this.$route.params.idExamen
+      this.esExamen = true
+      this.getTestById('examen_test_by_id/', this.idTest)
+    }
   },
   methods: {
     async getUser () {
@@ -90,12 +120,13 @@ export default {
         }
       })
     },
-    async getTestById () {
+    async getTestById (ruta, id) {
       this.$q.loading.show({
         message: 'Cargando Datos...'
       })
-      await this.$api.get('topic_test_by_id/' + this.$route.params.id).then(res => {
+      await this.$api.get(ruta + id).then(res => {
         if (res) {
+          console.log(res)
           this.test = res
           this.preguntas = this.test.questions.sort(() => Math.random() - 0.5)
           this.$q.loading.hide()
@@ -147,7 +178,7 @@ export default {
         if (bool) {
           clearInterval(vm.timeCounter2)
           if (pregunta.isActive) {
-            vm.$api.put('topic_test/' + vm.$route.params.id, pregunta).then(res => {
+            vm.$api.put(vm.esTema ? 'topic_test/' : vm.esExamen ? 'examen_test/' : 'type_test/' + vm.idTest, pregunta).then(res => {
               if (res) {
                 vm.$router.go(-1)
               }
@@ -157,7 +188,7 @@ export default {
           }
         } else {
           clearInterval(vm.timeCounter2)
-          vm.$api.put('topic_test/' + vm.$route.params.id, pregunta).then(res => {
+          vm.$api.put(vm.esTema ? 'topic_test/' : vm.esExamen ? 'examen_test/' : 'type_test/' + vm.idTest, pregunta).then(res => {
             if (res) {
               vm.$refs.carousel.next()
               vm.listo = false

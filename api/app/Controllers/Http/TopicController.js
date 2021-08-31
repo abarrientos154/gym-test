@@ -50,7 +50,7 @@ class TopicController {
   async getTestById ({ request, response, params }) {
     try {
       let tema = (await TopicTest.query().where({_id: params.id}).first()).toJSON()
-      let allQuestions = (await Question.query().where({topic: tema.tema_id}).with('answers').fetch()).toJSON()
+      let allQuestions = (await Question.query().where({topic: tema.tema_id}).with('answers').with('leyInfo').with('articuloInfo').fetch()).toJSON()
       let questions = []
       if (tema.subTemas.length) {
         questions = allQuestions.filter(v => {
@@ -79,8 +79,9 @@ class TopicController {
     }
   }
 
-  async getTestResult ({ request, response, params }) {
-    let tests = (await TopicTest.query().where({tema_id: params.id}).fetch()).toJSON()
+  async getTestResult ({ request, response, params, auth }) {
+    const user = (await auth.getUser()).toJSON()
+    let tests = (await TopicTest.query().where({tema_id: params.id, user_id: user._id}).fetch()).toJSON()
     let totalQuest = 0
     let correctas = 0
     for (let i = 0; i < tests.length; i++) {
@@ -129,8 +130,6 @@ class TopicController {
         tema.correctas = tema.correctas + 1
       }
       tema.save()
-      /* let tema = (await TopicTest.query().where({_id: params.id}).first()).toJSON()
-      let update = await TopicTest.query().where('_id', params.id).update(data) */
 
       response.send(tema)
     } catch (error) {

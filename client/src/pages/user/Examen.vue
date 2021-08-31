@@ -4,12 +4,12 @@
     <q-img src="image 5.png" style="height: 330px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
         <div class="row no-wrap items-center q-mb-xl absolute-bottom bg-transparent">
           <img src="balance 3.png" style="width: 50px" >
-          <div class="text-h5 text-bold q-pl-sm">{{tema.name}}</div>
+          <div class="text-h5 text-bold q-pl-sm">{{esGym ? tema.type_name : tema.name}}</div>
         </div>
     </q-img>
 
     <div class="q-mx-md q-pa-md bg-white" style="position:relative; top: -40px;border-top-left-radius: 20px; border-top-right-radius: 20px">
-        <div class="row item-start">
+        <div v-if="esTema" class="row item-start">
             <div class="col-6">
                 <div class="text-bold text-primary">Tema</div>
                 <div class="text-caption text-grey-8">Tema seleccionado</div>
@@ -28,13 +28,18 @@
                 <div v-else class="text-center text-grey-8 q-pt-md">Sin sub temas</div>
             </div>
         </div>
+        <div v-if="esExamen">
+          <div class="text-bold text-primary">Convocatoria</div>
+          <div class="text-caption text-grey-8">{{tema.convocatoria}}</div>
+        </div>
 
-        <q-separator color="primary" class="q-my-md" />
+        <q-separator v-if="!esGym" color="primary" class="q-my-md" />
 
         <div class="text-bold text-primary">Detalles del examen</div>
         <div class="text-caption text-grey-8">Indicaciones al realizar el examen</div>
 
         <div class="row item-start q-my-md">
+          {{resultado}}
             <div class="col-6">
                 <div class="text-caption text-bold text-primary">Preguntas</div>
                 <div class="text-caption text-grey-8">Cantidad {{preguntas.length}} preguntas</div>
@@ -43,13 +48,15 @@
             </div>
             <div class="col-6">
                 <div class="text-caption text-bold text-primary">Resultados del test</div>
-                <div class="text-caption text-grey-8">Respondidas: {{resultado.total_quest}}</div>
+                <div class="text-caption text-grey-8">{{esExamen ? 'Preguntas:' : 'Respondidas:'}} {{resultado.total_quest}}</div>
                 <div class="text-caption text-grey-8">Correctas: {{resultado.correctas}}</div>
+                <div v-if="esExamen" class="text-caption text-grey-8">Incorrectas: {{resultado.Incorrectas}}</div>
+                <div v-if="esExamen" class="text-caption text-grey-8">Vacias: {{resultado.vacias}}</div>
             </div>
         </div>
         <div class="row justify-center">
           <q-btn no-caps color="primary" label="Iniciar test" style="width:80%"
-          @click="iniciarTest()" />
+          @click="esTema ? iniciarTema() : esGym ? iniciarGym() : iniciarExamen()" />
         </div>
     </div>
   </div>
@@ -59,6 +66,10 @@
 export default {
   data () {
     return {
+      esTema: false,
+      esExamen: false,
+      esGym: false,
+      user: {},
       tema: {},
       resultado: {},
       subTemas: [],
@@ -67,19 +78,70 @@ export default {
     }
   },
   mounted () {
-    this.getTema()
+    this.getUser()
+    if (this.$route.params.idTema) {
+      this.esTema = true
+      this.getTema()
+    } else if (this.$route.params.idExamen) {
+      this.esExamen = true
+      this.getExamen()
+    } else if (this.$route.params.idType) {
+      this.esGym = true
+      this.getType()
+    }
   },
   methods: {
+    async getUser () {
+      await this.$api.get('user_info').then(res => {
+        if (res) {
+          this.user = res
+        }
+      })
+    },
     getTema () {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      this.$api.get('topic_by_id/' + this.$route.params.id).then(res => {
+      this.$api.get('topic_by_id/' + this.$route.params.idTema).then(res => {
         if (res) {
           this.tema = res
           this.preguntas = res.questions
           this.subTemas = res.subTemas
           this.$api.get('topic_result_by_id/' + this.tema.tema).then(v => {
+            if (v) {
+              this.resultado = v
+            }
+          })
+          this.$q.loading.hide()
+        }
+      })
+    },
+    getType () {
+      this.$q.loading.show({
+        message: 'Cargando datos...'
+      })
+      this.$api.get('type_by_id/' + this.$route.params.idType).then(res => {
+        if (res) {
+          this.tema = res
+          this.preguntas = res.questions
+          this.$api.get('type_result_by_id/' + this.tema.id).then(v => {
+            if (v) {
+              this.resultado = v
+            }
+          })
+          this.$q.loading.hide()
+        }
+      })
+    },
+    getExamen () {
+      this.$q.loading.show({
+        message: 'Cargando datos...'
+      })
+      this.$api.get('ExamById/' + this.$route.params.idExamen).then(res => {
+        if (res) {
+          this.tema = res
+          this.preguntas = res.questions
+          this.$api.get('examen_result_by_id/' + this.tema.id).then(v => {
             if (v) {
               this.resultado = v
             }
@@ -106,17 +168,65 @@ export default {
         this.preguntas = this.tema.questions
       }
     },
-    iniciarTest () {
+    iniciarTema () {
       if (this.preguntas.length) {
         this.$q.loading.show()
         const data = {
+          user_id: this.user._id,
           tema_id: this.tema.tema,
           tema_name: this.tema.name,
           subTemas: this.selectedSubTemas
         }
         this.$api.post('topic_test', data).then(res => {
           if (res) {
-            this.$router.push('/tema/' + res._id)
+            this.$router.push('/tema/test/' + res._id)
+            this.$q.loading.hide()
+          } else {
+            this.$q.loading.hide()
+          }
+        })
+      } else {
+        this.$q.notify({
+          message: 'No hay preguntas para iniciar el test',
+          color: 'black'
+        })
+      }
+    },
+    iniciarGym () {
+      if (this.preguntas.length) {
+        this.$q.loading.show()
+        const data = {
+          user_id: this.user._id,
+          type_id: this.tema.id,
+          type_name: this.tema.type_name
+        }
+        this.$api.post('type_test', data).then(res => {
+          if (res) {
+            this.$router.push('/gym/test/' + res._id)
+            this.$q.loading.hide()
+          } else {
+            this.$q.loading.hide()
+          }
+        })
+      } else {
+        this.$q.notify({
+          message: 'No hay preguntas para iniciar el test',
+          color: 'black'
+        })
+      }
+    },
+    iniciarExamen () {
+      if (this.preguntas.length) {
+        this.$q.loading.show()
+        const data = {
+          user_id: this.user._id,
+          examen_id: this.tema.id,
+          examen_name: this.tema.name,
+          all_quest: this.preguntas.length
+        }
+        this.$api.post('examen_test', data).then(res => {
+          if (res) {
+            this.$router.push('/examen/test/' + res._id)
             this.$q.loading.hide()
           } else {
             this.$q.loading.hide()
