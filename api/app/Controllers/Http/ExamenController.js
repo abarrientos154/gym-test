@@ -1,7 +1,5 @@
 'use strict'
-const ExcelJS = require('exceljs');
 const Examen = use("App/Models/Examen")
-const MoveFileService = use("App/Services/MoveFileService")
 // const { validate } = use("Validator")
 // const Helpers = use('Helpers')
 // const mkdirp = use('mkdirp')
@@ -43,34 +41,6 @@ class ExamenController {
     // }
     let guardar = await Examen.create(dat)
     response.send(guardar)
-  }
-
-  async excelExam ({request, response}) {
-    let files = request.file('fileExcel')
-    var filePath = await MoveFileService.moveFile(files)
-    var workbook = new ExcelJS.Workbook()
-    workbook = await workbook.xlsx.readFile(filePath)
-    let explanation = workbook.getWorksheet('Hoja1')
-    let colComment = explanation.getColumn('D')
-    colComment.eachCell(async (cell, rowNumber) => {
-      if (rowNumber >= 2) {
-        let exam = {}
-        let id = explanation.getCell('A' + rowNumber).value
-        let date = explanation.getCell('B' + rowNumber).value
-        let convocatoria = explanation.getCell('C' + rowNumber).value
-        let name = explanation.getCell('D' + rowNumber).value
-        if (id.result) {
-          exam.id = id.result
-        } else {
-          exam.id = id
-        }
-        exam.date = date
-        exam.convocatoria = convocatoria
-        exam.name = name
-        let save = await Examen.create(exam)
-      }
-    })
-    response.send(true)
   }
 
   async update ({ params, request, response }) {
