@@ -1,11 +1,7 @@
 'use strict'
-const ExcelJS = require('exceljs');
-const MoveFileService = use("App/Services/MoveFileService")
 const Topic = use("App/Models/Topic")
 const TopicTest = use("App/Models/TopicTest")
 const Question = use("App/Models/Question")
-const Helpers = use('Helpers')
-const mkdirp = use('mkdirp')
 const moment = require('moment')
 var ObjectId = require('mongodb').ObjectId;
 
@@ -176,30 +172,6 @@ class TopicController {
     } catch (error) {
       console.error('metodo store:' + error.name + ':' + error.message);
     } */
-  }
-
-  async excelTopic ({request, response}) {
-    let files = request.file('fileExcel')
-    var filePath = await MoveFileService.moveFile(files)
-    var workbook = new ExcelJS.Workbook()
-    workbook = await workbook.xlsx.readFile(filePath)
-    let explanation = workbook.getWorksheet('Hoja1')
-    let colComment = explanation.getColumn('B')
-    colComment.eachCell(async (cell, rowNumber) => {
-      if (rowNumber >= 2) {
-        let topic = {}
-        let id = explanation.getCell('A' + rowNumber).value
-        let tema = explanation.getCell('B' + rowNumber).value
-        let long_name = explanation.getCell('C' + rowNumber).value
-        let name = explanation.getCell('D' + rowNumber).value
-        if (id.result) { topic.id = id.result } else { topic.id = id }
-        topic.tema = tema
-        topic.long_name = long_name
-        topic.name = name
-        let save = await Topic.create(topic)
-      }
-    })
-    response.send(true)
   }
 
   /**

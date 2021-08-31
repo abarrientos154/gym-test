@@ -1,7 +1,5 @@
 'use strict'
-const ExcelJS = require('exceljs');
 const Question = use("App/Models/Question")
-const MoveFileService = use("App/Services/MoveFileService")
 // const Asignatura = use("App/Models/Asignatura")
 // const Niveles = use("App/Models/Nivele")
 const Helpers = use('Helpers')
@@ -108,50 +106,6 @@ class QuestionController {
     } catch (error) {
       console.error(error.name + 'store: ' + error.message);
     }
-  }
-
-  async excelQuestion ({request, response}) {
-    let files = request.file('fileExcel')
-    var filePath = await MoveFileService.moveFile(files)
-    var workbook = new ExcelJS.Workbook()
-    workbook = await workbook.xlsx.readFile(filePath)
-    let explanation = workbook.getWorksheet('Hoja1')
-    let colComment = explanation.getColumn('B')
-    colComment.eachCell(async (cell, rowNumber) => {
-      if (rowNumber >= 2) {
-        let question = {}
-        let id = explanation.getCell('A' + rowNumber).value
-        let title = explanation.getCell('B' + rowNumber).value
-        let topic = explanation.getCell('C' + rowNumber).value
-        let exam = explanation.getCell('D' + rowNumber).value
-        let order = explanation.getCell('E' + rowNumber).value
-        let ley_id = explanation.getCell('F' + rowNumber).value
-        let article = explanation.getCell('G' + rowNumber).value
-        let article_id = explanation.getCell('H' + rowNumber).value
-        let paragraph_id = explanation.getCell('I' + rowNumber).value
-        let mal = explanation.getCell('J' + rowNumber).value
-        let type = explanation.getCell('K' + rowNumber).value
-        let brand = explanation.getCell('L' + rowNumber).value
-        let process = explanation.getCell('M' + rowNumber).value
-        let only = explanation.getCell('N' + rowNumber).value
-        question.id = parseInt(id)
-        question.title = title
-        question.topic = topic
-        question.exam = exam
-        question.order = order
-        question.ley_id = ley_id
-        question.article = article
-        question.article_id = article_id
-        question.paragraph_id = paragraph_id
-        question.mal = mal
-        question.type = type
-        if (brand !== null) {  question.brand = true } else { question.brand = false }
-        question.process = process
-        if (only !== null) {  question.only = true } else { question.only = false }
-        let save = await Question.create(question)
-      }
-    })
-    response.send(true)
   }
 
   async multiplesQuestions ({ request, response }) {

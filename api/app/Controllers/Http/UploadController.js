@@ -1,9 +1,11 @@
 'use strict'
 const ExcelJS = require('exceljs');
 const Question = use("App/Models/Question")
+const Exam = use("App/Models/Examen")
 const Article = use("App/Models/Article")
 const Law = use("App/Models/Law")
 const SubTopic = use("App/Models/SubTopic")
+const Topic = use("App/Models/Topic")
 const Type = use("App/Models/Type")
 const Answer = use("App/Models/Answer")
 const MoveFileService = use("App/Services/MoveFileService")
@@ -101,6 +103,102 @@ class UploadController {
   async destroy ({ params, request, response }) {
   }
 
+  async excelTopic ({ request, response }) {
+    let files = request.file('fileExcel')
+    var filePath = await MoveFileService.moveFile(files)
+    var workbook = new ExcelJS.Workbook()
+    workbook = await workbook.xlsx.readFile(filePath)
+    let explanation = workbook.getWorksheet('Hoja1')
+    let colComment = explanation.getColumn('B')
+    colComment.eachCell(async (cell, rowNumber) => {
+      if (rowNumber >= 2) {
+        let topic = {}
+        let id = explanation.getCell('A' + rowNumber).value
+        let tema = explanation.getCell('B' + rowNumber).value
+        let long_name = explanation.getCell('C' + rowNumber).value
+        let name = explanation.getCell('D' + rowNumber).value
+        if (id.result) { topic.id = id.result } else { topic.id = id }
+        topic.tema = tema
+        topic.long_name = long_name
+        topic.name = name
+        let save = await Topic.create(topic)
+      }
+    })
+    response.send(true)
+  }
+
+  async excelQuestion ({ request, response }) {
+    let files = request.file('fileExcel')
+    var filePath = await MoveFileService.moveFile(files)
+    var workbook = new ExcelJS.Workbook()
+    workbook = await workbook.xlsx.readFile(filePath)
+    let explanation = workbook.getWorksheet('Hoja1')
+    let colComment = explanation.getColumn('B')
+    colComment.eachCell(async (cell, rowNumber) => {
+      if (rowNumber >= 2) {
+        let question = {}
+        let id = explanation.getCell('A' + rowNumber).value
+        let title = explanation.getCell('B' + rowNumber).value
+        let topic = explanation.getCell('C' + rowNumber).value
+        let exam = explanation.getCell('D' + rowNumber).value
+        let order = explanation.getCell('E' + rowNumber).value
+        let ley_id = explanation.getCell('F' + rowNumber).value
+        let article = explanation.getCell('G' + rowNumber).value
+        let article_id = explanation.getCell('H' + rowNumber).value
+        let paragraph_id = explanation.getCell('I' + rowNumber).value
+        let mal = explanation.getCell('J' + rowNumber).value
+        let type = explanation.getCell('K' + rowNumber).value
+        let brand = explanation.getCell('L' + rowNumber).value
+        let process = explanation.getCell('M' + rowNumber).value
+        let only = explanation.getCell('N' + rowNumber).value
+        question.id = parseInt(id)
+        question.title = title
+        question.topic = topic
+        question.exam = exam
+        question.order = order
+        question.ley_id = ley_id
+        question.article = article
+        question.article_id = article_id
+        question.paragraph_id = paragraph_id
+        question.mal = mal
+        question.type = type
+        if (brand !== null) { question.brand = true } else { question.brand = false }
+        question.process = process
+        if (only !== null) { question.only = true } else { question.only = false }
+        let save = await Question.create(question)
+      }
+    })
+    response.send(true)
+  }
+
+  async excelExam ({ request, response }) {
+    let files = request.file('fileExcel')
+    var filePath = await MoveFileService.moveFile(files)
+    var workbook = new ExcelJS.Workbook()
+    workbook = await workbook.xlsx.readFile(filePath)
+    let explanation = workbook.getWorksheet('Hoja1')
+    let colComment = explanation.getColumn('D')
+    colComment.eachCell(async (cell, rowNumber) => {
+      if (rowNumber >= 2) {
+        let exam = {}
+        let id = explanation.getCell('A' + rowNumber).value
+        let date = explanation.getCell('B' + rowNumber).value
+        let convocatoria = explanation.getCell('C' + rowNumber).value
+        let name = explanation.getCell('D' + rowNumber).value
+        if (id.result) {
+          exam.id = id.result
+        } else {
+          exam.id = id
+        }
+        exam.date = date
+        exam.convocatoria = convocatoria
+        exam.name = name
+        let save = await Exam.create(exam)
+      }
+    })
+    response.send(true)
+  }
+
   async excelArticle ({ request, response }) {
     let files = request.file('fileExcel')
     var filePath = await MoveFileService.moveFile(files)
@@ -170,12 +268,12 @@ class UploadController {
     colComment.eachCell(async (cell, rowNumber) => {
       if (rowNumber >= 2) {
         let answer = {}
-        let id_question = explanation.getCell('A' + rowNumber).value
-        let id = explanation.getCell('B' + rowNumber).value
+        let id = explanation.getCell('A' + rowNumber).value
+        let id_question = explanation.getCell('B' + rowNumber).value
         let answer_name = explanation.getCell('C' + rowNumber).value
         let isCorrect = explanation.getCell('D' + rowNumber).value
         let order = explanation.getCell('E' + rowNumber).value
-        answer.id_question = id_question
+        answer.id_question = parseInt(id_question)
         answer.id = id 
         answer.answer_name = answer_name
         answer.isCorrect = isCorrect === 'N' ? false : true 

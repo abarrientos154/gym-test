@@ -62,7 +62,7 @@ addPrefixToGroup(
     Route.put('topic_test/:id', 'TopicController.testUpdate')
     Route.get('topic_test_by_id/:id', 'TopicController.getTestById')
     Route.get('topic_result_by_id/:id', 'TopicController.getTestResult')
-    Route.post('excel_topic', 'TopicController.excelTopic')
+    Route.post('excel_topic', 'UploadController.excelTopic')
 
     Route.post('excel_law', 'UploadController.excelLaw')
     Route.get('laws', 'LawController.index')
@@ -91,7 +91,7 @@ addPrefixToGroup(
     Route.get('examen_test_by_id/:id', 'ExamenController.getTestById')
     Route.get('examen_result_by_id/:id', 'ExamenController.getTestResult')
     Route.post('examen', 'ExamenController.store')
-    Route.post('excel_exam', 'ExamenController.excelExam')
+    Route.post('excel_exam', 'UploadController.excelExam')
     Route.get('getExamWithTest/:id', 'ExamenController.getExamWithTest')
     Route.put('examen/:id', 'ExamenController.update')
     Route.delete('examen/:id', 'ExamenController.destroy')
@@ -102,7 +102,7 @@ addPrefixToGroup(
 
 
     Route.post('newQuest', 'QuestionController.store')
-    Route.post('excel_question', 'QuestionController.excelQuestion')
+    Route.post('excel_question', 'UploadController.excelQuestion')
     Route.put('multiplesQuestions', 'QuestionController.multiplesQuestions')
     Route.get('getQuestions', 'QuestionController.index')
     Route.get('getQuestionsbyTest/:id', 'QuestionController.getQuestionsbyTest')
