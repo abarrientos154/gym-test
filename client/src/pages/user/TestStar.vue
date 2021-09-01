@@ -75,7 +75,7 @@
         </q-carousel>
 
         <q-dialog v-model="verLey" v-if="verLey">
-          <q-card class="q-pa-md" style="width: 100%; border-radius: 15px">
+          <q-card class="q-pa-md bordes" style="width: 100%; border-radius: 15px">
             <div class="text-bold text-primary">Ley</div>
             <div class="text-caption text-grey-8">{{infoSelec.leyInfo.acronym_law ? '(' + infoSelec.leyInfo.acronym_law + ')' : ''}} {{infoSelec.leyInfo.law_name}}</div>
             <div class="text-bold text-primary q-pt-md">{{infoSelec.articuloInfo.article_name}}</div>
@@ -138,7 +138,6 @@ export default {
       })
       await this.$api.get(ruta + id).then(res => {
         if (res) {
-          console.log(res)
           this.test = res
           this.preguntas = this.test.questions.sort(() => Math.random() - 0.5)
           if (this.esExamen && res.tiempo) {
