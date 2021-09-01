@@ -114,11 +114,11 @@ class UploadController {
       if (rowNumber >= 2) {
         let topic = {}
         let id = explanation.getCell('A' + rowNumber).value
-        let tema = explanation.getCell('B' + rowNumber).value
+        let topic = explanation.getCell('B' + rowNumber).value
         let long_name = explanation.getCell('C' + rowNumber).value
         let name = explanation.getCell('D' + rowNumber).value
         if (id.result) { topic.id = id.result } else { topic.id = id }
-        topic.tema = tema
+        topic.topic = topic
         topic.long_name = long_name
         topic.name = name
         let save = await Topic.create(topic)
@@ -142,7 +142,7 @@ class UploadController {
         let topic = explanation.getCell('C' + rowNumber).value
         let exam = explanation.getCell('D' + rowNumber).value
         let order = explanation.getCell('E' + rowNumber).value
-        let ley_id = explanation.getCell('F' + rowNumber).value
+        let law_id = explanation.getCell('F' + rowNumber).value
         let article = explanation.getCell('G' + rowNumber).value
         let article_id = explanation.getCell('H' + rowNumber).value
         let paragraph_id = explanation.getCell('I' + rowNumber).value
@@ -156,7 +156,7 @@ class UploadController {
         question.topic = topic
         question.exam = exam
         question.order = order
-        question.ley_id = ley_id
+        question.law_id = law_id
         question.article = article
         question.article_id = article_id
         question.paragraph_id = paragraph_id
@@ -224,7 +224,9 @@ class UploadController {
         article.article_text = article_text
         article.paragraph_text = paragraph_text
         article.revision = false
-        let save = await Article.create(article)
+        if (paragraph_text !== null && article_text !== null) {
+          let save = await Article.create(article)
+        }
       }
     })
     response.send(true)

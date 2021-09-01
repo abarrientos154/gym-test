@@ -23,6 +23,12 @@ class ArticleController {
     response.send(data)
   }
 
+
+  async getArticlesByLaws ({ params, response }) {
+    let data = (await Article.query().where({ law: params.id }).fetch()).toJSON()
+    response.send(data)
+  }
+
   /**
    * Render a form to be used for creating a new article.
    * GET articles/create

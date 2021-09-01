@@ -1,12 +1,11 @@
 <template>
   <div>
     <div style="background: linear-gradient(to right, #002938, #004e6d); height: 200px; width: 100%;"></div>
-    <!-- <q-img src="noimg.png" style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; height: 265px; width: 100%;"/> -->
     <div class="column q-pa-lg no-wrap" style="margin-top: -200px">
       <div class="text-h4 text-white text-bold q-mb-xl q-px-xl">Preguntas</div>
       <div class="text-h5 text-white q-mb-sm q-px-md">Preguntas recientes</div>
       <div class="column">
-        <q-scroll-area horizontal style="height: 280px;">
+        <!-- <q-scroll-area horizontal style="height: 280px;">
           <div class="full-width row no-wrap">
             <q-card class="q-mr-md column bordes" v-for="(item, index) in questions" :key="index" style="min-width: 275px; max-width: 400px">
               <q-card-section class="col" horizontal>
@@ -44,12 +43,15 @@
               </q-card-section>
             </q-card>
           </div>
-        </q-scroll-area>
+        </q-scroll-area> -->
       </div>
       <q-btn color="primary" dense no-caps size="md">
         <q-file borderless v-model="file" hint="(.xls, .xlsx, .xltx, .ods, .ots, .csv)" accept=".xls, .xlsx, .xltx, .ods, .ots, .csv/*" @input="changeFile()" style="height: 30px; font-size: 0px"/>
         <div class="absolute-center">Importar archivo</div>
       </q-btn>
+    </div>
+    <div class="row justify-center">
+      <listable style="min-width: 900px" :columns="columns" :data="data" title="Preguntas" @function="execute"/>
     </div>
     <q-dialog v-model="nuevo" @hide="decartarCamb()">
       <q-card style="border-radius: 20px;">
@@ -69,111 +71,54 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <!-- <div class="text-primary text-h5">{{course.name}}</div>
-    <div class="text-black text-subtitle1 text-weight-bolder q-mb-lg">Niveles</div>
-    <div class="column items-center" style="width: 100%" v-if="tests.length > 0">
-      <q-card v-for="(item,index) in tests" clickable :key="index" class="q-pa-none q-mb-md" style="width: 98%; border-radius: 15px; min-width: 300px; max-width: 500px">
-        <div class="row">
-          <div class="col-6 q-pa-sm">
-            <div class="text-h6" @click="$router.push('/preguntas/' + item._id)">{{item.title}}</div>
-            <div class="absolute-bottom row q-pa-md">
-              <q-btn flat dense round class="q-mx-sm" color="primary" icon="edit" @click="editTem(item)"/>
-              <q-btn flat dense round class="q-mx-sm" color="red" icon="delete" @click="eiminarTem(item._id)"/>
-            </div>
-          </div>
-          <div v-ripple class="col-6 q-pa-none" @click="$router.push('/preguntas/' + item._id)">
-            <q-img :src="baseuNivel + item._id" style="height: 150px; width: 100%; border-top-right-radius: 15px; border-bottom-right-radius: 15px" />
-          </div>
-        </div>
-      </q-card>
-    </div>
-    <q-card v-else class="shadow-2 q-ma-md q-pa-md">
-      <div class="text-center text-subtitle1">Actualmente sin niveles...</div>
-    </q-card>
-
-    <q-dialog v-model="nuevo" @hide="decartarCamb()">
-      <q-card style="width:100%">
+    <q-dialog v-model="show" @hide="decartarCamb()">
+      <q-card style="border-radius: 20px;">
         <q-card-section>
-          <div class="text-h6">{{edit ? 'Editar Nivel' : 'Crear Nivel'}}</div>
+          <div class="text-h6">{{editQuestion ? 'Editar Examen' : 'Crear Examen'}}</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
-          <div class="column items-center q-pb-sm">
-            <q-avatar size="100px" class="bg-grey-5">
-              <q-img :src="edit ? imgNivel : nivelFile ? imgNivel : ''" style="height: 100%">
-                <q-file borderless v-model="nivelFile" @input="changeFile()" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px">
-                  <q-icon name="cloud_upload" class="absolute-center q-mt-lg" size="45px" color="white" />
-                </q-file>
-              </q-img>
-            </q-avatar>
-            <div :class="$v.nivelFile.$error ? 'text-negative' : 'text-grey-9'">Imagen del nivel</div>
-          </div>
-          <q-input
-            dense
-            outlined
-            type="text"
-            v-model="form.title"
-            label="Nuevo nombre"
-            :error="$v.form.title.$error"
-            error-message="Este campo es requerido"
-            @blur="$v.form.title.$touch()"
-          />
-          <div class="row justify-around q-pb-md q-gutter-md">
-            <div class="col">
-              <div>Puntuación del nivel</div>
-              <q-input
-                  v-model.number="form.point"
-                  type="number"
-                  placeholder="0"
-                  outlined
-                  dense
-                  :error="$v.form.point.$error"
-                  error-message="Este campo es requerido"
-                  @blur="$v.form.point.$touch()"
-                />
-            </div>
-            <div class="col">
-              <div>Duración del nivel</div>
-              <q-input
-                v-model.number="form.time"
-                type="number"
-                suffix="min"
-                outlined
-                dense
-                :error="$v.form.time.$error"
-                error-message="Este campo es requerido"
-                @blur="$v.form.time.$touch()"
-              />
-            </div>
-          </div>
-          <q-toggle
-            v-model="form.type"
-            label="Nivel gratuito"
-          />
+          <q-input rounded dense outlined type="text" v-model="form.title" label="Nuevo nombre" :error="$v.form.title.$error" error-message="Este campo es requerido"  @blur="$v.form.title.$touch()">
+            <template v-slot:prepend>
+              <q-icon name="edit" color="primary"/>
+            </template>
+          </q-input>
+          <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.topic" label="Escoga un tema" dense :options="topics" :error="$v.form.topic.$error" error-message="Este campo es requerido"  @blur="$v.form.topic.$touch()" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="topic" clearable></q-select>
+          <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.law" label="Escoga una ley" dense :options="laws" :error="$v.form.law.$error" error-message="Este campo es requerido"  @blur="$v.form.law.$touch()" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="law_name" @input="getArticleByLaw(form.law)" clearable></q-select>
+          <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.article" label="Escoga una ley" dense :options="articles" :error="$v.form.article.$error" error-message="Este campo es requerido"  @blur="$v.form.article.$touch()" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="paragraph_text" clearable></q-select>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn label="Cancelar" color="primary" v-close-popup no-caps style="width:100px"/>
-          <q-btn :label="edit ? 'Actualizar' :  'Guardar'" color="primary" no-caps style="width:100px"
-          @click="edit ? actualizarTem() : crearTem()" />
+          <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
+          <q-btn flat :label="editQuestion ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="edit ? updateQuestion() : show ? setQuestion() : ''" no-caps/>
         </q-card-actions>
       </q-card>
     </q-dialog>
-
-    <q-page-sticky position="bottom-right" :offset="[20, 20]">
-      <q-btn round icon="add" color="primary" size="20px" @click="editTem()"/>
-    </q-page-sticky> -->
   </div>
 </template>
 
 <script>
+import Listable from '../../components/Listable.vue'
 import { required, minLength, maxLength } from 'vuelidate/lib/validators'
 export default {
+  components: { Listable },
   data () {
     return {
       edit: false,
       nuevo: false,
       form: {},
       questions: [],
-      file: null
+      file: null,
+      columns: [
+        { name: 'title', label: 'Título', align: 'left', field: 'title' },
+        { name: 'lawName', label: 'Ley', align: 'left', field: 'lawName' },
+        { name: 'topic', align: 'left', label: 'Tema', field: 'topic' },
+        { name: 'article', label: 'Articulo', field: 'article' },
+        { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }
+      ],
+      show: false,
+      editQuestion: false,
+      topics: [],
+      laws: [],
+      articles: []
     }
   },
   validations: {
@@ -182,14 +127,57 @@ export default {
     }
   },
   mounted () {
-    this.getQuestion()
+    this.getQuestions()
   },
   methods: {
-    actualizarQuestion () {
+    getData () {
+      this.$q.loading.show({
+        message: 'Cargando datos...'
+      })
+      this.getTopics()
+      this.getLaws()
+      if (this.topics !== [] && this.laws !== []) {
+        this.$q.loading.hide()
+      }
+    },
+    async getQuestions () {
+      this.$q.loading.show({
+        message: 'Cargando datos...'
+      })
+      await this.$api.get('getQuestions').then(res => {
+        if (res) {
+          this.questions = res.slice(0, 20)
+          this.$q.loading.hide()
+          // console.log(this.questions)
+        }
+      })
+    },
+    async getTopics () {
+      await this.$api.get('getTopics').then(res => {
+        if (res) {
+          this.topics = res
+        }
+      })
+    },
+    async getLaws () {
+      await this.$api.get('getLaws').then(res => {
+        if (res) {
+          this.laws = res
+        }
+      })
+    },
+    async getArticlesByLaws (id) {
+      await this.$api.get('getArticlesByLaws/' + id).then(res => {
+        if (res) {
+          this.articles = res
+        }
+      })
+    },
+    updateQuestion () {
       this.$v.form.$touch()
       if (!this.$v.form.$error) {
         this.$q.loading.show({
-          message: 'Actualizando Examen, Por Favor Espere...'
+          message: 'Actualizando información, Por Favor Espere...'
         })
         this.$api.put('updateQuest/' + this.form._id, this.form).then((res) => {
           if (res) {
@@ -198,7 +186,7 @@ export default {
               color: 'positive',
               message: 'Pregunta Actualizada Correctamente'
             })
-            this.getQuestion()
+            this.getQuestions()
           }
         })
       }
@@ -207,7 +195,7 @@ export default {
       this.form = {}
       this.edit = false
     },
-    editQuestion (itm) {
+    /* editQuestion (itm) {
       if (itm) {
         const datos = { ...itm }
         this.form = datos
@@ -216,12 +204,12 @@ export default {
       } else {
         this.nuevo = true
       }
-    },
-    crearQuestion () {
+    }, */
+    setQuestion () {
       this.$v.$touch()
       if (!this.$v.form.$error) {
         this.$q.loading.show({
-          message: 'Subiendo Examen, Por Favor Espere...'
+          message: 'Subiendo información, Por Favor Espere...'
         })
         this.$api.post('newQuest', this.form).then((res) => {
           if (res) {
@@ -230,15 +218,15 @@ export default {
               color: 'positive',
               message: 'Pregunta Creada Correctamente'
             })
-            this.getQuestion()
+            this.getQuestions()
           }
         })
       }
     },
-    eiminarQuestion (id) {
+    deleteQuestion (id) {
       this.$q.dialog({
         title: 'Confirma',
-        message: '¿Seguro deseas eliminar este examen?',
+        message: '¿Seguro deseas eliminar esta pregunta?',
         cancel: true,
         persistent: true
       }).onOk(() => {
@@ -248,23 +236,11 @@ export default {
               color: 'positive',
               message: 'Eliminado Correctamente'
             })
-            this.getQuestion()
+            this.getQuestions()
           }
         })
       }).onCancel(() => {
         // console.log('>>>> Cancel')
-      })
-    },
-    getQuestion () {
-      this.$q.loading.show({
-        message: 'Cargando datos...'
-      })
-      this.$api.get('getQuestions').then(res => {
-        if (res) {
-          this.questions = res.slice(0, 20)
-          // console.log(this.questions)
-        }
-        this.$q.loading.hide()
       })
     },
     changeFile () {
@@ -285,11 +261,20 @@ export default {
               color: 'positive'
             })
             this.file = null
-            this.getQuestion()
+            this.getQuestions()
           }
           this.$q.loading.hide()
         })
       }
+    },
+    execute (emit) {
+      console.log('emit :>> ', emit)
+      if (emit.title === 'Eliminar') {
+        this.deleteQuestion(emit.id)
+      } /* else if (emit.title === 'Editar') {
+        this.dateExam_id = emit.id
+        this.newDE = true
+      } */
     }
   }
 }

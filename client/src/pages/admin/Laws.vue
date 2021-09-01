@@ -151,7 +151,7 @@ export default {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      await this.$api.get('laws').then(res => {
+      await this.$api.get('GetLaws').then(res => {
         if (res) {
           this.laws = res.slice(0, 10)
           // console.log(this.laws)

@@ -197,7 +197,7 @@ export default {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      this.$api.get('topics').then(res => {
+      this.$api.get('getTopics').then(res => {
         if (res) {
           this.topics = res
           // console.log(this.topics)

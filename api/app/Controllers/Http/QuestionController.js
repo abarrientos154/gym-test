@@ -1,5 +1,6 @@
 'use strict'
 const Question = use("App/Models/Question")
+const Law = use("App/Models/Law")
 // const Asignatura = use("App/Models/Asignatura")
 // const Niveles = use("App/Models/Nivele")
 const Helpers = use('Helpers')
@@ -25,6 +26,25 @@ class QuestionController {
    */
   async index ({ request, response, view }) {
     let data = await Question.all()
+    for (let i in data) {
+      data[i].lawName = (await Law.query().where({id: data[i].law_id}).first()).law_name
+      data[i].actions = [
+        {
+          color: "primary",
+          icon: "edit",
+          url: "",
+          action: "",
+          title: "Editar",
+        },
+        {
+          color: "red",
+          icon: "delete",
+          url: "",
+          action: "",
+          title: "Eliminar",
+        }
+      ]
+    }
     response.send(data)
   }
 
@@ -199,7 +219,7 @@ class QuestionController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params, response }) {
     const questToDestroy = await Question.where('_id', params.id).delete()
     response.send(questToDestroy)
   }

@@ -190,7 +190,7 @@ export default {
       })
     },
     getTemas () {
-      this.$api.get('topics').then(res => {
+      this.$api.get('getTopics').then(res => {
         if (res) {
           this.materias = res
         }

@@ -1,11 +1,11 @@
 <template>
   <div class="q-pa-md">
     <q-table
-      title="Fechas de Examenes Existentes"
+      :title="title"
       :data="data"
       :columns="columns"
       row-key="name"
-      no-data-label="Aún no existen Fechas de Examen"
+      :no-data-label="`Aún no existen ${titles}`"
     >
       <q-td
           slot="body-cell-actions"
@@ -35,7 +35,7 @@
 <script>
 export default {
   name: 'Listable',
-  props: ['columns', 'data'],
+  props: ['columns', 'data', 'title'],
   data () {
     return {
     }
