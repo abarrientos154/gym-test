@@ -39,7 +39,6 @@
         <div class="text-caption text-grey-8">Indicaciones al realizar el examen</div>
 
         <div class="row item-start q-my-md">
-          {{resultado}}
             <div class="col-6">
                 <div class="text-caption text-bold text-primary">Preguntas</div>
                 <div class="text-caption text-grey-8">Cantidad {{preguntas.length}} preguntas</div>
@@ -50,7 +49,7 @@
                 <div class="text-caption text-bold text-primary">Resultados del test</div>
                 <div class="text-caption text-grey-8">{{esExamen ? 'Preguntas:' : 'Respondidas:'}} {{resultado.total_quest}}</div>
                 <div class="text-caption text-grey-8">Correctas: {{resultado.correctas}}</div>
-                <div v-if="esExamen" class="text-caption text-grey-8">Incorrectas: {{resultado.Incorrectas}}</div>
+                <div v-if="esExamen" class="text-caption text-grey-8">Incorrectas: {{resultado.incorrectas}}</div>
                 <div v-if="esExamen" class="text-caption text-grey-8">Vacias: {{resultado.vacias}}</div>
             </div>
         </div>

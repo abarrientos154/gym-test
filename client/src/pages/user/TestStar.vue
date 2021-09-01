@@ -178,7 +178,7 @@ export default {
         if (bool) {
           clearInterval(vm.timeCounter2)
           if (pregunta.isActive) {
-            vm.$api.put(vm.esTema ? 'topic_test/' : vm.esExamen ? 'examen_test/' : 'type_test/' + vm.idTest, pregunta).then(res => {
+            vm.$api.put(vm.esTema ? 'topic_test/' + vm.idTest : vm.esExamen ? 'examen_test/' + vm.idTest : 'type_test/' + vm.idTest, pregunta).then(res => {
               if (res) {
                 vm.$router.go(-1)
               }
@@ -188,7 +188,7 @@ export default {
           }
         } else {
           clearInterval(vm.timeCounter2)
-          vm.$api.put(vm.esTema ? 'topic_test/' : vm.esExamen ? 'examen_test/' : 'type_test/' + vm.idTest, pregunta).then(res => {
+          vm.$api.put(vm.esTema ? 'topic_test/' + vm.idTest : vm.esExamen ? 'examen_test/' + vm.idTest : 'type_test/' + vm.idTest, pregunta).then(res => {
             if (res) {
               vm.$refs.carousel.next()
               vm.listo = false

@@ -26,6 +26,22 @@ class TypeController {
     response.send(data)
   }
 
+  async misRutinas ({ request, response, auth }) {
+    const user = (await auth.getUser()).toJSON()
+    let allData = (await TypeTest.query().where({user_id: user._id}).fetch()).toJSON()
+    let data = []
+    if (allData.length) {
+      data = allData.reverse().slice(0, 4)
+      data.map(v => {
+        return {
+          ...v,
+          fecha: moment(v.created_at).format('DD/MM/YYYY')
+        }
+      })
+    }
+    response.send(data)
+  }
+
   async getTypeById ({ request, response, view, params }) {
     let datos = (await Type.find(params.id)).toJSON()
     let questions = (await Question.query().where({type: datos.type_name}).with('answers').fetch()).toJSON()
@@ -64,8 +80,7 @@ class TypeController {
 
   async getTestResult ({ request, response, params, auth }) {
     const user = (await auth.getUser()).toJSON()
-    console.log(user._id, params.id, 11)
-    let tests = (await TypeTest.query().where({type_id: params.id, user_id: user._id}).fetch()).toJSON()
+    let tests = (await TypeTest.query().where({type_id: Number(params.id), user_id: user._id}).fetch()).toJSON()
     let totalQuest = 0
     let correctas = 0
     for (let i = 0; i < tests.length; i++) {

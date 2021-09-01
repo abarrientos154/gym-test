@@ -30,6 +30,22 @@ class ExamenController {
     let datos = await Examen.all()
     response.send(datos)
   }
+
+  async misExamenes ({ request, response, auth }) {
+    const user = (await auth.getUser()).toJSON()
+    let allData = (await ExamenTest.query().where({user_id: user._id}).fetch()).toJSON()
+    let data = []
+    if (allData.length) {
+      data = allData.reverse().slice(0, 4)
+      data.map(v => {
+        return {
+          ...v,
+          fecha: moment(v.created_at).format('DD/MM/YYYY')
+        }
+      })
+    }
+    response.send(data)
+  }
   
   async examById ({ request, response, view, params }) {
     let datos = (await Examen.find(params.id)).toJSON()
@@ -69,12 +85,12 @@ class ExamenController {
 
   async getTestResult ({ request, response, params, auth }) {
     const user = (await auth.getUser()).toJSON()
-    let tests = (await ExamenTest.query().where({examen_id: params.id, user_id: user._id}).fetch()).toJSON()
+    let tests = (await ExamenTest.query().where({examen_id: Number(params.id), user_id: user._id}).fetch()).toJSON()
     let data = {
       total_quest: tests.length ? tests[tests.length - 1].all_quest : 0,
       correctas: tests.length ? tests[tests.length - 1].correctas : 0,
-      incorrectas: tests.length ? tests[tests.length - 1].incorectas : 0,
-      vacias: tests.length ? tests[tests.length - 1].all_quest - tests[tests.length - 1].correctas - tests[tests.length - 1].incorectas : 0,
+      incorrectas: tests.length ? tests[tests.length - 1].incorrectas : 0,
+      vacias: tests.length ? tests[tests.length - 1].all_quest - tests[tests.length - 1].total_quest : 0,
       fecha: tests.length ? moment(tests[tests.length - 1].created_at).format('DD/MM/YYYY') : null
     }
     response.send(data)
@@ -142,7 +158,6 @@ class ExamenController {
   async getExamWithTest ({ request, response, params }) {
     try {
       let Exam = await Examen.with('tests').find(params.id)
-      console.log('Exam :>> ', Exam);
       response.send(Exam)
     } catch (error) {
       console.error(error.name + 'tests: ' + error.message);

@@ -29,35 +29,41 @@
         <div class="text-caption text-grey-8 q-mb-sm">Conoce tus últimos resultados</div>
         <q-card class="bordes q-pa-none" style="width: 100%; border-radius: 10px;">
           <div class="row items-center q-py-xs q-pl-xs">
-            <q-icon name="language" color="primary" size="40px" />
+            <q-img src="Vector-1.png" style="width: 40px" />
             <div class="q-pl-xs">
               <div class="text-primary">MIS EXAMENES</div>
               <div class="text-grey-8 text-caption">Conoce el historial de tus examenes</div>
             </div>
           </div>
           <div class="bg-primary q-py-md q-px-xs q-ma-none">
-            <div class="row justify-between text-white text-caption q-pb-xs" v-for="(item, index) in 4" :key="index">
-              <div>Nombre de rutina</div>
-              <div>10/10/2021</div>
-              <div>10pts/100pts</div>
+            <div v-if="rutinaExamen.length">
+              <div class="row justify-between text-white text-caption q-pb-xs" v-for="(item, index) in rutinaExamen" :key="index">
+                <div class="col-5 text-center ellipsis">{{item.examen_name}}</div>
+                <div class="col-3 text-center">{{item.fecha}}</div>
+                <div class="col-4 text-center">{{item.all_quest}} / {{item.correctas}}</div>
+              </div>
             </div>
+            <div v-else class="text-white text-caption text-center">No hay examenes presentados</div>
           </div>
         </q-card>
 
         <q-card class="bordes q-pa-none q-mt-md" style="width: 100%; border-radius: 10px;">
           <div class="row items-center q-py-xs q-pl-xs">
-            <q-icon name="language" color="primary" size="40px" />
+            <q-img src="Vector-1.png" style="width: 40px" />
             <div class="q-pl-xs">
               <div class="text-primary">MIS RUTINAS DE ENTRENAMIENTO</div>
               <div class="text-grey-8 text-caption">Conoce el historial de tus rutinas</div>
             </div>
           </div>
           <div class="bg-primary q-py-md q-px-xs q-ma-none">
-            <div class="row justify-between text-white text-caption q-pb-xs" v-for="(item, index) in 4" :key="index">
-              <div>Nombre de rutina</div>
-              <div>10/10/2021</div>
-              <div>10pts/100pts</div>
+            <div v-if="rutinaGym.length">
+              <div class="row justify-between text-white text-caption q-pb-xs" v-for="(item, index) in rutinaGym" :key="index">
+                <div class="col-4 text-center ellipsis">{{item.type_name}}</div>
+                <div class="col-4 text-center">{{item.fecha}}</div>
+                <div class="col-4 text-center">{{item.total_quest}} / {{item.correctas}}</div>
+              </div>
             </div>
+            <div v-else class="text-white text-caption text-center">No hay entrenamientos realizados</div>
           </div>
         </q-card>
 
@@ -147,7 +153,9 @@ export default {
         width: '8px',
         opacity: 0
       },
-      materias: [1, 2, 3],
+      rutinaExamen: [],
+      rutinaGym: [],
+      materias: [],
       gym: [],
       examenes: [],
       blogs: [1, 2, 3]
@@ -156,6 +164,7 @@ export default {
   mounted () {
     this.baseuPerfil = env.apiUrl + 'perfil_img/'
     this.getUser()
+    this.getRutinas()
     this.getTemas()
     this.getGym()
     this.getExamenes()
@@ -165,6 +174,20 @@ export default {
       this.$api.get('user_info').then(v => {
         if (v) {
           this.user = v
+        }
+      })
+    },
+    getRutinas () {
+      this.$api.get('mis_examenes').then(v => {
+        if (v) {
+          this.rutinaExamen = v
+          console.log(this.rutinaExamen)
+        }
+      })
+      this.$api.get('mis_rutinas').then(v => {
+        if (v) {
+          this.rutinaGym = v
+          console.log(this.rutinaGym)
         }
       })
     },
