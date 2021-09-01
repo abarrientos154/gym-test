@@ -124,7 +124,7 @@
         <q-scroll-area v-if="blogs.length" horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 270px; width: 100%;">
           <div class="row no-wrap q-gutter-md">
             <q-card flat style="width: 200px; height: 200px" clickable v-ripple v-for="(item, index) in blogs" :key="index"
-            @click="$router.push('/blog/' + item)">
+            @click="$router.push('/publicidad/' + item)">
               <q-img src="materia1 1.png" style="height: 100%; width: 100%; border-radius: 10px">
                 <div class="absolute-full column justify-end">
                   <div class="text-h6 text-center">Nombre del blog</div>
