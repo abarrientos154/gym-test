@@ -112,16 +112,16 @@ class UploadController {
     let colComment = explanation.getColumn('B')
     colComment.eachCell(async (cell, rowNumber) => {
       if (rowNumber >= 2) {
-        let topic = {}
+        let topicDB = {}
         let id = explanation.getCell('A' + rowNumber).value
         let topic = explanation.getCell('B' + rowNumber).value
         let long_name = explanation.getCell('C' + rowNumber).value
         let name = explanation.getCell('D' + rowNumber).value
-        if (id.result) { topic.id = id.result } else { topic.id = id }
-        topic.topic = topic
-        topic.long_name = long_name
-        topic.name = name
-        let save = await Topic.create(topic)
+        if (id.result) { topicDB.id = id.result } else { topicDB.id = id }
+        topicDB.topic = topic
+        topicDB.long_name = long_name
+        topicDB.name = name
+        let save = await Topic.create(topicDB)
       }
     })
     response.send(true)

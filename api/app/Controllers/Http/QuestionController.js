@@ -24,31 +24,36 @@ class QuestionController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
-    let data = await Question.all()
-    for (let i in data) {
-      data[i].lawName = (await Law.query().where({id: data[i].law_id}).first()).law_name
-      data[i].actions = [
-        {
-          color: "primary",
-          icon: "edit",
-          url: "",
-          action: "",
-          title: "Editar",
-        },
-        {
-          color: "red",
-          icon: "delete",
-          url: "",
-          action: "",
-          title: "Eliminar",
+  async index ({ response }) {
+    let data = (await Question.query().where({}).fetch()).toJSON()
+    if (data !== []) {
+      for (const i in data) {
+        let law = await Law.query().where({ id: data[i].law_id }).first()
+        if (law !== null) {
+          data[i].lawName = law.law_name
         }
-      ]
+        data[i].actions = [
+          {
+            color: "primary",
+            icon: "edit",
+            url: "",
+            action: "",
+            title: "Editar",
+          },
+          {
+            color: "red",
+            icon: "delete",
+            url: "",
+            action: "",
+            title: "Eliminar",
+          }
+        ]
+      }
     }
     response.send(data)
   }
 
-  async getQuestionsbyTest ({ response, params }) {
+  /* async getQuestionsbyTest ({ response, params }) {
     const id = parseInt(params.id)
     try {
       const data = (await Question.query().where({ test_id: id }).fetch()).toJSON()
@@ -57,7 +62,7 @@ class QuestionController {
       console.error(e.name + ': ' + e.message)
     }
   }
-
+ */
 
   async getQuestionsbyExam ({ request, response, view, params }) {
     let data = (await Question.query().where({ examen_id: params.id }).fetch()).toJSON()
@@ -94,38 +99,9 @@ class QuestionController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
-    try {
-      var quest = request.only(['datQ'])
-      quest = JSON.parse(quest.datQ)
-      var answers = request.only(['datA'])
-      answers = JSON.parse(answers.datA)
-      answers = Object.values(answers)
-      let arr = []
-      for (let i in answers) {
-        let ans = { titleAnswer: answers[i], isActive: false }
-        arr.push(ans)
-      }
-      for (let i = 0; i < arr.length; i++) {
-        arr[i].value = i === 0 ? 'A' : i === 1 ? 'B' : i === 2 ? 'C' : 'D'
-      }
-      quest.answers = arr
-      quest.isActive = false
-      let save = await Question.create(quest)
-      const profilePic = request.file('files', {
-        types: ['image']
-      })
-      if (Helpers.appRoot('storage/uploads/preguntas')) {
-        await profilePic.move(Helpers.appRoot('storage/uploads/preguntas'), {
-          name: save._id.toString(),
-          overwrite: true
-        })
-      } else {
-        mkdirp.sync(`${__dirname}/storage/Excel`)
-      }
-      response.send(save)
-    } catch (error) {
-      console.error(error.name + 'store: ' + error.message);
-    }
+    const body = request.all()
+    const save = await Question.create(body)
+    response.send(save)
   }
 
   async multiplesQuestions ({ request, response }) {
@@ -154,9 +130,9 @@ class QuestionController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-    let quest = (await Question.find(params.id)).toJSON()
-    response.send(quest)
+  async show ({ params, response }) {
+    let data = (await Question.find(params.id)).toJSON()
+    response.send(data)
   }
 
   /**
@@ -180,35 +156,9 @@ class QuestionController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
-    try {
-      var quest = request.only(['datQ'])
-      quest = JSON.parse(quest.datQ)
-      var answers = request.only(['datA'])
-      answers = JSON.parse(answers.datA)
-      answers = Object.values(answers)
-      for (let i in answers) {
-        quest.answers[i].titleAnswer = answers[i]
-        quest.answers[i].isActive = false
-      }
-      if (quest.file) {
-        const profilePic = request.file('files', {
-          types: ['image']
-        })
-        if (Helpers.appRoot('storage/uploads/preguntas')) {
-          await profilePic.move(Helpers.appRoot('storage/uploads/preguntas'), {
-            name: quest._id.toString(),
-            overwrite: true
-          })
-        } else {
-          mkdirp.sync(`${__dirname}/storage/Excel`)
-        }
-      }
-      delete quest.file
-      const update = await Question.where('_id', params.id).update(quest)
-      response.send(update)
-    } catch (error) {
-      console.error(error.name + '1:' + error.message);
-    }
+    const body = request.all()
+    const update = await Question.where('_id', params.id).update(body)
+    response.send(update)
   }
 
   /**

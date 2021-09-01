@@ -5,7 +5,7 @@
       :data="data"
       :columns="columns"
       row-key="name"
-      :no-data-label="`Aún no existen ${titles}`"
+      :no-data-label="`Aún no existen ${title}`"
     >
       <q-td
           slot="body-cell-actions"

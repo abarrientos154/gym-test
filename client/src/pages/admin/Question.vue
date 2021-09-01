@@ -50,10 +50,10 @@
         <div class="absolute-center">Importar archivo</div>
       </q-btn>
     </div>
-    <div class="row justify-center">
-      <listable style="min-width: 900px" :columns="columns" :data="data" title="Preguntas" @function="execute"/>
+    <div class="row justify-center" style="height: 70%">
+      <listable class="col" :columns="columns" :data="questions" title="Preguntas" @function="execute"/>
     </div>
-    <q-dialog v-model="nuevo" @hide="decartarCamb()">
+    <!-- <q-dialog v-model="nuevo" @hide="decartarCamb()">
       <q-card style="border-radius: 20px;">
         <q-card-section>
           <div class="text-h6">{{edit ? 'Editar Examen' : 'Crear Examen'}}</div>
@@ -70,25 +70,22 @@
           <q-btn flat :label="edit ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="edit ? actualizarQuestion() : nuevo ? crearQuestion() : ''" no-caps/>
         </q-card-actions>
       </q-card>
-    </q-dialog>
+    </q-dialog> -->
     <q-dialog v-model="show" @hide="decartarCamb()">
       <q-card style="border-radius: 20px;">
         <q-card-section>
-          <div class="text-h6">{{editQuestion ? 'Editar Examen' : 'Crear Examen'}}</div>
+          <div class="text-h6">{{editQuestion ? 'Editar pregunta' : 'Crear pregunta'}}</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
-          <q-input rounded dense outlined type="text" v-model="form.title" label="Nuevo nombre" :error="$v.form.title.$error" error-message="Este campo es requerido"  @blur="$v.form.title.$touch()">
-            <template v-slot:prepend>
-              <q-icon name="edit" color="primary"/>
-            </template>
+          <q-input dense outlined type="text" v-model="form.title" label="Nueva pregunta" :error="$v.form.title.$error" error-message="Este campo es requerido"  @blur="$v.form.title.$touch()">
           </q-input>
           <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.topic" label="Escoga un tema" dense :options="topics" :error="$v.form.topic.$error" error-message="Este campo es requerido"  @blur="$v.form.topic.$touch()" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="topic" clearable></q-select>
-          <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.law" label="Escoga una ley" dense :options="laws" :error="$v.form.law.$error" error-message="Este campo es requerido"  @blur="$v.form.law.$touch()" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="law_name" @input="getArticleByLaw(form.law)" clearable></q-select>
-          <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.article" label="Escoga una ley" dense :options="articles" :error="$v.form.article.$error" error-message="Este campo es requerido"  @blur="$v.form.article.$touch()" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="paragraph_text" clearable></q-select>
+          <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.law_id" label="Escoga una ley" dense :options="laws" :error="$v.form.law_id.$error" error-message="Este campo es requerido"  @blur="$v.form.law_id.$touch()" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="law_name" @input="getArticlesByLaw(form.law_id)" clearable></q-select>
+          <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.article_id" label="Escoga un Articulo" dense :options="articles" :error="$v.form.article_id.$error" error-message="Este campo es requerido"  @blur="$v.form.article_id.$touch()" map-options emit-value option-value="_id" options-selected-class="text-primary" option-label="paragraph_text" clearable></q-select>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
-          <q-btn flat :label="editQuestion ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="edit ? updateQuestion() : show ? setQuestion() : ''" no-caps/>
+          <q-btn flat :label="editQuestion ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="editQuestion ? updateQuestion() : setQuestion()" no-caps/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -97,7 +94,7 @@
 
 <script>
 import Listable from '../../components/Listable.vue'
-import { required, minLength, maxLength } from 'vuelidate/lib/validators'
+import { required } from 'vuelidate/lib/validators'
 export default {
   components: { Listable },
   data () {
@@ -123,7 +120,10 @@ export default {
   },
   validations: {
     form: {
-      name: { required, minLength: minLength(3), maxLength: maxLength(20) }
+      title: { required },
+      topic: { required },
+      law_id: { required },
+      article_id: { required }
     }
   },
   mounted () {
@@ -148,7 +148,13 @@ export default {
         if (res) {
           this.questions = res.slice(0, 20)
           this.$q.loading.hide()
-          // console.log(this.questions)
+        }
+      })
+    },
+    async getQuestionById (id) {
+      await this.$api.get('getQuestionById/' + id).then(res => {
+        if (res) {
+          this.form = res
         }
       })
     },
@@ -166,8 +172,8 @@ export default {
         }
       })
     },
-    async getArticlesByLaws (id) {
-      await this.$api.get('getArticlesByLaws/' + id).then(res => {
+    async getArticlesByLaw (id) {
+      await this.$api.get('getArticlesByLaw/' + id).then(res => {
         if (res) {
           this.articles = res
         }
@@ -240,7 +246,6 @@ export default {
           }
         })
       }).onCancel(() => {
-        // console.log('>>>> Cancel')
       })
     },
     changeFile () {
@@ -268,13 +273,14 @@ export default {
       }
     },
     execute (emit) {
-      console.log('emit :>> ', emit)
       if (emit.title === 'Eliminar') {
         this.deleteQuestion(emit.id)
-      } /* else if (emit.title === 'Editar') {
-        this.dateExam_id = emit.id
-        this.newDE = true
-      } */
+      } else if (emit.title === 'Editar') {
+        this.getData()
+        this.getQuestionById(emit.id)
+        this.editQuestion = true
+        this.show = true
+      }
     }
   }
 }

@@ -84,7 +84,7 @@ addPrefixToGroup(
 
     Route.post('excel_article', 'UploadController.excelArticle')
     Route.get('articles', 'ArticleController.index')
-    Route.get('getArticlesByLaws/:id', 'ArticleController.getArticlesByLaws')
+    Route.get('getArticlesByLaw/:id', 'ArticleController.getArticlesByLaw')
 
     Route.get('examen', 'ExamenController.index')
     Route.get('mis_examenes', 'ExamenController.misExamenes')
@@ -112,7 +112,7 @@ addPrefixToGroup(
     Route.get('getQuestionsbyExam/:id', 'QuestionController.getQuestionsbyExam')
     Route.get('getFullQuestions/', 'QuestionController.getFullQuestions')
     Route.put('updateQuest/:id', 'QuestionController.update')
-    Route.get('questById/:id', 'QuestionController.show')
+    Route.get('getQuestionById/:id', 'QuestionController.show')
     Route.delete('destroyQuest/:id', 'QuestionController.destroy')
 
     Route.post('newBlog', 'BlogController.store')

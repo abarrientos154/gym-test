@@ -24,8 +24,9 @@ class ArticleController {
   }
 
 
-  async getArticlesByLaws ({ params, response }) {
-    let data = (await Article.query().where({ law: params.id }).fetch()).toJSON()
+  async getArticlesByLaw ({ params, response }) {
+    const id = parseInt(params.id)
+    let data = (await Article.query().where({ law: id }).fetch()).toJSON()
     response.send(data)
   }
 

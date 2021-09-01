@@ -219,7 +219,7 @@ export default {
         }).then(res => {
           if (res) {
             this.$q.notify({
-              message: 'Preguntas Cargadas Correctamente',
+              message: 'Temas Cargados Correctamente',
               color: 'positive'
             })
             this.file = null
