@@ -81,6 +81,7 @@
 export default {
   data () {
     return {
+      timeCounter: null,
       timeCounter1: null,
       timeCounter2: null,
       listo: false,
@@ -91,6 +92,9 @@ export default {
       esExamen: false,
       idTest: '',
       slide: 1,
+      minutos: 0,
+      segundos: 0,
+      timeTest: 0,
       user: {},
       test: {},
       infoSelec: {},
@@ -138,6 +142,31 @@ export default {
           })
         }
       })
+    },
+    valueTiempo () {
+      this.minutos = this.timeTest
+      this.segundos = 60
+      this.timeCounter = setInterval(timer, 1000)
+      const vm = this
+
+      function timer () {
+        if (vm.segundos > 0) {
+          if (vm.minutos > 0) {
+            vm.segundos = vm.segundos - 1
+          } else {
+            vm.segundos = vm.segundos - 1
+          }
+        } else {
+          if (vm.minutos > 0) {
+            vm.minutos = vm.minutos - 1
+            vm.segundos = 60
+          } else {
+            clearInterval(vm.timeCounter)
+            /* vm.save() */
+          }
+        }
+        return vm.minutos
+      }
     },
     answerSelected (opcion, pregunta, bool) {
       for (let i = 0; i < pregunta.answers.length; i++) {

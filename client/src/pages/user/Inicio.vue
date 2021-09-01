@@ -181,13 +181,11 @@ export default {
       this.$api.get('mis_examenes').then(v => {
         if (v) {
           this.rutinaExamen = v
-          console.log(this.rutinaExamen)
         }
       })
       this.$api.get('mis_rutinas').then(v => {
         if (v) {
           this.rutinaGym = v
-          console.log(this.rutinaGym)
         }
       })
     },

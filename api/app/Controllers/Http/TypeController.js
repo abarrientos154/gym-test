@@ -32,7 +32,7 @@ class TypeController {
     let data = []
     if (allData.length) {
       data = allData.reverse().slice(0, 4)
-      data.map(v => {
+      data = data.map(v => {
         return {
           ...v,
           fecha: moment(v.created_at).format('DD/MM/YYYY')

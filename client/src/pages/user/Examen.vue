@@ -55,9 +55,29 @@
         </div>
         <div class="row justify-center">
           <q-btn no-caps color="primary" label="Iniciar test" style="width:80%"
-          @click="esTema ? iniciarTema() : esGym ? iniciarGym() : iniciarExamen()" />
+          @click="esTema ? iniciarTema() : esGym ? iniciarGym() : verifyExam()" />
         </div>
     </div>
+
+    <q-dialog v-model="examTime">
+      <q-card class="q-pa-md" style="width:100%; border-radius: 15px">
+        <div class="text-primary text-subtitle1 text-bold">¿Deseas presentar el test con tiempo?</div>
+        <q-toggle
+          :label="tiempo ? 'Si' : 'No'"
+          color="primary"
+          v-model="tiempo"
+        />
+        <q-input v-if="tiempo" outlined v-model.number="timeTest" type="number" suffix="minutos" class="q-my-md">
+          <template v-slot:before>
+            <q-icon name="timer" color="primary" />
+          </template>
+        </q-input>
+        <div class="row justify-center q-py-md">
+          <q-btn no-caps color="primary" label="Iniciar test" style="width:80%"
+          @click="verifyTime()" />
+        </div>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -68,6 +88,9 @@ export default {
       esTema: false,
       esExamen: false,
       esGym: false,
+      examTime: false,
+      tiempo: false,
+      timeTest: 1,
       user: {},
       tema: {},
       resultado: {},
@@ -214,29 +237,50 @@ export default {
         })
       }
     },
-    iniciarExamen () {
+    verifyExam () {
       if (this.preguntas.length) {
-        this.$q.loading.show()
-        const data = {
-          user_id: this.user._id,
-          examen_id: this.tema.id,
-          examen_name: this.tema.name,
-          all_quest: this.preguntas.length
-        }
-        this.$api.post('examen_test', data).then(res => {
-          if (res) {
-            this.$router.push('/examen/test/' + res._id)
-            this.$q.loading.hide()
-          } else {
-            this.$q.loading.hide()
-          }
-        })
+        this.tiempo = false
+        this.timeTest = 1
+        this.examTime = true
       } else {
         this.$q.notify({
           message: 'No hay preguntas para iniciar el test',
           color: 'black'
         })
       }
+    },
+    verifyTime () {
+      if (this.tiempo) {
+        if (this.timeTest > 0) {
+          this.iniciarExamen()
+        } else {
+          this.$q.notify({
+            message: 'No es un tiempo valido',
+            color: 'black'
+          })
+        }
+      } else {
+        this.iniciarExamen()
+      }
+    },
+    iniciarExamen () {
+      this.$q.loading.show()
+      const data = {
+        user_id: this.user._id,
+        examen_id: this.tema.id,
+        examen_name: this.tema.name,
+        all_quest: this.preguntas.length,
+        tiempo: this.tiempo,
+        timeTest: this.timeTest
+      }
+      this.$api.post('examen_test', data).then(res => {
+        if (res) {
+          this.$router.push('/examen/test/' + res._id)
+          this.$q.loading.hide()
+        } else {
+          this.$q.loading.hide()
+        }
+      })
     }
   }
 }
