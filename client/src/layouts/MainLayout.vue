@@ -143,7 +143,7 @@ export default {
         {
           icon: 'apps',
           label: 'Blog',
-          ruta: 'blog_user'
+          ruta: '/blog_user'
         },
         {
           icon: 'person',

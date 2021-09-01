@@ -7,7 +7,6 @@
             ref="carousel"
             >
             <q-carousel-slide :name="index + 1" class="q-pa-none" v-for="(item, index) in preguntas" :key="index">
-                <q-btn v-if="slide > 1" class="absolute-top" round flat color="white" icon="arrow_back" @click="$refs.carousel.previous()" />
                 <div class="row justify-center">
                     <q-img src="image 5.png" style="height: 350px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
                         <div v-if="!esExamen" class="row justify-end bg-transparent" style="width:100%">
@@ -24,6 +23,15 @@
                             <div class="text-h5 text-bold q-pl-sm">{{esTema ? test.tema_name : esExamen ? test.examen_name : test.type_name}}</div>
                         </div>
                     </q-img>
+                    <div v-if="esExamen && test.tiempo" class="absolute-top-right q-pa-md">
+                      <q-field outlined dense stack-label>
+                        <template v-slot:control>
+                          <div class="row justify-end no-wrap" tabindex="0" style="width:100%">
+                            <div class="text-bold text-white">{{minutos + ':' + segundos}}</div>
+                          </div>
+                        </template>
+                      </q-field>
+                    </div>
                 </div>
 
                 <div class="q-mx-md q-px-md q-pt-md bg-white" style="position:relative; top: -40px; border-top-left-radius: 20px; border-top-right-radius: 20px">
@@ -133,6 +141,9 @@ export default {
           console.log(res)
           this.test = res
           this.preguntas = this.test.questions.sort(() => Math.random() - 0.5)
+          if (this.esExamen && res.tiempo) {
+            this.valueTiempo()
+          }
           this.$q.loading.hide()
         } else {
           this.$q.loading.hide()
@@ -144,7 +155,7 @@ export default {
       })
     },
     valueTiempo () {
-      this.minutos = this.timeTest
+      this.minutos = this.test.timeTest - 1
       this.segundos = 60
       this.timeCounter = setInterval(timer, 1000)
       const vm = this
@@ -162,7 +173,7 @@ export default {
             vm.segundos = 60
           } else {
             clearInterval(vm.timeCounter)
-            /* vm.save() */
+            vm.responder(true, { isActive: false })
           }
         }
         return vm.minutos
@@ -206,6 +217,7 @@ export default {
       function timer () {
         if (bool) {
           clearInterval(vm.timeCounter2)
+          clearInterval(vm.timeCounter)
           if (pregunta.isActive) {
             vm.$api.put(vm.esTema ? 'topic_test/' + vm.idTest : vm.esExamen ? 'examen_test/' + vm.idTest : 'type_test/' + vm.idTest, pregunta).then(res => {
               if (res) {

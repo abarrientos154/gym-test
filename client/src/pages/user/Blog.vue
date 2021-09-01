@@ -14,7 +14,7 @@
         <q-scroll-area v-if="ultimos.length" horizontal class="q-my-md" :thumb-style="thumbStyle" style="height: 180px; width: 100%;">
           <div class="row no-wrap q-gutter-sm">
             <q-card flat style="width: 150px; height: 170px" clickable v-ripple v-for="(item, index) in ultimos" :key="index"
-            @click="$router.push('/blog/' + item)">
+            @click="$router.push('/publicidad/' + item)">
               <q-img src="materia1 1.png" style="height: 100%; width: 100%;">
                 <div class="absolute-full column justify-end">Nombre del blog</div>
               </q-img>
@@ -34,7 +34,7 @@
             <div class="row items-center no-wrap q-pa-sm">
               <div class="col-4">
                 <q-btn no-caps dense rounded color="primary" label="Ver más" class="q-px-md"
-                @click="$router.push('/blog/' + item)" />
+                @click="$router.push('/publicidad/' + item)" />
               </div>
               <div class="col-8 text-caption self-start q-pl-sm text-grey-8 ellipsis-2-lines">Descripción</div>
             </div>
