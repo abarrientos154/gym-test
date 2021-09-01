@@ -50,6 +50,7 @@
         <div class="absolute-center">Importar archivo</div>
       </q-btn>
     </div>
+    <q-btn color="primary" label="Nueva Pregunta" icon="add" dense no-caps size="md" class="q-ml-md" @click="newQuest()"/>
     <div class="row justify-center" style="height: 70%">
       <listable class="col" :columns="columns" :data="questions" title="Preguntas" @function="execute"/>
     </div>
@@ -146,8 +147,9 @@ export default {
       })
       await this.$api.get('getQuestions').then(res => {
         if (res) {
-          this.questions = res.slice(0, 20)
+          this.questions = res
           this.$q.loading.hide()
+          console.log('this.questions :>> ', this.questions)
         }
       })
     },
@@ -281,6 +283,11 @@ export default {
         this.editQuestion = true
         this.show = true
       }
+    },
+    newQuest () {
+      this.editQuestion = false
+      this.form = {}
+      this.show = true
     }
   }
 }
