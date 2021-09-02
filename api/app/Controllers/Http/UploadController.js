@@ -3,7 +3,6 @@ const ExcelJS = require('exceljs');
 const Question = use("App/Models/Question")
 const Exam = use("App/Models/Examen")
 const Article = use("App/Models/Article")
-const SubTitleArticle = use("App/Models/SubTitleArticle")
 const Paragraph = use("App/Models/Paragraph")
 const Law = use("App/Models/Law")
 const SubTopic = use("App/Models/SubTopic")
