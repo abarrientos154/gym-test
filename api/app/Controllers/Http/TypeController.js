@@ -63,6 +63,16 @@ class TypeController {
       let type = (await TypeTest.query().where({_id: params.id}).first()).toJSON()
       let questions = (await Question.query().where({type: type.type_name}).with('answers').with('leyInfo').with('articuloInfo').fetch()).toJSON()
       for (let i = 0; i < questions.length; i++) {
+        if (questions[i].answers[0].order === null) {
+          questions[i].answers = questions[i].answers.sort(() => Math.random() - 0.5)
+        } else {
+          var arrayAnswers = []
+          arrayAnswers[0] = questions[i].answers.find(v => v.order.toLowerCase() === 'a')
+          arrayAnswers[1] = questions[i].answers.find(v => v.order.toLowerCase() === 'b')
+          arrayAnswers[2] = questions[i].answers.find(v => v.order.toLowerCase() === 'c')
+          arrayAnswers[3] = questions[i].answers.find(v => v.order.toLowerCase() === 'd')
+          questions[i].answers = arrayAnswers
+        }
         questions[i].answers = questions[i].answers.map(v => {
           questions[i].selected = false
           return {

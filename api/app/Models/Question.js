@@ -5,7 +5,7 @@ const Model = use('Model')
 
 class Question extends Model {
     answers () {
-        return this.hasMany('App/Models/Answer', 'id', 'id')
+        return this.hasMany('App/Models/Answer', 'id', 'id_question')
     }
 
     leyInfo () {

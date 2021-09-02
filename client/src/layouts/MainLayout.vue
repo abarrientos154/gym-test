@@ -135,15 +135,15 @@ export default {
           label: 'Inicio',
           ruta: '/inicio'
         },
-        {
+        /* {
           icon: 'view_list',
           label: 'Temas',
           ruta: '/temas'
-        },
+        }, */
         {
           icon: 'apps',
           label: 'Blog',
-          ruta: 'blog_user'
+          ruta: '/blog_user'
         },
         {
           icon: 'person',
