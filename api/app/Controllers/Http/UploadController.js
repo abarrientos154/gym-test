@@ -3,6 +3,8 @@ const ExcelJS = require('exceljs');
 const Question = use("App/Models/Question")
 const Exam = use("App/Models/Examen")
 const Article = use("App/Models/Article")
+const SubTitleArticle = use("App/Models/SubTitleArticle")
+const Paragraph = use("App/Models/Paragraph")
 const Law = use("App/Models/Law")
 const SubTopic = use("App/Models/SubTopic")
 const Topic = use("App/Models/Topic")
@@ -206,27 +208,59 @@ class UploadController {
     workbook = await workbook.xlsx.readFile(filePath)
     let explanation = workbook.getWorksheet('Hoja1')
     let colComment = explanation.getColumn('B')
+    var articleNumber = ''
+    var order = 0
+    var artId = ''
     colComment.eachCell(async (cell, rowNumber) => {
       if (rowNumber >= 2) {
-        let article = {}
-        let paragraph = explanation.getCell('A' + rowNumber).value
-        let law = explanation.getCell('B' + rowNumber).value
-        let article_name = explanation.getCell('C' + rowNumber).value
-        if (explanation.getCell('E' + rowNumber).value !== '') {
-          var article_text = explanation.getCell('E' + rowNumber).value
-        }
-        if (explanation.getCell('F' + rowNumber).value !== '') {
-          var paragraph_text = explanation.getCell('F' + rowNumber).value
-        }
-        article.paragraph = paragraph
+        var article = {}
+        var subTitleArticle = {}
+        var paragraphDB = {}
+        //var paragraph = explanation.getCell('A' + rowNumber).value
+        var law = explanation.getCell('B' + rowNumber).value
+        var article_name = explanation.getCell('C' + rowNumber).value
+        var article_text = explanation.getCell('E' + rowNumber).value
+        var paragraph_text = explanation.getCell('F' + rowNumber).value
+        // Creacion de los registros de la colección de articulos //
+        
         article.law = law
         article.article_name = article_name
-        article.article_text = article_text
-        article.paragraph_text = paragraph_text
-        article.revision = false
-        if (paragraph_text !== null && article_text !== null) {
-          let save = await Article.create(article)
+        article.sub_title = article_text
+        
+        if (article_name !== articleNumber) {
+          articleNumber = article_name
+          var newArticle = await Article.create(article)
+          artId = newArticle._id
+          paragraphDB.article_id = artId
+          order = 0
         }
+        //                                                        //
+        // Creacion de los registros de la colección de parrafos de los articulos //
+        paragraphDB.paragraph_text = paragraph_text
+        
+        if (paragraphDB.paragraph_text.length > 0) {
+          order++
+          paragraphDB.order = order
+          var newParagrahp = await Paragraph.create(paragraphDB)
+          console.log('order :>> ', order);
+        }
+        //                                                                   //
+
+        // Creacion de los registros de la colección de subtitulos de los articulos //
+
+        /* try {
+          subTitleArticle.title_name = article_text
+          subTitleArticle.article_id = artId
+          if (subTitleArticle.title_name.length > 0 && subTitleArticle.article_id !== '') {
+            var newSubTitleArticle = await SubTitleArticle.create(subTitleArticle)
+            subAId = newSubTitleArticle._id
+            order = 0
+          }
+        } catch (error) {
+          console.error('creacion de subtitulos ' + error.message)
+        } */
+
+        //                                                                          //
       }
     })
     response.send(true)
