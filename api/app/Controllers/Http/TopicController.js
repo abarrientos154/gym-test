@@ -29,7 +29,7 @@ class TopicController {
 
   async getTopicById ({ request, response, params }) {
     let tema = (await Topic.query().where({_id: params.id}).with('subTemas').first()).toJSON()
-    let questions = (await Question.query().where({topic: tema.tema}).with('answers').fetch()).toJSON()
+    let questions = (await Question.query().where({topic: tema.topic}).with('answers').fetch()).toJSON()
     for (let i = 0; i < questions.length; i++) {
       questions[i].answers = questions[i].answers.map(v => {
         questions[i].selected = false

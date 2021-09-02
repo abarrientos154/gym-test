@@ -11,7 +11,7 @@
                     <q-img src="image 5.png" style="height: 350px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
                         <div v-if="!esExamen" class="row justify-end bg-transparent" style="width:100%">
                           <q-btn :loading="loading" rounded no-caps color="primary" label="Terminar test" class="q-px-sm"
-                          @click="!listo ? responder(true, item) : ''" >
+                          @click="terminado = true, !listo ? responder(true, item) : ''" >
                             <template v-slot:loading>
                               <q-spinner-hourglass class="on-left" />
                               Procesando...
@@ -46,7 +46,7 @@
                     </q-card>
 
                     <q-card clickable v-ripple class="bordes q-pa-none q-my-sm row items-center" v-for="(option, index2) in item.answers" :key="index2" style="width: 100%; border-radius: 10px;"
-                    @click="!listo ? answerSelected(option, item, index + 1 === preguntas.length ? true : false) : ''">
+                    @click="!listo && !terminado ? answerSelected(option, item, index + 1 === preguntas.length ? true : false) : ''">
                       <q-item class="q-pa-none row" style="width:100%">
                         <q-item-section side class="q-py-sm q-px-md q-ma-none text-h6 bg-primary text-white"
                         style="border-top-left-radius: 10px; border-bottom-left-radius: 10px">{{index2 === 0 ? 'A' : index2 === 1 ? 'B' : index2 === 2 ? 'C' : 'D'}}</q-item-section>
@@ -93,6 +93,7 @@ export default {
       timeCounter1: null,
       timeCounter2: null,
       listo: false,
+      terminado: false,
       atras: false,
       loading: false,
       verLey: false,
