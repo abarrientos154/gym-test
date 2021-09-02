@@ -5,7 +5,7 @@ const Model = use('Model')
 
 class Topic extends Model {
     subTemas () {
-        return this.hasMany('App/Models/SubTopic', 'tema', 'topic_id')
+        return this.hasMany('App/Models/SubTopic', 'topic', 'topic_id')
     }
 }
 

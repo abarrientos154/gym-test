@@ -129,7 +129,7 @@ export default {
           this.tema = res
           this.preguntas = res.questions
           this.subTemas = res.subTemas
-          this.$api.get('topic_result_by_id/' + this.tema.tema).then(v => {
+          this.$api.get('topic_result_by_id/' + this.tema.topic).then(v => {
             if (v) {
               this.resultado = v
             }
@@ -195,7 +195,7 @@ export default {
         this.$q.loading.show()
         const data = {
           user_id: this.user._id,
-          tema_id: this.tema.tema,
+          tema_id: this.tema.topic,
           tema_name: this.tema.name,
           subTemas: this.selectedSubTemas
         }
