@@ -104,6 +104,35 @@ class UserController {
     let modificar = await User.query().where('_id', params.id).update(dat)
     response.send(modificar)
   }
+  async updateUserInfo ({ params, request, response }) {
+    var dat = request.all()
+    let modificar = await User.query().where('_id', params.id).update(dat)
+    response.send(modificar)
+  }
+
+  async updatePerfilImg ({ request, response, auth }) {
+    let user = (await auth.getUser()).toJSON()
+    var profilePic = request.file('files', {
+      types: ['image'],
+      size: '25mb'
+    })
+    if (profilePic) {
+      if (Helpers.appRoot('storage/uploads/perfil')) {
+        await profilePic.move(Helpers.appRoot('storage/uploads/perfil'), {
+          name: user._id.toString(),
+          overwrite: true
+        })
+      } else {
+        mkdirp.sync(`${__dirname}/storage/Excel`)
+      }
+
+      if (!profilePic.moved()) {
+        return profilePic.error()
+      } else {
+        response.send(user)
+      }
+    }
+  }
 }
 
 module.exports = UserController;
