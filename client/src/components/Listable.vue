@@ -9,6 +9,7 @@
       :filter="filter"
     >
       <template v-slot:top-right>
+        <!-- <q-search color="primary" v-model="filter" /> -->
         <q-input borderless dense debounce="300" v-model="filter" placeholder="Buscar">
           <template v-slot:append>
             <q-icon name="search" />
@@ -41,13 +42,12 @@
   </div>
 </template>
 <script>
-import { ref } from 'vue'
 export default {
   name: 'Listable',
   props: ['columns', 'data', 'title'],
-  setup () {
+  data () {
     return {
-      filter: ref('')
+      filter: ''
     }
   },
   methods: {

@@ -209,59 +209,59 @@ class UploadController {
     let colComment = explanation.getColumn('B')
     var articleNumber = ''
     var order = 0
-    var artId = ''
     colComment.eachCell(async (cell, rowNumber) => {
       if (rowNumber >= 2) {
         var article = {}
-        var subTitleArticle = {}
-        var paragraphDB = {}
         //var paragraph = explanation.getCell('A' + rowNumber).value
         var law = explanation.getCell('B' + rowNumber).value
         var article_name = explanation.getCell('C' + rowNumber).value
         var article_text = explanation.getCell('E' + rowNumber).value
         var paragraph_text = explanation.getCell('F' + rowNumber).value
-        // Creacion de los registros de la colección de articulos //
-        
         article.law = law
         article.article_name = article_name
         article.sub_title = article_text
         
         if (article_name !== articleNumber) {
           articleNumber = article_name
-          var newArticle = await Article.create(article)
-          artId = newArticle._id
-          paragraphDB.article_id = artId
-          order = 0
+          var newArticle = Article.create(article)
+          console.log('se creo articulos');
         }
-        //                                                        //
-        // Creacion de los registros de la colección de parrafos de los articulos //
-        paragraphDB.paragraph_text = paragraph_text
-        
-        if (paragraphDB.paragraph_text.length > 0) {
-          order++
-          paragraphDB.order = order
-          var newParagrahp = await Paragraph.create(paragraphDB)
-          console.log('order :>> ', order);
-        }
-        //                                                                   //
-
-        // Creacion de los registros de la colección de subtitulos de los articulos //
-
-        /* try {
-          subTitleArticle.title_name = article_text
-          subTitleArticle.article_id = artId
-          if (subTitleArticle.title_name.length > 0 && subTitleArticle.article_id !== '') {
-            var newSubTitleArticle = await SubTitleArticle.create(subTitleArticle)
-            subAId = newSubTitleArticle._id
-            order = 0
-          }
-        } catch (error) {
-          console.error('creacion de subtitulos ' + error.message)
-        } */
-
-        //                                                                          //
       }
     })
+    let setParagraph = async () => {
+      colComment.eachCell(async (cell, rowNumber) => {
+        if (rowNumber >= 2) {
+          var paragraphDB = {}
+          //var paragraph = explanation.getCell('A' + rowNumber).value
+          var law = explanation.getCell('B' + rowNumber).value
+          var article_name = explanation.getCell('C' + rowNumber).value
+          var article_text = explanation.getCell('E' + rowNumber).value
+          var paragraph_text = explanation.getCell('F' + rowNumber).value
+          try {
+            
+            if (article_name !== articleNumber) {
+              articleNumber = article_name
+              order = 0
+            }
+            // Creacion de los registros de la colección de parrafos de los articulos //
+            paragraphDB.paragraph_text = paragraph_text
+            paragraphDB.order = order
+            
+            if (paragraphDB.paragraph_text.length > 0) {
+              order++
+              console.log('order :>> ', order);
+              var articleCreated = (await Article.query().where({ law: law, article_name: article_name }).first()).toJSON()
+              console.log('articleCreated :>> ', articleCreated);
+              paragraphDB.article_id = articleCreated._id
+              var newParagrahp = await Paragraph.create(paragraphDB)
+            }
+          } catch (error) {
+            console.error('fallo: ' + error.message)
+          }
+        }
+      })
+    }
+    setTimeout(setParagraph, 8000);
     response.send(true)
   }
   async excelLaw ({ request, response }) {
