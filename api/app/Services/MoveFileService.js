@@ -1,6 +1,5 @@
 class MoveFileService {
   async moveFile (file) {
-    console.log('file :>> ', file);
     const Helpers = use('Helpers')
     const path = require('path')
     file.clientName = 'UploadExcel.xlsx'

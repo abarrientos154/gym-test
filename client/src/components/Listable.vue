@@ -6,7 +6,15 @@
       :columns="columns"
       row-key="name"
       :no-data-label="`Aún no existen ${title}`"
+      :filter="filter"
     >
+      <template v-slot:top-right>
+        <q-input borderless dense debounce="300" v-model="filter" placeholder="Buscar">
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+      </template>
       <q-td
           slot="body-cell-actions"
           slot-scope="props"
@@ -33,11 +41,13 @@
   </div>
 </template>
 <script>
+import { ref } from 'vue'
 export default {
   name: 'Listable',
   props: ['columns', 'data', 'title'],
-  data () {
+  setup () {
     return {
+      filter: ref('')
     }
   },
   methods: {
