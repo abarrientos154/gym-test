@@ -8,8 +8,8 @@
             >
             <q-carousel-slide :name="index + 1" class="q-pa-none" v-for="(item, index) in preguntas" :key="index">
                 <div class="row justify-center">
-                    <q-img src="image 5.png" style="height: 350px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
-                        <div v-if="!esExamen" class="row justify-end bg-transparent" style="width:100%">
+                    <q-img src="fondo.png" style="height: 200px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
+                        <div v-if="!esExamen" class="row justify-end bg-transparent" style="width:100%; z-index: 3">
                           <q-btn :loading="loading" rounded no-caps color="primary" label="Terminar test" class="q-px-sm"
                           @click="terminado = true, !listo ? responder(true, item) : ''" >
                             <template v-slot:loading>
@@ -19,26 +19,28 @@
                           </q-btn>
                         </div>
                         <div class="row no-wrap items-center q-mb-xl absolute-bottom bg-transparent">
-                            <img src="balance 3.png" style="width: 50px" >
-                            <div class="text-h5 text-bold q-pl-sm">{{esTema ? test.tema_name : esExamen ? test.examen_name : test.type_name}}</div>
+                            <!-- <img src="balance 3.png" style="width: 50px" > -->
+                            <div class="text-h5 text-bold q-pl-sm ellipsis-2-lines">{{esTema ? test.tema_name : esExamen ? test.examen_name : test.type_name}}</div>
                         </div>
                     </q-img>
-                    <div v-if="esExamen && test.tiempo" class="absolute-top-right q-pa-md">
-                      <q-field outlined dense stack-label>
-                        <template v-slot:control>
-                          <div class="row justify-end no-wrap" tabindex="0" style="width:100%">
-                            <div class="text-bold text-white">{{minutos + ':' + segundos}}</div>
-                          </div>
-                        </template>
-                      </q-field>
-                    </div>
                 </div>
 
                 <div class="q-mx-md q-px-md q-pt-md bg-white" style="position:relative; top: -40px; border-top-left-radius: 20px; border-top-right-radius: 20px">
                     <q-card class="bordes q-pa-none q-mb-md" style="width: 100%; border-radius: 10px;">
-                        <div class="row no-wrap items-center q-py-xs q-pl-xs">
-                            <q-icon name="help" color="primary" size="40px" />
-                            <div class="text-primary q-pl-xs">Pregunta</div>
+                        <div class="row no-wrap items-center justify-between q-py-xs q-px-xs">
+                            <div class="row no-wrap items-center">
+                              <q-icon name="help" color="primary" size="40px" />
+                              <div class="text-primary q-pl-xs">Pregunta</div>
+                            </div>
+                            <div v-if="esExamen && test.tiempo" class="q-pr-sm">
+                              <q-field outlined dense stack-label>
+                                <template v-slot:control>
+                                  <div class="row justify-end no-wrap" tabindex="0" style="width:100%">
+                                    <div class="text-bold text-primary">{{minutos + ':' + segundos}}</div>
+                                  </div>
+                                </template>
+                              </q-field>
+                            </div>
                         </div>
                         <div class="bg-primary q-py-md q-px-md q-ma-none">
                             <div class="text-white text-center text-caption">{{item.title}}</div>
@@ -55,19 +57,17 @@
                       </q-item>
                     </q-card>
 
-                    <div class="row justify-end q-pb-xs">
-                      <q-btn flat no-caps color="orange" label="Ver ley"
-                      @click="infoSelec = item, verLey = true" />
-                    </div>
-
                     <div class="row justify-between">
                       <div>
                         <q-btn v-if="index > 0 && !atras && !listo" flat no-caps color="primary" label="Respuesta anterior"
                         @click="anterior()" />
-                      </div>
-                      <div>
+
                         <q-btn v-if="atras" flat no-caps color="primary" label="Siguiente"
                         @click="atras = false, listo = false, $refs.carousel.next()" />
+                      </div>
+                      <div>
+                        <q-btn flat no-caps color="orange" label="Ver ley"
+                        @click="'infoSelec = item, verLey = true'" />
                       </div>
                     </div>
                 </div>
@@ -79,7 +79,7 @@
             <div class="text-bold text-primary">Ley</div>
             <div class="text-caption text-grey-8">{{infoSelec.leyInfo.acronym_law ? '(' + infoSelec.leyInfo.acronym_law + ')' : ''}} {{infoSelec.leyInfo.law_name}}</div>
             <div class="text-bold text-primary q-pt-md">{{infoSelec.articuloInfo.article_name}}</div>
-            <div class="text-caption text-grey-8">{{infoSelec.articuloInfo.paragraph_text}}</div>
+            <div class="text-caption text-grey-8">{{infoSelec.articuloInfo.sub_title}}</div>
           </q-card>
         </q-dialog>
   </div>
@@ -166,6 +166,9 @@ export default {
             vm.segundos = vm.segundos - 1
           } else {
             vm.segundos = vm.segundos - 1
+            if (vm.segundos < 6) {
+              vm.terminado = true
+            }
           }
         } else {
           if (vm.minutos > 0) {
@@ -173,6 +176,7 @@ export default {
             vm.segundos = 60
           } else {
             clearInterval(vm.timeCounter)
+            vm.terminado = true
             vm.responder(true, { isActive: false })
           }
         }

@@ -9,7 +9,7 @@ class Question extends Model {
     }
 
     leyInfo () {
-        return this.hasOne('App/Models/Law', 'ley_id', 'id')
+        return this.hasOne('App/Models/Law', 'law_id', 'id')
     }
 
     articuloInfo () {
