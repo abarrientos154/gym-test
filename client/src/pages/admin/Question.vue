@@ -149,13 +149,24 @@ export default {
         this.$q.loading.hide()
       }
     },
-    async getQuestions () {
+    async getQuestions (val) {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
       await this.$api.get('getQuestions').then(res => {
         if (res) {
           this.questions = res
+          if (val && val === 'set') {
+            this.$q.notify({
+              color: 'positive',
+              message: 'Pregunta Creada Correctamente'
+            })
+          } else if (val && val === 'update') {
+            this.$q.notify({
+              color: 'positive',
+              message: 'Pregunta Actualizada Correctamente'
+            })
+          }
           this.$q.loading.hide()
         }
       })
@@ -206,17 +217,9 @@ export default {
     updateQuestion () {
       this.$v.form.$touch()
       if (!this.$v.form.$error) {
-        this.$q.loading.show({
-          message: 'Actualizando información, Por Favor Espere...'
-        })
         this.$api.put('updateQuest/' + this.form._id, this.form).then((res) => {
           if (res) {
-            this.$q.loading.hide()
-            this.$q.notify({
-              color: 'positive',
-              message: 'Pregunta Actualizada Correctamente'
-            })
-            this.getQuestions()
+            this.getQuestions('update')
           }
         })
       }
@@ -238,17 +241,9 @@ export default {
     setQuestion () {
       this.$v.$touch()
       if (!this.$v.form.$error) {
-        this.$q.loading.show({
-          message: 'Subiendo información, Por Favor Espere...'
-        })
         this.$api.post('newQuest', this.form).then((res) => {
           if (res) {
-            this.$q.loading.hide()
-            this.$q.notify({
-              color: 'positive',
-              message: 'Pregunta Creada Correctamente'
-            })
-            this.getQuestions()
+            this.getQuestions('set')
           }
         })
       }
