@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="column items-center">
       <q-img src="fondo.png" style="height: 450px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
         <div class="bg-transparent" style="width:100%">
           <div class="q-pb-sm">
@@ -15,7 +15,7 @@
         </div>
       </q-img>
 
-      <div class="q-mx-md q-pa-md bg-white" style="position:absolute; top: 130px; padding-bottom: 100px; border-top-left-radius: 20px; border-top-right-radius: 20px">
+      <div class="q-pa-md bg-white" style="position:absolute; top: 130px; padding-bottom: 100px; width:93%; border-top-left-radius: 20px; border-top-right-radius: 20px">
         <q-card style="width: 100%; border-radius: 10px">
           <q-img src="Group.png" style="width: 100%; height: 200px; border-radius: 10px">
             <div class="absolute-full">
