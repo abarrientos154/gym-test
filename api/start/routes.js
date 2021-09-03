@@ -86,6 +86,7 @@ addPrefixToGroup(
     Route.post('excel_article', 'UploadController.excelArticle')
     Route.get('articles', 'ArticleController.index')
     Route.get('getArticlesByLaw/:id', 'ArticleController.getArticlesByLaw')
+    Route.get('getParagraphsByArticle/:id', 'ParagraphController.getParagraphsByArticle')
 
     Route.get('examen', 'ExamenController.index')
     Route.get('mis_examenes', 'ExamenController.misExamenes')

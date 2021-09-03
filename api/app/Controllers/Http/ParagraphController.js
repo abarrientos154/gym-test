@@ -1,4 +1,6 @@
 'use strict'
+const Paragraph = use('App/Models/Paragraph')
+var ObjectId = require('mongodb').ObjectId;
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -18,6 +20,11 @@ class ParagraphController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
+  }
+  
+  async getParagraphsByArticle ({params, response}) {
+    const data = (await Paragraph.query().where({ article_id: params.id }).fetch()).toJSON()
+    response.send(data)
   }
 
   /**
