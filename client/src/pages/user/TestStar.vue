@@ -82,7 +82,7 @@
             <div class="text-caption text-grey-8">{{infoSelec.articuloInfo ? infoSelec.articuloInfo.sub_title : ''}}</div>
             <div v-if="infoSelec.parrafoInfo.length">
               <div v-for="(item, index) in infoSelec.parrafoInfo" :key="index"
-              class="text-caption text-grey-8">
+              class="text-caption text-grey-8" :class="infoSelec.paragraph_id && infoSelec.paragraph_id === item.id ? 'text-bold' : ''">
                 {{item.paragraph_text}}
               </div>
             </div>
