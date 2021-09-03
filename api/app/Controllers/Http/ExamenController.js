@@ -80,7 +80,7 @@ class ExamenController {
           questions[i].answers = arrayAnswers
         }
 
-        questions[i].articuloInfo = (await Articulos.query().where({article_name: questions[i].article, law: questions[i].law_id}).first()).toJSON()
+        questions[i].articuloInfo = (await Articulos.query().where({article_name: questions[i].article, law: questions[i].law_id}).first())
         questions[i].answers = questions[i].answers.map(v => {
           questions[i].selected = false
           return {

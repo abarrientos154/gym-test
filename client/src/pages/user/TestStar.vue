@@ -141,6 +141,7 @@ export default {
         if (res) {
           this.test = res
           this.preguntas = this.test.questions.sort(() => Math.random() - 0.5)
+          console.log(this.preguntas)
           if (this.esExamen && res.tiempo) {
             this.valueTiempo()
           }
