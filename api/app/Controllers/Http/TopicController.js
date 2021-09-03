@@ -2,6 +2,7 @@
 const Topic = use("App/Models/Topic")
 const TopicTest = use("App/Models/TopicTest")
 const Question = use("App/Models/Question")
+const Articulos = use("App/Models/Article")
 const moment = require('moment')
 var ObjectId = require('mongodb').ObjectId;
 
@@ -46,7 +47,7 @@ class TopicController {
   async getTestById ({ request, response, params }) {
     try {
       let tema = (await TopicTest.query().where({_id: params.id}).first()).toJSON()
-      let allQuestions = (await Question.query().where({topic: tema.tema_id}).with('answers').with('leyInfo').with('articuloInfo').fetch()).toJSON()
+      let allQuestions = (await Question.query().where({topic: tema.tema_id}).with('answers').with('leyInfo').fetch()).toJSON()
       let questions = []
       if (tema.subTemas.length) {
         questions = allQuestions.filter(v => {
@@ -70,6 +71,8 @@ class TopicController {
           arrayAnswers[3] = questions[i].answers.find(v => v.order.toLowerCase() === 'd')
           questions[i].answers = arrayAnswers
         }
+
+        questions[i].articuloInfo = (await Articulos.query().where({article_name: questions[i].article, law: questions[i].law_id}).first()).toJSON()
         questions[i].answers = questions[i].answers.map(v => {
           questions[i].selected = false
           return {

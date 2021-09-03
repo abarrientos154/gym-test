@@ -67,7 +67,7 @@
                       </div>
                       <div>
                         <q-btn flat no-caps color="orange" label="Ver ley"
-                        @click="'infoSelec = item, verLey = true'" />
+                        @click="infoSelec = item, verLey = true" />
                       </div>
                     </div>
                 </div>
