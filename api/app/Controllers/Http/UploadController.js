@@ -224,7 +224,6 @@ class UploadController {
         if (article_name !== articleNumber) {
           articleNumber = article_name
           var newArticle = Article.create(article)
-          console.log('se creo articulos');
         }
       }
     })
@@ -249,9 +248,7 @@ class UploadController {
             
             if (paragraphDB.paragraph_text.length > 0) {
               order++
-              console.log('order :>> ', order);
               var articleCreated = (await Article.query().where({ law: law, article_name: article_name }).first()).toJSON()
-              console.log('articleCreated :>> ', articleCreated);
               paragraphDB.article_id = articleCreated._id
               var newParagrahp = await Paragraph.create(paragraphDB)
             }
