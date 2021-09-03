@@ -12,7 +12,11 @@
       </q-btn>
     </div>
     <q-btn color="primary" label="Nueva Pregunta" icon="add" dense no-caps size="md" class="q-ml-md" @click="newQuest()"/>
-    <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="filter.topic" label="Escoga un tema" dense :options="topics" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="topic" clearable></q-select>
+    <div class="row q-my-sm q-mx-md">
+      <q-select style="min-width: 220px" class="q-mr-sm" outlined v-model="filter.topic" label="Escoga un tema" dense :options="topics" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="topic" @input="getQuestions(filter.topic)" clearable></q-select>
+      <q-select style="min-width: 220px" class="q-mr-sm" outlined v-model="filter.type" label="Escoga un tipo" dense :options="types" map-options emit-value option-value="type_name" options-selected-class="text-primary" option-label="type_name" @input="getQuestions(filter.type)" clearable></q-select>
+      <!-- <q-select style="min-width: 220px" class="q-mr-sm" outlined v-model="filter.type" label="Escoga un tema" dense :options="types" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="type" clearable></q-select> -->
+    </div>
     <div class="row justify-center" style="height: 70%">
       <listable class="col" :columns="columns" :data="questions" title="Preguntas" @function="execute"/>
     </div>
@@ -66,7 +70,9 @@ export default {
       articles: [],
       paragraphs: [],
       types: [],
-      filter: {}
+      filter: {},
+      topic: '',
+      type: ''
     }
   },
   validations: {
@@ -82,6 +88,7 @@ export default {
   mounted () {
     // this.getQuestions()
     this.getTopics()
+    this.getTypes()
   },
   methods: {
     getData () {
@@ -95,11 +102,13 @@ export default {
         this.$q.loading.hide()
       }
     },
-    async getQuestions (val) {
+    async getQuestions (val, filter) {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      await this.$api.get('getQuestions').then(res => {
+      this.filter
+      console.log('filter >> ', filter)
+      await this.$api.post('getQuestionsByFilter', filter).then(res => {
         if (res) {
           this.questions = res
           if (val && val === 'set') {

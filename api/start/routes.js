@@ -110,6 +110,7 @@ addPrefixToGroup(
     Route.post('excel_question', 'UploadController.excelQuestion')
     Route.put('multiplesQuestions', 'QuestionController.multiplesQuestions')
     Route.get('getQuestions', 'QuestionController.index')
+    Route.post('getQuestionsByFilter', 'QuestionController.getQuestionsByFilter')
     Route.get('getQuestionsbyTest/:id', 'QuestionController.getQuestionsbyTest')
     Route.get('getQuestionsbyExam/:id', 'QuestionController.getQuestionsbyExam')
     Route.get('getFullQuestions/', 'QuestionController.getFullQuestions')

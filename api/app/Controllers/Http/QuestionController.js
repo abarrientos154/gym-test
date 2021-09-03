@@ -52,6 +52,42 @@ class QuestionController {
     }
     response.send(data)
   }
+  async getQuestionsByFilter ({ request, response }) {
+    let filter = request.all()
+    console.log('filter :>> ', filter);
+    if (filter.topic && filter.type === undefined) {
+      var data = (await Question.query().where({ topic: filter.topic }).fetch()).toJSON()
+    } else if (filter.type && filter.topic === undefined) {
+      var data = (await Question.query().where({ type: filter.type }).fetch()).toJSON()
+    } else if (filter.topic && filter.type) {
+      var data = (await Question.query().where({ type: filter.type, topic: filter.topic}).fetch()).toJSON()
+    }
+    if (data !== []) {
+      for (const i in data) {
+        let law = await Law.query().where({ id: data[i].law_id }).first()
+        if (law !== null) {
+          data[i].lawName = law.law_name
+        }
+        data[i].actions = [
+          {
+            color: "primary",
+            icon: "edit",
+            url: "",
+            action: "",
+            title: "Editar",
+          },
+          {
+            color: "red",
+            icon: "delete",
+            url: "",
+            action: "",
+            title: "Eliminar",
+          }
+        ]
+      }
+    }
+    response.send(data)
+  }
 
   /* async getQuestionsbyTest ({ response, params }) {
     const id = parseInt(params.id)

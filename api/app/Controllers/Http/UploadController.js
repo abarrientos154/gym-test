@@ -223,7 +223,7 @@ class UploadController {
         
         if (article_name !== articleNumber) {
           articleNumber = article_name
-          var newArticle = Article.create(article)
+          var newArticle = await Article.create(article)
         }
       }
     })
