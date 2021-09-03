@@ -70,9 +70,7 @@ export default {
       articles: [],
       paragraphs: [],
       types: [],
-      filter: {},
-      topic: '',
-      type: ''
+      filter: {}
     }
   },
   validations: {
@@ -106,7 +104,7 @@ export default {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      this.filter
+      // this.filter
       console.log('filter >> ', filter)
       await this.$api.post('getQuestionsByFilter', filter).then(res => {
         if (res) {
