@@ -78,8 +78,14 @@
           <q-card class="q-pa-md bordes" style="width: 100%; border-radius: 15px">
             <div class="text-bold text-primary">Ley</div>
             <div class="text-caption text-grey-8">{{infoSelec.leyInfo.acronym_law ? '(' + infoSelec.leyInfo.acronym_law + ')' : ''}} {{infoSelec.leyInfo.law_name}}</div>
-            <div class="text-bold text-primary q-pt-md">{{infoSelec.articuloInfo.article_name}}</div>
-            <div class="text-caption text-grey-8">{{infoSelec.articuloInfo.sub_title}}</div>
+            <div class="text-bold text-primary q-pt-md">{{infoSelec.article}}</div>
+            <div class="text-caption text-grey-8">{{infoSelec.articuloInfo ? infoSelec.articuloInfo.sub_title : ''}}</div>
+            <div v-if="infoSelec.parrafoInfo.length">
+              <div v-for="(item, index) in infoSelec.parrafoInfo" :key="index"
+              class="text-caption text-grey-8">
+                {{item.paragraph_text}}
+              </div>
+            </div>
           </q-card>
         </q-dialog>
   </div>

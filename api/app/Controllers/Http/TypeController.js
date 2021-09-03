@@ -3,6 +3,7 @@ const Type = use("App/Models/Type")
 const Question = use("App/Models/Question")
 const TypeTest = use("App/Models/TypeTest")
 const Articulos = use("App/Models/Article")
+const Parrafos = use("App/Models/Paragraph")
 const moment = require('moment')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
@@ -75,7 +76,17 @@ class TypeController {
           questions[i].answers = arrayAnswers
         }
 
-        questions[i].articuloInfo = (await Articulos.query().where({article_name: questions[i].article, law: questions[i].law_id}).first()).toJSON()
+        questions[i].articuloInfo = (await Articulos.query().where({article_name: questions[i].article, law: questions[i].law_id}).first())
+        if (questions[i].articuloInfo) {
+          questions[i].parrafoInfo = (await Parrafos.query().where({article_id: String(questions[i].articuloInfo._id)}).fetch()).toJSON()
+        } else {
+          questions[i].parrafoInfo = []
+        }
+        if (questions[i].parrafoInfo.length) {
+          questions[i].parrafoInfo.sort(function(a, b) {
+            return a.order - b.order;
+          })
+        }
         questions[i].answers = questions[i].answers.map(v => {
           questions[i].selected = false
           return {
