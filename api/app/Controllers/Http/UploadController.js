@@ -231,7 +231,7 @@ class UploadController {
       colComment.eachCell(async (cell, rowNumber) => {
         if (rowNumber >= 2) {
           var paragraphDB = {}
-          //var paragraph = explanation.getCell('A' + rowNumber).value
+          var id = explanation.getCell('A' + rowNumber).value
           var law = explanation.getCell('B' + rowNumber).value
           var article_name = explanation.getCell('C' + rowNumber).value
           var article_text = explanation.getCell('E' + rowNumber).value
@@ -245,6 +245,7 @@ class UploadController {
             // Creacion de los registros de la colección de parrafos de los articulos //
             paragraphDB.paragraph_text = paragraph_text
             paragraphDB.order = order
+            paragraphDB.id = id
             
             if (paragraphDB.paragraph_text.length > 0) {
               order++

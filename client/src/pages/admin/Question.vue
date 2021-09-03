@@ -5,45 +5,6 @@
       <div class="text-h4 text-white text-bold q-mb-xl q-px-xl">Preguntas</div>
       <div class="text-h5 text-white q-mb-sm q-px-md">Preguntas recientes</div>
       <div class="column">
-        <!-- <q-scroll-area horizontal style="height: 280px;">
-          <div class="full-width row no-wrap">
-            <q-card class="q-mr-md column bordes" v-for="(item, index) in questions" :key="index" style="min-width: 275px; max-width: 400px">
-              <q-card-section class="col" horizontal>
-                <q-card-section class="col column justify-between">
-                  <div class="text-subtitle1 text-bold text-primary" style="min-width: 275px; max-width: 400px">{{item.title}}</div>
-                  <div class="column justify-between">
-                    <div class="row items-center text-grey">
-                      <q-icon size="20px" name="date_range" class="q-mr-xs"/>
-                      <div>{{item.topic}}</div>
-                    </div>
-                    <div class="row items-center text-grey">
-                      <q-icon size="20px" name="account_tree" class="q-mr-xs"/>
-                      <div>Gestion</div>
-                    </div>
-                    <div class="row items-center text-grey">
-                      <q-icon size="20px" name="schedule" class="q-mr-xs"/>
-                      <div>10 minutos</div>
-                    </div>
-                  </div>
-                </q-card-section>
-                <q-separator color="primary" vertical/>
-                <q-card-section class="column" style="width: 90px">
-                  <div class="col column items-center justify-around">
-                    <q-btn flat dense>
-                      <q-img src="visibility.png" style="height: 25px; width: 35px;"/>
-                    </q-btn>
-                    <q-btn flat dense @click="editQuestion(item)">
-                      <q-img src="edit.png" style="height: 30px; width: 30px;"/>
-                    </q-btn>
-                    <q-btn flat dense @click="eiminarQuestion(item._id)">
-                      <q-img src="delete.png" style="height: 30px; width: 30px;"/>
-                    </q-btn>
-                  </div>
-                </q-card-section>
-              </q-card-section>
-            </q-card>
-          </div>
-        </q-scroll-area> -->
       </div>
       <q-btn color="primary" dense no-caps size="md">
         <q-file borderless v-model="file" hint="(.xls, .xlsx, .xltx, .ods, .ots, .csv)" accept=".xls, .xlsx, .xltx, .ods, .ots, .csv/*" @input="changeFile()" style="height: 30px; font-size: 0px"/>
@@ -51,27 +12,10 @@
       </q-btn>
     </div>
     <q-btn color="primary" label="Nueva Pregunta" icon="add" dense no-caps size="md" class="q-ml-md" @click="newQuest()"/>
+    <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="filter.topic" label="Escoga un tema" dense :options="topics" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="topic" clearable></q-select>
     <div class="row justify-center" style="height: 70%">
       <listable class="col" :columns="columns" :data="questions" title="Preguntas" @function="execute"/>
     </div>
-    <!-- <q-dialog v-model="nuevo" @hide="decartarCamb()">
-      <q-card style="border-radius: 20px;">
-        <q-card-section>
-          <div class="text-h6">{{edit ? 'Editar Examen' : 'Crear Examen'}}</div>
-        </q-card-section>
-        <q-card-section class="q-pt-none">
-          <q-input rounded dense outlined type="text" v-model="form.name" label="Nuevo nombre" :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()">
-            <template v-slot:prepend>
-              <q-icon name="edit" color="primary"/>
-            </template>
-          </q-input>
-        </q-card-section>
-        <q-card-actions align="right">
-          <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
-          <q-btn flat :label="edit ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="edit ? actualizarQuestion() : nuevo ? crearQuestion() : ''" no-caps/>
-        </q-card-actions>
-      </q-card>
-    </q-dialog> -->
     <q-dialog v-model="show" @hide="decartarCamb()">
       <q-card style="border-radius: 20px;">
         <q-card-section>
@@ -121,7 +65,8 @@ export default {
       laws: [],
       articles: [],
       paragraphs: [],
-      types: []
+      types: [],
+      filter: {}
     }
   },
   validations: {
@@ -135,7 +80,8 @@ export default {
     }
   },
   mounted () {
-    this.getQuestions()
+    // this.getQuestions()
+    this.getTopics()
   },
   methods: {
     getData () {
@@ -228,16 +174,6 @@ export default {
       this.form = {}
       this.edit = false
     },
-    /* editQuestion (itm) {
-      if (itm) {
-        const datos = { ...itm }
-        this.form = datos
-        this.nuevo = true
-        this.edit = true
-      } else {
-        this.nuevo = true
-      }
-    }, */
     setQuestion () {
       this.$v.$touch()
       if (!this.$v.form.$error) {
