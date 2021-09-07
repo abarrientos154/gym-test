@@ -206,15 +206,15 @@ export default {
     },
     execute (emit) {
       if (emit.title === 'Eliminar') {
-        this.deleteTopic(emit.id)
+        this.deleteArticle(emit.id)
       } else if (emit.title === 'Editar') {
-        this.getTopicById(emit.id)
+        this.getArticleById(emit.id)
         this.editArticle = true
         this.show = true
       }
     },
-    async getTopicById (id) {
-      await this.$api.get('getTopicById/' + id).then(res => {
+    async getArticleById (id) {
+      await this.$api.get('getArticleById/' + id).then(res => {
         if (res) {
           this.form = res
         }

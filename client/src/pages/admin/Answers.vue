@@ -35,10 +35,10 @@
         <div class="absolute-center">Importar archivo</div>
       </q-btn>
     </div>
-    <q-btn color="primary" label="Nueva Respuesta" icon="add" dense no-caps size="md" class="q-ml-md" @click="newAnswer()"/>
+    <!-- <q-btn color="primary" label="Nueva Respuesta" icon="add" dense no-caps size="md" class="q-ml-md" @click="newAnswer()"/> -->
     <div class="row q-my-sm q-mx-md">
-      <q-select style="min-width: 220px" class="q-mr-sm" outlined v-model="topic" label="Escoga un tema" dense :options="topics" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="topic" @input="getQuestions(topic)" clearable></q-select>
-      <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="question" label="Escoga una pregunta" dense :options="questions" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="title" @input="getAnswers(true)" @filter="filterFn" clearable>
+      <q-select style="min-width: 220px" class="q-mr-sm q-my-sm" outlined v-model="topic" label="Escoga un tema" dense :options="topics" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="topic" @input="getQuestionsByTopic(topic)" clearable></q-select>
+      <q-select style="min-width: 220px" class="q-mr-md q-my-sm" outlined v-model="question" label="Escoga una pregunta" dense :options="questions" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="title" @input="getAnswers(true)" clearable>
         <template v-slot:no-option>
           <q-item>
             <q-item-section class="text-grey">
@@ -57,7 +57,7 @@
           <div class="text-h6">{{editAnswer ? 'Editar Respuesta' : 'Crear Respuesta'}}</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
-          <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.id_question" label="Escoga una pregunta" dense :options="questions" :error="$v.form.id_question.$error" error-message="Este campo es requerido"  @blur="$v.form.id_question.$touch()" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="title" @filter="filterFn" clearable>
+          <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.id_question" label="Escoga una pregunta" dense :options="questions" :error="$v.form.id_question.$error" error-message="Este campo es requerido"  @blur="$v.form.id_question.$touch()" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="title" clearable>
             <template v-slot:no-option>
               <q-item>
                 <q-item-section class="text-grey">
@@ -94,20 +94,20 @@ export default {
       file: null,
       questions: [],
       columns: [
-        { name: 'id_question', label: '# de Pregunta', align: 'left', field: 'question' },
+        { name: 'id_question', label: '# de Pregunta', align: 'left', field: 'id_question' },
         { name: 'answer_name', label: 'Respuesta', align: 'left', field: 'answer_name' },
         {
           name: 'isCorrect',
           align: 'left',
           label: 'Correcta',
-          field: 'isCorrect',
+          field: 'isCorrect'/* ,
           format: (val) => {
             if (val === true) {
               val = 'Si'
             } else {
               val = 'No'
             }
-          }
+          } */
         },
         { name: 'order', label: 'Orden', align: 'left', field: 'order' },
         { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }
@@ -116,6 +116,7 @@ export default {
       filter: {},
       question: '',
       topic: '',
+      topics: [],
       options: this.questions
     }
   },
@@ -132,19 +133,6 @@ export default {
     this.getTopics()
   },
   methods: {
-    filterFn (val, update) {
-      if (val === '') {
-        update(() => {
-          this.options = this.questions
-        })
-        return
-      }
-
-      update(() => {
-        const needle = val.toLowerCase()
-        this.options = this.questions.filter(v => v.toLowerCase().indexOf(needle) > -1)
-      })
-    },
     async getTopics () {
       await this.$api.get('getTopics').then(res => {
         if (res) {
@@ -226,9 +214,9 @@ export default {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      await this.$api.get('getAnswersByFilter', this.filter).then(res => {
+      await this.$api.post('getAnswersByFilter', this.filter).then(res => {
         if (res) {
-          this.answers = res.slice(0, 10)
+          this.answers = res
           // console.log(this.answers)
         }
         this.$q.loading.hide()
@@ -260,7 +248,7 @@ export default {
     },
     execute (emit) {
       if (emit.title === 'Eliminar') {
-        this.deleteTopic(emit.id)
+        this.deleteAnswer(emit.id)
       } else if (emit.title === 'Editar') {
         this.getAnswerById(emit.id)
         this.editAnswer = true

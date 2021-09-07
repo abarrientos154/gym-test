@@ -24,7 +24,7 @@ class AnswerController {
   async getAnswersByFilter ({ request, response }) {
     let filter = request.all()
     if (filter.question) {
-      var data = (await Answer.query().where({ law: filter.question }).fetch()).toJSON()
+      var data = (await Answer.query().where({ id_question: filter.question }).fetch()).toJSON()
     }
     if (data !== []) {
       for (const i in data) {
@@ -44,6 +44,11 @@ class AnswerController {
             title: "Eliminar",
           }
         ]
+        if (data[i].isCorrect === true) {
+          data[i].isCorrect = 'Si'
+        } else if (data[i].isCorrect === false) {
+          data[i].isCorrect = 'No'
+        }
       }
     }
     response.send(data)
