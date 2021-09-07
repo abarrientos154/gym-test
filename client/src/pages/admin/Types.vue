@@ -6,7 +6,7 @@
       <div class="text-h4 text-white text-bold q-mb-xl q-px-xl">Tipos</div>
       <div>
         <div class="text-h5 text-white q-mb-sm q-px-md">Tipos recientes</div>
-        <q-scroll-area horizontal style="height: 230px">
+        <!-- <q-scroll-area horizontal style="height: 230px">
           <div class="full-width row no-wrap">
             <q-card class="q-mr-md column bordes" v-for="(item, index) in types" :key="index" style="width: 260px; border-radius: 20px;">
               <q-img src="noimg.png" style="height: 130px"/>
@@ -28,28 +28,29 @@
               </q-card-section>
             </q-card>
           </div>
-        </q-scroll-area>
+        </q-scroll-area> -->
       </div>
       <q-btn color="primary" dense no-caps size="md">
         <q-file borderless v-model="file" hint="(.xls, .xlsx, .xltx, .ods, .ots, .csv)" accept=".xls, .xlsx, .xltx, .ods, .ots, .csv/*" @input="uploadFile()" style="height: 30px; font-size: 0px"/>
         <div class="absolute-center">Importar archivo</div>
       </q-btn>
     </div>
-    <q-dialog v-model="nuevo" @hide="decartarCamb()">
+    <q-btn color="primary" label="Nuevo Tipo" icon="add" dense no-caps size="md" class="q-ml-md" @click="newType()"/>
+    <div class="row justify-center" style="height: 70%">
+      <listable class="col" :columns="columns" :data="types" title="Tipos" @function="execute"/>
+    </div>
+    <q-dialog v-model="show" @hide="decartarCamb()">
       <q-card style="border-radius: 20px;">
         <q-card-section>
-          <div class="text-h6">{{edit ? 'Editar Examen' : 'Crear Examen'}}</div>
+          <div class="text-h6">{{editType ? 'Editar Tipo' : 'Crear Tipo'}}</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
-          <q-input rounded dense outlined type="text" v-model="form.name" label="Nuevo nombre" :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()">
-            <template v-slot:prepend>
-              <q-icon name="edit" color="primary"/>
-            </template>
+          <q-input dense outlined type="text" v-model="form.type_name" label="Nuevo Tipo" :error="$v.form.type_name.$error" error-message="Este campo es requerido"  @blur="$v.form.type_name.$touch()">
           </q-input>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
-          <q-btn flat :label="edit ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="edit ? updateTypes() : nuevo ? setType() : ''" no-caps/>
+          <q-btn flat :label="editType ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="editType ? updateType() : setType()" no-caps/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -57,33 +58,39 @@
 </template>
 
 <script>
-import { required, minLength, maxLength } from 'vuelidate/lib/validators'
+import Listable from '../../components/Listable.vue'
+import { required } from 'vuelidate/lib/validators'
 export default {
+  components: { Listable },
   data () {
     return {
-      edit: false,
-      nuevo: false,
+      editType: false,
       form: {},
       types: [],
-      file: null
+      file: null,
+      columns: [
+        { name: 'type_name', label: 'Tipo', align: 'left', field: 'type_name' },
+        { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }
+      ],
+      show: false
     }
   },
   validations: {
     form: {
-      name: { required, minLength: minLength(3), maxLength: maxLength(20) }
+      type_name: { required }
     }
   },
   mounted () {
     this.getTypes()
   },
   methods: {
-    updateTypes () {
+    updateType () {
       this.$v.form.$touch()
       if (!this.$v.form.$error) {
         this.$q.loading.show({
           message: 'Actualizando Tipo, Por Favor Espere...'
         })
-        this.$api.put('/' + this.form._id, this.form).then((res) => {
+        this.$api.put('updateType/' + this.form._id, this.form).then((res) => {
           if (res) {
             this.$q.loading.hide()
             this.$q.notify({
@@ -99,23 +106,13 @@ export default {
       this.form = {}
       this.edit = false
     },
-    editType (itm) {
-      if (itm) {
-        const datos = { ...itm }
-        this.form = datos
-        this.nuevo = true
-        this.edit = true
-      } else {
-        this.nuevo = true
-      }
-    },
     setType () {
       this.$v.$touch()
       if (!this.$v.form.$error) {
         this.$q.loading.show({
           message: 'Subiendo tipo, Por Favor Espere...'
         })
-        this.$api.post('', this.form).then((res) => {
+        this.$api.post('setType', this.form).then((res) => {
           if (res) {
             this.$q.loading.hide()
             this.$q.notify({
@@ -134,7 +131,7 @@ export default {
         cancel: true,
         persistent: true
       }).onOk(() => {
-        this.$api.delete('/' + id).then(res => {
+        this.$api.delete('deleteType/' + id).then(res => {
           if (res) {
             this.$q.notify({
               color: 'positive',
@@ -182,6 +179,27 @@ export default {
           this.$q.loading.hide()
         })
       }
+    },
+    execute (emit) {
+      if (emit.title === 'Eliminar') {
+        this.deleteType(emit.id)
+      } else if (emit.title === 'Editar') {
+        this.getTypeById(emit.id)
+        this.editType = true
+        this.show = true
+      }
+    },
+    async getTypeById (id) {
+      await this.$api.get('getTypeById/' + id).then(res => {
+        if (res) {
+          this.form = res
+        }
+      })
+    },
+    newType () {
+      this.editType = false
+      this.form = {}
+      this.show = true
     }
   }
 }

@@ -183,7 +183,7 @@ export default {
     },
     decartarCamb () {
       this.form = {}
-      this.edit = false
+      this.show = false
     },
     setQuestion () {
       this.$v.$touch()

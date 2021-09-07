@@ -6,9 +6,9 @@
       <div class="text-h4 text-white text-bold q-mb-xl q-px-xl">Examen</div>
       <div>
         <div class="text-h5 text-white q-mb-sm q-px-md">Mis examenes</div>
-        <q-scroll-area horizontal style="height: 175px">
+        <!-- <q-scroll-area horizontal style="height: 175px">
           <div class="full-width row no-wrap">
-            <q-card class="q-mr-md column bordes" v-for="(item, index) in examenes" :key="index" style="width: 275px;">
+            <q-card class="q-mr-md column bordes" v-for="(item, index) in exams" :key="index" style="width: 275px;">
               <q-card-section class="col" horizontal>
                 <q-card-section class="col column justify-between">
                   <div class="text-subtitle1 text-bold text-primary">{{item.name}}</div>
@@ -44,28 +44,33 @@
               </q-card-section>
             </q-card>
           </div>
-        </q-scroll-area>
+        </q-scroll-area> -->
       </div>
       <q-btn color="primary" dense no-caps size="md">
         <q-file borderless v-model="file" hint="(.xls, .xlsx, .xltx, .ods, .ots, .csv)" accept=".xls, .xlsx, .xltx, .ods, .ots, .csv/*" @input="changeFile()" style="height: 30px; font-size: 0px"/>
         <div class="absolute-center">Importar archivo</div>
       </q-btn>
     </div>
-    <q-dialog v-model="nuevo" @hide="decartarCamb()">
+    <q-btn color="primary" label="Nuevo Examen" icon="add" dense no-caps size="md" class="q-ml-md" @click="newExam()"/>
+    <div class="row justify-center" style="height: 70%">
+      <listable class="col" :columns="columns" :data="exams" title="Examenes" @function="execute"/>
+    </div>
+    <q-dialog v-model="show" @hide="decartarCamb()">
       <q-card style="border-radius: 20px;">
         <q-card-section>
-          <div class="text-h6">{{edit ? 'Editar Examen' : 'Crear Examen'}}</div>
+          <div class="text-h6">{{editExam ? 'Editar examen' : 'Crear examen'}}</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
-          <q-input rounded dense outlined type="text" v-model="form.name" label="Nuevo nombre" :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()">
-            <template v-slot:prepend>
-              <q-icon name="edit" color="primary"/>
-            </template>
+          <q-input dense outlined type="text" v-model="form.name" label="Nuevo examen" :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()">
           </q-input>
+          <!-- <q-date
+            v-model="date"
+            default-view="Years"
+          /> -->
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
-          <q-btn flat :label="edit ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="edit ? actualizarExam() : nuevo ? crearExam() : ''" no-caps/>
+          <q-btn flat :label="editExam ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="editExam ? updateExam() : setExam()" no-caps/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -73,27 +78,37 @@
 </template>
 
 <script>
-import { required, minLength, maxLength } from 'vuelidate/lib/validators'
+import Listable from '../../components/Listable.vue'
+import { required } from 'vuelidate/lib/validators'
 export default {
+  components: { Listable },
   data () {
     return {
       edit: false,
       nuevo: false,
       form: {},
-      examenes: [],
-      file: null
+      exams: [],
+      file: null,
+      columns: [
+        { name: 'date', label: 'Fecha', align: 'left', field: 'date' },
+        { name: 'convocatoria', label: 'Convocatoria', align: 'left', field: 'convocatoria' },
+        { name: 'name', align: 'left', label: 'Nombre', field: 'name' },
+        { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }
+      ],
+      show: false,
+      editExam: false
     }
   },
   validations: {
     form: {
-      name: { required, minLength: minLength(3), maxLength: maxLength(20) }
+      name: { required }
     }
   },
   mounted () {
     this.getExam()
   },
   methods: {
-    actualizarExam () {
+    updateExam () {
       this.$v.form.$touch()
       if (!this.$v.form.$error) {
         this.$q.loading.show({
@@ -115,7 +130,7 @@ export default {
       this.form = {}
       this.edit = false
     },
-    editExam (itm) {
+    /* editExam (itm) {
       if (itm) {
         const datos = { ...itm }
         this.form = datos
@@ -124,8 +139,8 @@ export default {
       } else {
         this.nuevo = true
       }
-    },
-    crearExam () {
+    }, */
+    setExam () {
       this.$v.$touch()
       if (!this.$v.form.$error) {
         this.$q.loading.show({
@@ -143,7 +158,7 @@ export default {
         })
       }
     },
-    eiminarExam (id) {
+    deleteExam (id) {
       this.$q.dialog({
         title: 'Confirma',
         message: '¿Seguro deseas eliminar este examen?',
@@ -169,8 +184,7 @@ export default {
       })
       this.$api.get('examen').then(res => {
         if (res) {
-          this.examenes = res
-          // console.log(this.examenes)
+          this.exams = res
         }
         this.$q.loading.hide()
       })
@@ -198,6 +212,27 @@ export default {
           this.$q.loading.hide()
         })
       }
+    },
+    execute (emit) {
+      if (emit.title === 'Eliminar') {
+        this.deleteExam(emit.id)
+      } else if (emit.title === 'Editar') {
+        this.getExamById(emit.id)
+        this.editExam = true
+        this.show = true
+      }
+    },
+    async getExamById (id) {
+      await this.$api.get('getExamById/' + id).then(res => {
+        if (res) {
+          this.form = res
+        }
+      })
+    },
+    newExam () {
+      this.editQuestion = false
+      this.form = {}
+      this.show = true
     }
   }
 }

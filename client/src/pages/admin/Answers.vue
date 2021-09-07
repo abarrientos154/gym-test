@@ -6,7 +6,7 @@
       <div class="text-h4 text-white text-bold q-mb-xl q-px-xl">Respuestas</div>
       <div>
         <div class="text-h5 text-white q-mb-sm q-px-md">Respuestas recientes</div>
-        <q-scroll-area horizontal style="height: 230px">
+        <!-- <q-scroll-area horizontal style="height: 230px">
           <div class="full-width row no-wrap">
             <q-card class="q-mr-md column bordes" v-for="(item, index) in answers" :key="index" style="width: 260px; border-radius: 20px;">
               <q-img src="noimg.png" style="height: 130px"/>
@@ -28,28 +28,52 @@
               </q-card-section>
             </q-card>
           </div>
-        </q-scroll-area>
+        </q-scroll-area> -->
       </div>
       <q-btn color="primary" dense no-caps size="md">
         <q-file borderless v-model="file" hint="(.xls, .xlsx, .xltx, .ods, .ots, .csv)" accept=".xls, .xlsx, .xltx, .ods, .ots, .csv/*" @input="uploadFile()" style="height: 30px; font-size: 0px"/>
         <div class="absolute-center">Importar archivo</div>
       </q-btn>
     </div>
-    <q-dialog v-model="nuevo" @hide="decartarCamb()">
+    <q-btn color="primary" label="Nueva Respuesta" icon="add" dense no-caps size="md" class="q-ml-md" @click="newAnswer()"/>
+    <div class="row q-my-sm q-mx-md">
+      <q-select style="min-width: 220px" class="q-mr-sm" outlined v-model="topic" label="Escoga un tema" dense :options="topics" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="topic" @input="getQuestions(topic)" clearable></q-select>
+      <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="question" label="Escoga una pregunta" dense :options="questions" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="title" @input="getAnswers(true)" @filter="filterFn" clearable>
+        <template v-slot:no-option>
+          <q-item>
+            <q-item-section class="text-grey">
+              Primero escoge un Tema
+            </q-item-section>
+          </q-item>
+        </template>
+      </q-select>
+    </div>
+    <div class="row justify-center" style="height: 70%">
+      <listable class="col" :columns="columns" :data="answers" title="Respuestas" @function="execute"/>
+    </div>
+    <q-dialog v-model="show" @hide="decartarCamb()">
       <q-card style="border-radius: 20px;">
         <q-card-section>
-          <div class="text-h6">{{edit ? 'Editar Examen' : 'Crear Examen'}}</div>
+          <div class="text-h6">{{editAnswer ? 'Editar Respuesta' : 'Crear Respuesta'}}</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
-          <q-input rounded dense outlined type="text" v-model="form.name" label="Nuevo nombre" :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()">
-            <template v-slot:prepend>
-              <q-icon name="edit" color="primary"/>
+          <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.id_question" label="Escoga una pregunta" dense :options="questions" :error="$v.form.id_question.$error" error-message="Este campo es requerido"  @blur="$v.form.id_question.$touch()" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="title" @filter="filterFn" clearable>
+            <template v-slot:no-option>
+              <q-item>
+                <q-item-section class="text-grey">
+                  Primero escoge un Tema
+                </q-item-section>
+              </q-item>
             </template>
+          </q-select>
+          <q-input dense outlined type="text" v-model="form.answer_name" label="Nueva Respuesta" :error="$v.form.answer_name.$error" error-message="Este campo es requerido"  @blur="$v.form.answer_name.$touch()">
+          </q-input>
+          <q-input dense outlined type="text" v-model="form.order" label="Orden" :error="$v.form.order.$error" error-message="Este campo es requerido"  @blur="$v.form.order.$touch()">
           </q-input>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
-          <q-btn flat :label="edit ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="edit ? updateAnswers() : nuevo ? setAnswer() : ''" no-caps/>
+          <q-btn flat :label="editAnswer ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="editAnswer ? updateAnswer() : setAnswer()" no-caps/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -57,33 +81,91 @@
 </template>
 
 <script>
-import { required, minLength, maxLength } from 'vuelidate/lib/validators'
+import Listable from '../../components/Listable.vue'
+import { required, maxLength } from 'vuelidate/lib/validators'
 export default {
+  components: { Listable },
   data () {
     return {
-      edit: false,
+      editAnswer: false,
       nuevo: false,
       form: {},
       answers: [],
-      file: null
+      file: null,
+      questions: [],
+      columns: [
+        { name: 'id_question', label: '# de Pregunta', align: 'left', field: 'question' },
+        { name: 'answer_name', label: 'Respuesta', align: 'left', field: 'answer_name' },
+        {
+          name: 'isCorrect',
+          align: 'left',
+          label: 'Correcta',
+          field: 'isCorrect',
+          format: (val) => {
+            if (val === true) {
+              val = 'Si'
+            } else {
+              val = 'No'
+            }
+          }
+        },
+        { name: 'order', label: 'Orden', align: 'left', field: 'order' },
+        { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }
+      ],
+      show: false,
+      filter: {},
+      question: '',
+      topic: '',
+      options: this.questions
     }
   },
   validations: {
     form: {
-      name: { required, minLength: minLength(3), maxLength: maxLength(20) }
+      answer_name: { required },
+      id_question: { required },
+      isCorrect: { required },
+      order: { required, maxLength: maxLength(1) }
     }
   },
   mounted () {
-    this.getAnswers()
+    // this.getAnswers()
+    this.getTopics()
   },
   methods: {
-    updateAnswers () {
+    filterFn (val, update) {
+      if (val === '') {
+        update(() => {
+          this.options = this.questions
+        })
+        return
+      }
+
+      update(() => {
+        const needle = val.toLowerCase()
+        this.options = this.questions.filter(v => v.toLowerCase().indexOf(needle) > -1)
+      })
+    },
+    async getTopics () {
+      await this.$api.get('getTopics').then(res => {
+        if (res) {
+          this.topics = res
+        }
+      })
+    },
+    async getQuestionsByTopic (topic) {
+      await this.$api.get('getQuestionsByTopic/' + topic).then(res => {
+        if (res) {
+          this.questions = res
+        }
+      })
+    },
+    updateAnswer () {
       this.$v.form.$touch()
       if (!this.$v.form.$error) {
         this.$q.loading.show({
           message: 'Actualizando Respuesta, Por Favor Espere...'
         })
-        this.$api.put('/' + this.form._id, this.form).then((res) => {
+        this.$api.put('updateAnswer/' + this.form._id, this.form).then((res) => {
           if (res) {
             this.$q.loading.hide()
             this.$q.notify({
@@ -99,23 +181,13 @@ export default {
       this.form = {}
       this.edit = false
     },
-    editAnswer (itm) {
-      if (itm) {
-        const datos = { ...itm }
-        this.form = datos
-        this.nuevo = true
-        this.edit = true
-      } else {
-        this.nuevo = true
-      }
-    },
     setAnswer () {
       this.$v.$touch()
       if (!this.$v.form.$error) {
         this.$q.loading.show({
           message: 'Subiendo ley, Por Favor Espere...'
         })
-        this.$api.post('', this.form).then((res) => {
+        this.$api.post('setAnswer', this.form).then((res) => {
           if (res) {
             this.$q.loading.hide()
             this.$q.notify({
@@ -134,7 +206,7 @@ export default {
         cancel: true,
         persistent: true
       }).onOk(() => {
-        this.$api.delete('/' + id).then(res => {
+        this.$api.delete('deleteAnswer/' + id).then(res => {
           if (res) {
             this.$q.notify({
               color: 'positive',
@@ -147,11 +219,14 @@ export default {
         // console.log('>>>> Cancel')
       })
     },
-    async getAnswers () {
+    async getAnswers (isFilter) {
+      if (isFilter === true) {
+        this.filter.question = this.question
+      }
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      await this.$api.get('answers').then(res => {
+      await this.$api.get('getAnswersByFilter', this.filter).then(res => {
         if (res) {
           this.answers = res.slice(0, 10)
           // console.log(this.answers)
@@ -182,6 +257,27 @@ export default {
           this.$q.loading.hide()
         })
       }
+    },
+    execute (emit) {
+      if (emit.title === 'Eliminar') {
+        this.deleteTopic(emit.id)
+      } else if (emit.title === 'Editar') {
+        this.getAnswerById(emit.id)
+        this.editAnswer = true
+        this.show = true
+      }
+    },
+    async getAnswerById (id) {
+      await this.$api.get('getAnswerById/' + id).then(res => {
+        if (res) {
+          this.form = res
+        }
+      })
+    },
+    newAnswer () {
+      this.editAnswer = false
+      this.form = {}
+      this.show = true
     }
   }
 }

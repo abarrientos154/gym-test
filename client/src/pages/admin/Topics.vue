@@ -6,7 +6,7 @@
       <div class="text-h4 text-white text-bold q-mb-xl q-px-xl">Temas</div>
       <div>
         <div class="text-h5 text-white q-mb-sm q-px-md">Temas recientes</div>
-        <q-scroll-area horizontal style="height: 230px">
+        <!-- <q-scroll-area horizontal style="height: 230px">
           <div class="full-width row no-wrap">
             <q-card class="q-mr-md column bordes" v-for="(item, index) in topics" :key="index" style="width: 260px; border-radius: 20px;">
               <q-img src="noimg.png" style="height: 130px"/>
@@ -28,113 +28,82 @@
               </q-card-section>
             </q-card>
           </div>
-        </q-scroll-area>
+        </q-scroll-area> -->
       </div>
       <q-btn color="primary" dense no-caps size="md">
         <q-file borderless v-model="file" hint="(.xls, .xlsx, .xltx, .ods, .ots, .csv)" accept=".xls, .xlsx, .xltx, .ods, .ots, .csv/*" @input="changeFile()" style="height: 30px; font-size: 0px"/>
         <div class="absolute-center">Importar archivo</div>
       </q-btn>
     </div>
-    <q-dialog v-model="nuevo" @hide="decartarCamb()">
+    <q-btn color="primary" label="Nuevo Tema" icon="add" dense no-caps size="md" class="q-ml-md" @click="newTopic()"/>
+    <div class="row justify-center" style="height: 70%">
+      <listable class="col" :columns="columns" :data="topics" title="Temas" @function="execute"/>
+    </div>
+    <q-dialog v-model="show" @hide="decartarCamb()">
       <q-card style="border-radius: 20px;">
         <q-card-section>
-          <div class="text-h6">{{edit ? 'Editar Examen' : 'Crear Examen'}}</div>
+          <div class="text-h6">{{editTopic ? 'Editar Tema' : 'Crear Tema'}}</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
-          <q-input rounded dense outlined type="text" v-model="form.name" label="Nuevo nombre" :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()">
-            <template v-slot:prepend>
-              <q-icon name="edit" color="primary"/>
-            </template>
+          <q-input dense outlined type="text" v-model="form.name" label="Nuevo Tema" :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()">
+          </q-input>
+          <q-input dense outlined type="text" v-model="form.long_name" label="Nombre Completo" :error="$v.form.long_name.$error" error-message="Este campo es requerido"  @blur="$v.form.long_name.$touch()">
+          </q-input>
+          <q-input dense outlined type="text" v-model="form.topic" label="Número de Tema" :error="$v.form.topic.$error" error-message="Este campo es requerido"  @blur="$v.form.topic.$touch()">
           </q-input>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
-          <q-btn flat :label="edit ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="edit ? actualizarTopic() : nuevo ? crearTopic() : ''" no-caps/>
+          <q-btn flat :label="editTopic ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="editTopic ? updateTopic() : setTopic()" no-caps/>
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <!-- <div class="text-primary text-h5">{{course.name}}</div>
-    <div class="text-black text-subtitle1 text-weight-bolder q-mb-lg">Temas</div>
-    <q-list class="column items-center" style="width: 100%" v-if="tests.length > 0">
-      <q-card v-for="(item,index) in tests" :key="index" v-ripple class="q-pa-sm q-mb-md bordes" style="width: 75%; min-width: 300px; max-width: 500px">
-        <q-item>
-          <q-item-section @click="$router.push('/exam/' + item._id)">
-            <q-item>
-              <q-item-section avatar>
-                <q-icon name="source" size="30px"/>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label class="text-black text-weight-bolder text-h6">{{item.title}}</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-item-section>
-          <q-item-section side>
-            <q-btn flat dense round class="q-mx-sm" color="primary" icon="edit" @click="editTem(item)"/>
-            <q-btn flat dense round class="q-mx-sm" color="red" icon="delete" @click="eiminarTem(item._id)"/>
-          </q-item-section>
-        </q-item>
-      </q-card>
-    </q-list>
-    <q-card v-else class="shadow-2 q-ma-md q-pa-md">
-      <div class="text-center text-subtitle1">Actualmente sin Temas...</div>
-    </q-card>
-    <q-dialog v-model="nuevo" @hide="decartarCamb()">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">{{edit ? 'Editar Tema' : 'Crear Tema'}}</div>
-        </q-card-section>
-        <q-card-section class="q-pt-none">
-          <q-input rounded dense outlined type="text" v-model="form.title" label="Nuevo nombre" :error="$v.form.title.$error" error-message="Este campo es requerido"  @blur="$v.form.title.$touch()">
-            <template v-slot:prepend>
-              <q-icon name="edit" color="primary"/>
-            </template>
-          </q-input>
-        </q-card-section>
-        <q-card-actions align="right">
-          <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
-          <q-btn flat :label="edit ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="edit ? actualizarTem() : crearTem()" no-caps/>
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-    <q-page-sticky position="bottom-right" :offset="[20, 20]">
-      <q-btn round icon="add" color="primary" size="20px" @click="editTem()"/>
-    </q-page-sticky> -->
   </div>
 </template>
 
 <script>
-import { required, minLength, maxLength } from 'vuelidate/lib/validators'
+import Listable from '../../components/Listable.vue'
+import { required } from 'vuelidate/lib/validators'
 export default {
+  components: { Listable },
   data () {
     return {
-      edit: false,
-      nuevo: false,
+      editTopic: false,
       form: {},
       topics: [],
-      file: null
+      file: null,
+      columns: [
+        { name: 'topic', label: 'Tema', align: 'left', field: 'topic' },
+        { name: 'long_name', label: 'Nombre Completo', align: 'left', field: 'long_name' },
+        { name: 'name', align: 'left', label: 'Nombre', field: 'name' },
+        { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }
+      ],
+      show: false
     }
   },
   validations: {
     form: {
-      name: { required, minLength: minLength(3), maxLength: maxLength(20) }
+      name: { required },
+      long_name: { required },
+      topic: { required }
     }
   },
   mounted () {
     this.getTopics()
   },
   methods: {
-    actualizarTopic () {
+    updateTopic () {
       this.$v.form.$touch()
       if (!this.$v.form.$error) {
         this.$q.loading.show({
-          message: 'Actualizando Examen, Por Favor Espere...'
+          message: 'Actualizando Tema, Por Favor Espere...'
         })
-        this.$api.put('/' + this.form._id, this.form).then((res) => {
+        this.$api.put('updateTopic/' + this.form._id, this.form).then((res) => {
           if (res) {
             this.$q.loading.hide()
             this.$q.notify({
               color: 'positive',
-              message: 'Pregunta Actualizada Correctamente'
+              message: 'Tema Actualizado Correctamente'
             })
             this.getTopics()
           }
@@ -143,44 +112,34 @@ export default {
     },
     decartarCamb () {
       this.form = {}
-      this.edit = false
+      this.show = false
     },
-    editTopic (itm) {
-      if (itm) {
-        const datos = { ...itm }
-        this.form = datos
-        this.nuevo = true
-        this.edit = true
-      } else {
-        this.nuevo = true
-      }
-    },
-    crearTopic () {
+    setTopic () {
       this.$v.$touch()
       if (!this.$v.form.$error) {
         this.$q.loading.show({
-          message: 'Subiendo Examen, Por Favor Espere...'
+          message: 'Subiendo Tema, Por Favor Espere...'
         })
-        this.$api.post('', this.form).then((res) => {
+        this.$api.post('setTopic', this.form).then((res) => {
           if (res) {
             this.$q.loading.hide()
             this.$q.notify({
               color: 'positive',
-              message: 'Pregunta Creada Correctamente'
+              message: 'Tema Creado Correctamente'
             })
             this.getTopics()
           }
         })
       }
     },
-    eiminarTopic (id) {
+    deleteTopic (id) {
       this.$q.dialog({
         title: 'Confirma',
-        message: '¿Seguro deseas eliminar este examen?',
+        message: '¿Seguro deseas eliminar este Tema?',
         cancel: true,
         persistent: true
       }).onOk(() => {
-        this.$api.delete('/' + id).then(res => {
+        this.$api.delete('deleteTopic/' + id).then(res => {
           if (res) {
             this.$q.notify({
               color: 'positive',
@@ -228,6 +187,27 @@ export default {
           this.$q.loading.hide()
         })
       }
+    },
+    execute (emit) {
+      if (emit.title === 'Eliminar') {
+        this.deleteTopic(emit.id)
+      } else if (emit.title === 'Editar') {
+        this.getTopicById(emit.id)
+        this.editTopic = true
+        this.show = true
+      }
+    },
+    async getTopicById (id) {
+      await this.$api.get('getTopicById/' + id).then(res => {
+        if (res) {
+          this.form = res
+        }
+      })
+    },
+    newTopic () {
+      this.editTopic = false
+      this.form = {}
+      this.show = true
     }
   }
 }

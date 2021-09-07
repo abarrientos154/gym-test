@@ -29,8 +29,38 @@ class ExamenController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
-    let datos = await Examen.all()
-    response.send(datos)
+    let data = (await Examen.query().where({}).fetch()).toJSON()
+    if (data !== []) {
+      for (const i in data) {
+        if (data[i].date === null) {
+          data[i].date = ''
+        } else {
+          data[i].date = moment(data[i].date).format('DD/MM/YYYY')
+        }
+        data[i].actions = [
+          {
+            color: "primary",
+            icon: "edit",
+            url: "",
+            action: "",
+            title: "Editar",
+          },
+          {
+            color: "red",
+            icon: "delete",
+            url: "",
+            action: "",
+            title: "Eliminar",
+          }
+        ]
+      }
+    }
+    response.send(data)
+  }
+
+  async show ({ params, response }) {
+    let data = (await Examen.find(params.id)).toJSON()
+    response.send(data)
   }
 
   async misExamenes ({ request, response, auth }) {
@@ -173,10 +203,9 @@ class ExamenController {
     response.send(modificar)
   }
 
-  async destroy ({ params, request, response }) {
-    let examen = await Examen.find(params.id)
-    await examen.delete()
-    response.send(examen)
+  async destroy ({ params, response }) {
+    const data = await Examen.where('_id', params.id).delete()
+    response.send(data)
   }
   async getExamWithTest ({ request, response, params }) {
     try {

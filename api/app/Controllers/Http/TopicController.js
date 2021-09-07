@@ -24,8 +24,28 @@ class TopicController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
-    let data = await Topic.all()
+  async index ({ response }) {
+    let data = (await Topic.query().where({}).fetch()).toJSON()
+    if (data !== []) {
+      for (const i in data) {
+        data[i].actions = [
+          {
+            color: "primary",
+            icon: "edit",
+            url: "",
+            action: "",
+            title: "Editar",
+          },
+          {
+            color: "red",
+            icon: "delete",
+            url: "",
+            action: "",
+            title: "Eliminar",
+          }
+        ]
+      }
+    }
     response.send(data)
   }
 
@@ -165,39 +185,7 @@ class TopicController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
-    /* try {
-      var data = request.only(['dat'])
-      data = JSON.parse(data.dat)
-      data.family_id = new ObjectId(data.family_id)
-      var id = (await Nivele.query().where({}).fetch()).toJSON()
-      if (id.length < 1) {
-        data.id = 1
-      } else {
-        let lastT = id.length - 1
-        id = parseInt(id[lastT].id) + 1
-        data.id = id
-      }
-      let save = await Topic.create(data)
-
-      const profilePic = request.file('files', {
-        types: ['image']
-      })
-      if (Helpers.appRoot('storage/uploads/niveles')) {
-        await profilePic.move(Helpers.appRoot('storage/uploads/niveles'), {
-          name: save._id.toString(),
-          overwrite: true
-        })
-      } else {
-        mkdirp.sync(`${__dirname}/storage/Excel`)
-      }
-
-      response.send(save)
-    } catch (error) {
-      console.error('metodo store:' + error.name + ':' + error.message);
-    } */
-  }
-
+  
   /**
    * Display a single test.
    * GET tests/:id
@@ -207,9 +195,7 @@ class TopicController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-  }
-
+  
   /**
    * Render a form to update an existing test.
    * GET tests/:id/edit
@@ -221,7 +207,7 @@ class TopicController {
    */
   async edit ({ params, request, response, view }) {
   }
-
+  
   /**
    * Update test details.
    * PUT or PATCH tests/:id
@@ -230,28 +216,7 @@ class TopicController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
-    /* var data = request.only(['dat'])
-    data = JSON.parse(data.dat)
-    data.family_id = new ObjectId(data.family_id)
-    if (data.file) {
-      const profilePic = request.file('files', {
-        types: ['image']
-      })
-      if (Helpers.appRoot('storage/uploads/niveles')) {
-        await profilePic.move(Helpers.appRoot('storage/uploads/niveles'), {
-          name: data._id.toString(),
-          overwrite: true
-        })
-      } else {
-        mkdirp.sync(`${__dirname}/storage/Excel`)
-      }
-    }
-    delete data.file
-    let update = await Topic.query().where('_id', params.id).update(data)
-    response.send(update) */
-  }
-
+  
   /**
    * Delete a test with id.
    * DELETE tests/:id
@@ -260,10 +225,27 @@ class TopicController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
-    /* let test = await Topic.find(params.id)
-    await test.delete()
-    response.send(test) */
+  
+  async show ({ params, response }) {
+    let data = (await Topic.find(params.id)).toJSON()
+    response.send(data)
+  }
+  
+  async store ({ request, response, auth }) {
+    const data = request.body
+    let save = await Topic.create(data)
+    response.send(save)
+  }
+
+  async update ({ params, request, response }) {
+    const body = request.all()
+    const update = await Topic.where('_id', params.id).update(body)
+    response.send(update)
+  }
+
+  async destroy ({ params, response }) {
+    const data = await Topic.where('_id', params.id).delete()
+    response.send(data)
   }
 
   async testByCourse ({ request, response, params }) {

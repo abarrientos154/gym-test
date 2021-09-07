@@ -19,7 +19,49 @@ class SubTopicController {
    * @param {View} ctx.view
    */
   async index ({ response }) {
-    let data = await SubTopic.all()
+    let data = (await SubTopic.query().where({}).fetch()).toJSON()
+    if (data !== []) {
+      for (const i in data) {
+        data[i].actions = [
+          {
+            color: "primary",
+            icon: "edit",
+            url: "",
+            action: "",
+            title: "Editar",
+          },
+          {
+            color: "red",
+            icon: "delete",
+            url: "",
+            action: "",
+            title: "Eliminar",
+          }
+        ]
+      }
+    }
+    response.send(data)
+  }
+
+  async show ({ params, response }) {
+    let data = (await SubTopic.find(params.id)).toJSON()
+    response.send(data)
+  }
+
+  async store ({ request, response, auth }) {
+    const data = request.body
+    let save = await SubTopic.create(data)
+    response.send(save)
+  }
+
+  async update ({ params, request, response }) {
+    const body = request.all()
+    const update = await SubTopic.where('_id', params.id).update(body)
+    response.send(update)
+  }
+
+  async destroy ({ params, response }) {
+    const data = await SubTopic.where('_id', params.id).delete()
     response.send(data)
   }
 
@@ -43,9 +85,6 @@ class SubTopicController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
-  }
-
   /**
    * Display a single subtopic.
    * GET subtopics/:id
@@ -55,8 +94,6 @@ class SubTopicController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-  }
 
   /**
    * Render a form to update an existing subtopic.
@@ -78,8 +115,6 @@ class SubTopicController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
-  }
 
   /**
    * Delete a subtopic with id.
@@ -89,8 +124,6 @@ class SubTopicController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
-  }
 }
 
 module.exports = SubTopicController

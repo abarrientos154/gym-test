@@ -19,10 +19,79 @@ class ArticleController {
    * @param {View} ctx.view
    */
   async index ({ response }) {
-    let data = await Article.all()
+    let data = (await Article.query().where({}).fetch()).toJSON()
+    if (data !== []) {
+      for (const i in data) {
+        data[i].actions = [
+          {
+            color: "primary",
+            icon: "edit",
+            url: "",
+            action: "",
+            title: "Editar",
+          },
+          {
+            color: "red",
+            icon: "delete",
+            url: "",
+            action: "",
+            title: "Eliminar",
+          }
+        ]
+      }
+    }
     response.send(data)
   }
 
+  async getArticlesByFilter ({ request, response }) {
+    let filter = request.all()
+    if (filter.law) {
+      var data = (await Article.query().where({ law: filter.law }).fetch()).toJSON()
+    }
+    if (data !== []) {
+      for (const i in data) {
+        data[i].actions = [
+          {
+            color: "primary",
+            icon: "edit",
+            url: "",
+            action: "",
+            title: "Editar",
+          },
+          {
+            color: "red",
+            icon: "delete",
+            url: "",
+            action: "",
+            title: "Eliminar",
+          }
+        ]
+      }
+    }
+    response.send(data)
+  }
+
+  async show ({ params, response }) {
+    let data = (await Article.find(params.id)).toJSON()
+    response.send(data)
+  }
+
+  async store ({ request, response, auth }) {
+    const data = request.body
+    let save = await Article.create(data)
+    response.send(save)
+  }
+
+  async update ({ params, request, response }) {
+    const body = request.all()
+    const update = await Article.where('_id', params.id).update(body)
+    response.send(update)
+  }
+
+  async destroy ({ params, response }) {
+    const data = await Article.where('_id', params.id).delete()
+    response.send(data)
+  }
 
   async getArticlesByLaw ({ params, response }) {
     const id = parseInt(params.id)
@@ -50,9 +119,7 @@ class ArticleController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
-  }
-
+  
   /**
    * Display a single article.
    * GET articles/:id
@@ -62,9 +129,7 @@ class ArticleController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-  }
-
+  
   /**
    * Render a form to update an existing article.
    * GET articles/:id/edit
@@ -85,9 +150,7 @@ class ArticleController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
-  }
-
+  
   /**
    * Delete a article with id.
    * DELETE articles/:id
@@ -96,8 +159,6 @@ class ArticleController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
-  }
 }
 
 module.exports = ArticleController

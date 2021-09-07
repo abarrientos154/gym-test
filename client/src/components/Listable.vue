@@ -5,7 +5,7 @@
       :data="data"
       :columns="columns"
       row-key="name"
-      :no-data-label="`Aún no existen ${title} debes escoger un tema o un tipo`"
+      :no-data-label="`Aún no existen ${title} debes escoger datos en algun filtro`"
       :filter="filter"
     >
       <template v-slot:top-right>

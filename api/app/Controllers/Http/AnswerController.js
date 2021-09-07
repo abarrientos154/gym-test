@@ -20,6 +20,57 @@ class AnswerController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
+  
+  async getAnswersByFilter ({ request, response }) {
+    let filter = request.all()
+    if (filter.question) {
+      var data = (await Answer.query().where({ law: filter.question }).fetch()).toJSON()
+    }
+    if (data !== []) {
+      for (const i in data) {
+        data[i].actions = [
+          {
+            color: "primary",
+            icon: "edit",
+            url: "",
+            action: "",
+            title: "Editar",
+          },
+          {
+            color: "red",
+            icon: "delete",
+            url: "",
+            action: "",
+            title: "Eliminar",
+          }
+        ]
+      }
+    }
+    response.send(data)
+  }
+
+  async showN ({ params, response }) {
+    let data = (await Answer.find(params.id)).toJSON()
+    response.send(data)
+  }
+
+  async storeN ({ request, response, auth }) {
+    const data = request.body
+    let save = await Answer.create(data)
+    response.send(save)
+  }
+
+  async updateN ({ params, request, response }) {
+    const body = request.all()
+    const update = await Answer.where('_id', params.id).update(body)
+    response.send(update)
+  }
+
+  async destroyN ({ params, response }) {
+    const data = await Answer.where('_id', params.id).delete()
+    response.send(data)
+  }
+
   async indexAnswer ({ response }) {
     let data = await Answer.all()
     response.send(data)

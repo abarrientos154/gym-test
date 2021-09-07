@@ -19,7 +19,49 @@ class LawController {
    * @param {View} ctx.view
    */
   async index ({ response }) {
-    let data = await Law.all()
+    let data = (await Law.query().where({}).fetch()).toJSON()
+    if (data !== []) {
+      for (const i in data) {
+        data[i].actions = [
+          {
+            color: "primary",
+            icon: "edit",
+            url: "",
+            action: "",
+            title: "Editar",
+          },
+          {
+            color: "red",
+            icon: "delete",
+            url: "",
+            action: "",
+            title: "Eliminar",
+          }
+        ]
+      }
+    }
+    response.send(data)
+  }
+
+  async show ({ params, response }) {
+    let data = (await Law.find(params.id)).toJSON()
+    response.send(data)
+  }
+
+  async store ({ request, response, auth }) {
+    const data = request.body
+    let save = await Law.create(data)
+    response.send(save)
+  }
+
+  async update ({ params, request, response }) {
+    const body = request.all()
+    const update = await Law.where('_id', params.id).update(body)
+    response.send(update)
+  }
+
+  async destroy ({ params, response }) {
+    const data = await Law.where('_id', params.id).delete()
     response.send(data)
   }
 
@@ -43,8 +85,6 @@ class LawController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
-  }
 
   /**
    * Display a single law.
@@ -55,8 +95,6 @@ class LawController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-  }
 
   /**
    * Render a form to update an existing law.
@@ -78,8 +116,6 @@ class LawController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
-  }
 
   /**
    * Delete a law with id.
@@ -89,8 +125,6 @@ class LawController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
-  }
 }
 
 module.exports = LawController

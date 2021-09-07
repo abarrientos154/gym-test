@@ -6,7 +6,7 @@
       <div class="text-h4 text-white text-bold q-mb-xl q-px-xl">Articulos</div>
       <div>
         <div class="text-h5 text-white q-mb-sm q-px-md">Articulos recientes</div>
-        <q-scroll-area horizontal style="height: 230px">
+        <!-- <q-scroll-area horizontal style="height: 230px">
           <div class="full-width row no-wrap">
             <q-card class="q-mr-md column bordes" v-for="(item, index) in articles" :key="index" style="width: 260px; border-radius: 20px;">
               <q-img src="noimg.png" style="height: 130px"/>
@@ -28,28 +28,35 @@
               </q-card-section>
             </q-card>
           </div>
-        </q-scroll-area>
+        </q-scroll-area> -->
       </div>
       <q-btn color="primary" dense no-caps size="md">
         <q-file borderless v-model="file" hint="(.xls, .xlsx, .xltx, .ods, .ots, .csv)" accept=".xls, .xlsx, .xltx, .ods, .ots, .csv/*" @input="uploadFile()" style="height: 30px; font-size: 0px"/>
         <div class="absolute-center">Importar archivo</div>
       </q-btn>
     </div>
-    <q-dialog v-model="nuevo" @hide="decartarCamb()">
+    <q-btn color="primary" label="Nuevo Artículo" icon="add" dense no-caps size="md" class="q-ml-md" @click="newArticle()"/>
+    <div class="row q-my-sm q-mx-md">
+      <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="law" label="Escoga una ley" dense :options="laws" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="law_name" @input="getArticles(true)" clearable></q-select>
+    </div>
+    <div class="row justify-center" style="height: 70%">
+      <listable class="col" :columns="columns" :data="articles" title="Artículos" @function="execute"/>
+    </div>
+    <q-dialog v-model="show" @hide="decartarCamb()">
       <q-card style="border-radius: 20px;">
         <q-card-section>
-          <div class="text-h6">{{edit ? 'Editar Examen' : 'Crear Examen'}}</div>
+          <div class="text-h6">{{editArticle ? 'Editar Artículo' : 'Crear Artículo'}}</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
-          <q-input rounded dense outlined type="text" v-model="form.name" label="Nuevo nombre" :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()">
-            <template v-slot:prepend>
-              <q-icon name="edit" color="primary"/>
-            </template>
+          <q-input dense outlined type="text" v-model="form.article_name" label="Nuevo Artículo" :error="$v.form.article_name.$error" error-message="Este campo es requerido"  @blur="$v.form.article_name.$touch()">
+          </q-input>
+          <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.law" label="Escoga una ley" dense :options="laws" :error="$v.form.law.$error" error-message="Este campo es requerido"  @blur="$v.form.law.$touch()" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="law_name" clearable></q-select>
+          <q-input dense outlined type="text" v-model="form.sub_title" label="Sub Título" :error="$v.form.sub_title.$error" error-message="Este campo es requerido"  @blur="$v.form.sub_title.$touch()">
           </q-input>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
-          <q-btn flat :label="edit ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="edit ? updateArticle() : nuevo ? setArticle() : ''" no-caps/>
+          <q-btn flat :label="editArticle ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="editArticle ? updateArticle() : setArticle()" no-caps/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -57,33 +64,54 @@
 </template>
 
 <script>
-import { required, minLength, maxLength } from 'vuelidate/lib/validators'
+import Listable from '../../components/Listable.vue'
+import { required } from 'vuelidate/lib/validators'
 export default {
+  components: { Listable },
   data () {
     return {
-      edit: false,
-      nuevo: false,
+      editArticle: false,
       form: {},
       articles: [],
-      file: null
+      file: null,
+      laws: [],
+      columns: [
+        { name: 'law', label: 'Ley', align: 'left', field: 'law' },
+        { name: 'article_name', label: 'Nombre del Artículo', align: 'left', field: 'article_name' },
+        { name: 'sub_title', align: 'left', label: 'Sub Título', field: 'sub_title' },
+        { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }
+      ],
+      show: false,
+      filter: {},
+      law: ''
     }
   },
   validations: {
     form: {
-      name: { required, minLength: minLength(3), maxLength: maxLength(20) }
+      article_name: { required },
+      law: { required },
+      sub_title: { required }
     }
   },
   mounted () {
-    this.getArticles()
+    // this.getArticles()
+    this.getLaws()
   },
   methods: {
+    async getLaws () {
+      await this.$api.get('getLaws').then(res => {
+        if (res) {
+          this.laws = res
+        }
+      })
+    },
     updateArticle () {
       this.$v.form.$touch()
       if (!this.$v.form.$error) {
         this.$q.loading.show({
           message: 'Actualizando Articulo, Por Favor Espere...'
         })
-        this.$api.put('/' + this.form._id, this.form).then((res) => {
+        this.$api.put('updateArticle/' + this.form._id, this.form).then((res) => {
           if (res) {
             this.$q.loading.hide()
             this.$q.notify({
@@ -99,23 +127,13 @@ export default {
       this.form = {}
       this.edit = false
     },
-    editArticle (itm) {
-      if (itm) {
-        const datos = { ...itm }
-        this.form = datos
-        this.nuevo = true
-        this.edit = true
-      } else {
-        this.nuevo = true
-      }
-    },
     setArticle () {
       this.$v.$touch()
       if (!this.$v.form.$error) {
         this.$q.loading.show({
           message: 'Subiendo Articulo, Por Favor Espere...'
         })
-        this.$api.post('', this.form).then((res) => {
+        this.$api.post('setArticle', this.form).then((res) => {
           if (res) {
             this.$q.loading.hide()
             this.$q.notify({
@@ -134,7 +152,7 @@ export default {
         cancel: true,
         persistent: true
       }).onOk(() => {
-        this.$api.delete('/' + id).then(res => {
+        this.$api.delete('deleteArticle/' + id).then(res => {
           if (res) {
             this.$q.notify({
               color: 'positive',
@@ -147,13 +165,16 @@ export default {
         // console.log('>>>> Cancel')
       })
     },
-    async getArticles () {
+    async getArticles (isFilter) {
+      if (isFilter === true) {
+        this.filter.law = this.law
+      }
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      await this.$api.get('articles').then(res => {
+      await this.$api.post('getArticlesByFilter', this.filter).then(res => {
         if (res) {
-          this.articles = res.slice(0, 10)
+          this.articles = res
           // console.log(this.articles)
         }
         this.$q.loading.hide()
@@ -182,6 +203,27 @@ export default {
           this.$q.loading.hide()
         })
       }
+    },
+    execute (emit) {
+      if (emit.title === 'Eliminar') {
+        this.deleteTopic(emit.id)
+      } else if (emit.title === 'Editar') {
+        this.getTopicById(emit.id)
+        this.editArticle = true
+        this.show = true
+      }
+    },
+    async getTopicById (id) {
+      await this.$api.get('getTopicById/' + id).then(res => {
+        if (res) {
+          this.form = res
+        }
+      })
+    },
+    newArticle () {
+      this.editArticle = false
+      this.form = {}
+      this.show = true
     }
   }
 }

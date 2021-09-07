@@ -6,7 +6,7 @@
       <div class="text-h4 text-white text-bold q-mb-xl q-px-xl">Sub Temas</div>
       <div>
         <div class="text-h5 text-white q-mb-sm q-px-md">Sub Temas recientes</div>
-        <q-scroll-area horizontal style="height: 230px">
+        <!-- <q-scroll-area horizontal style="height: 230px">
           <div class="full-width row no-wrap">
             <q-card class="q-mr-md column bordes" v-for="(item, index) in subTopics" :key="index" style="width: 260px; border-radius: 20px;">
               <q-img src="noimg.png" style="height: 130px"/>
@@ -28,28 +28,30 @@
               </q-card-section>
             </q-card>
           </div>
-        </q-scroll-area>
+        </q-scroll-area> -->
       </div>
       <q-btn color="primary" dense no-caps size="md">
         <q-file borderless v-model="file" hint="(.xls, .xlsx, .xltx, .ods, .ots, .csv)" accept=".xls, .xlsx, .xltx, .ods, .ots, .csv/*" @input="uploadFile()" style="height: 30px; font-size: 0px"/>
         <div class="absolute-center">Importar archivo</div>
       </q-btn>
     </div>
-    <q-dialog v-model="nuevo" @hide="decartarCamb()">
+    <q-btn color="primary" label="Nuevo Sub Tema" icon="add" dense no-caps size="md" class="q-ml-md" @click="newSubTopic()"/>
+    <div class="row justify-center" style="height: 70%">
+      <listable class="col" :columns="columns" :data="subTopics" title="Sub Temas" @function="execute"/>
+    </div>
+    <q-dialog v-model="show" @hide="decartarCamb()">
       <q-card style="border-radius: 20px;">
         <q-card-section>
-          <div class="text-h6">{{edit ? 'Editar Examen' : 'Crear Examen'}}</div>
+          <div class="text-h6">{{editSubTopic ? 'Editar Tema' : 'Crear Tema'}}</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
-          <q-input rounded dense outlined type="text" v-model="form.name" label="Nuevo nombre" :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()">
-            <template v-slot:prepend>
-              <q-icon name="edit" color="primary"/>
-            </template>
+          <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.topic_id" label="Escoga un tema" dense :options="topics" :error="$v.form.topic_id.$error" error-message="Este campo es requerido"  @blur="$v.form.topic_id.$touch()" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="topic" clearable></q-select>
+          <q-input dense outlined type="text" v-model="form.process" label="Nuevo Proceso" :error="$v.form.process.$error" error-message="Este campo es requerido"  @blur="$v.form.process.$touch()">
           </q-input>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
-          <q-btn flat :label="edit ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="edit ? updateSubTopics() : nuevo ? setSubTopic() : ''" no-caps/>
+          <q-btn flat :label="editSubTopic ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="editSubTopic ? updateSubTopic() : setSubTopic()" no-caps/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -57,33 +59,49 @@
 </template>
 
 <script>
-import { required, minLength, maxLength } from 'vuelidate/lib/validators'
+import Listable from '../../components/Listable.vue'
+import { required } from 'vuelidate/lib/validators'
 export default {
+  components: { Listable },
   data () {
     return {
-      edit: false,
-      nuevo: false,
+      editSubTopic: false,
       form: {},
       subTopics: [],
-      file: null
+      topics: [],
+      file: null,
+      columns: [
+        { name: 'topic_id', label: 'Tema', align: 'left', field: 'topic_id' },
+        { name: 'process', label: 'Nombre Completo', align: 'left', field: 'process' },
+        { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }
+      ],
+      show: false
     }
   },
   validations: {
     form: {
-      name: { required, minLength: minLength(3), maxLength: maxLength(20) }
+      topic_id: { required },
+      process: { required }
     }
   },
   mounted () {
     this.getSubTopics()
   },
   methods: {
-    updateSubTopics () {
+    async getTopics () {
+      await this.$api.get('getTopics').then(res => {
+        if (res) {
+          this.topics = res
+        }
+      })
+    },
+    updateSubTopic () {
       this.$v.form.$touch()
       if (!this.$v.form.$error) {
         this.$q.loading.show({
           message: 'Actualizando Sub Tema, Por Favor Espere...'
         })
-        this.$api.put('/' + this.form._id, this.form).then((res) => {
+        this.$api.put('updateSubTopic/' + this.form._id, this.form).then((res) => {
           if (res) {
             this.$q.loading.hide()
             this.$q.notify({
@@ -99,23 +117,13 @@ export default {
       this.form = {}
       this.edit = false
     },
-    editSubTopic (itm) {
-      if (itm) {
-        const datos = { ...itm }
-        this.form = datos
-        this.nuevo = true
-        this.edit = true
-      } else {
-        this.nuevo = true
-      }
-    },
     setSubTopic () {
       this.$v.$touch()
       if (!this.$v.form.$error) {
         this.$q.loading.show({
-          message: 'Subiendo ley, Por Favor Espere...'
+          message: 'Subiendo Sub Tema, Por Favor Espere...'
         })
-        this.$api.post('', this.form).then((res) => {
+        this.$api.post('setSubTopic', this.form).then((res) => {
           if (res) {
             this.$q.loading.hide()
             this.$q.notify({
@@ -134,7 +142,7 @@ export default {
         cancel: true,
         persistent: true
       }).onOk(() => {
-        this.$api.delete('/' + id).then(res => {
+        this.$api.delete('deleteSubTopic/' + id).then(res => {
           if (res) {
             this.$q.notify({
               color: 'positive',
@@ -153,8 +161,7 @@ export default {
       })
       await this.$api.get('subTopics').then(res => {
         if (res) {
-          this.subTopics = res.slice(0, 10)
-          // console.log(this.subTopics)
+          this.subTopics = res
         }
         this.$q.loading.hide()
       })
@@ -182,6 +189,29 @@ export default {
           this.$q.loading.hide()
         })
       }
+    },
+    execute (emit) {
+      if (emit.title === 'Eliminar') {
+        this.deleteSubTopic(emit.id)
+      } else if (emit.title === 'Editar') {
+        this.getTopics()
+        this.getSubTopicById(emit.id)
+        this.editSubTopic = true
+        this.show = true
+      }
+    },
+    async getSubTopicById (id) {
+      await this.$api.get('getSubTopicById/' + id).then(res => {
+        if (res) {
+          this.form = res
+        }
+      })
+    },
+    newSubTopic () {
+      this.getTopics()
+      this.editSubTopic = false
+      this.form = {}
+      this.show = true
     }
   }
 }
