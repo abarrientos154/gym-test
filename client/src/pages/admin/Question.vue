@@ -13,8 +13,8 @@
     </div>
     <q-btn color="primary" label="Nueva Pregunta" icon="add" dense no-caps size="md" class="q-ml-md" @click="newQuest()"/>
     <div class="row q-my-sm q-mx-md">
-      <q-select style="min-width: 220px" class="q-mr-sm" outlined v-model="filter.topic" label="Escoga un tema" dense :options="topics" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="topic" @input="getQuestions(filter.topic)" clearable></q-select>
-      <q-select style="min-width: 220px" class="q-mr-sm" outlined v-model="filter.type" label="Escoga un tipo" dense :options="types" map-options emit-value option-value="type_name" options-selected-class="text-primary" option-label="type_name" @input="getQuestions(filter.type)" clearable></q-select>
+      <q-select style="min-width: 220px" class="q-mr-sm" outlined v-model="topic" label="Escoga un tema" dense :options="topics" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="topic" @input="getQuestions(null, true)" clearable></q-select>
+      <q-select style="min-width: 220px" class="q-mr-sm" outlined v-model="type" label="Escoga un tipo" dense :options="types" map-options emit-value option-value="type_name" options-selected-class="text-primary" option-label="type_name" @input="getQuestions(null, true)" clearable></q-select>
       <!-- <q-select style="min-width: 220px" class="q-mr-sm" outlined v-model="filter.type" label="Escoga un tema" dense :options="types" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="type" clearable></q-select> -->
     </div>
     <div class="row justify-center" style="height: 70%">
@@ -70,7 +70,9 @@ export default {
       articles: [],
       paragraphs: [],
       types: [],
-      filter: {}
+      filter: {},
+      type: '',
+      topic: ''
     }
   },
   validations: {
@@ -100,13 +102,15 @@ export default {
         this.$q.loading.hide()
       }
     },
-    async getQuestions (val, filter) {
+    async getQuestions (val, isFilter) {
+      if (isFilter === true) {
+        this.filter.topic = this.topic
+        this.filter.type = this.type
+      }
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      // this.filter
-      console.log('filter >> ', filter)
-      await this.$api.post('getQuestionsByFilter', filter).then(res => {
+      await this.$api.post('getQuestionsByFilter', this.filter).then(res => {
         if (res) {
           this.questions = res
           if (val && val === 'set') {

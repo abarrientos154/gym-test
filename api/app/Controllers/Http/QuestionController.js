@@ -55,13 +55,14 @@ class QuestionController {
   async getQuestionsByFilter ({ request, response }) {
     let filter = request.all()
     console.log('filter :>> ', filter);
-    if (filter.topic && filter.type === undefined) {
+    if (filter.topic && filter.type === null) {
       var data = (await Question.query().where({ topic: filter.topic }).fetch()).toJSON()
-    } else if (filter.type && filter.topic === undefined) {
+    } else if (filter.type && filter.topic === null) {
       var data = (await Question.query().where({ type: filter.type }).fetch()).toJSON()
     } else if (filter.topic && filter.type) {
       var data = (await Question.query().where({ type: filter.type, topic: filter.topic}).fetch()).toJSON()
     }
+    console.log('data :>> ', data);
     if (data !== []) {
       for (const i in data) {
         let law = await Law.query().where({ id: data[i].law_id }).first()
