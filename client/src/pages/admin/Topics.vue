@@ -78,7 +78,8 @@ export default {
         { name: 'name', align: 'left', label: 'Nombre', field: 'name' },
         { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }
       ],
-      show: false
+      show: false,
+      courseId: ''
     }
   },
   validations: {
@@ -89,7 +90,9 @@ export default {
     }
   },
   mounted () {
+    this.courseId = localStorage.getItem('course_id')
     this.getTopics()
+    console.log('idCourse :>> ', this.courseId)
   },
   methods: {
     updateTopic () {
@@ -120,6 +123,7 @@ export default {
         this.$q.loading.show({
           message: 'Subiendo Tema, Por Favor Espere...'
         })
+        this.form.course_id = this.courseId
         this.$api.post('setTopic', this.form).then((res) => {
           if (res) {
             this.$q.loading.hide()
@@ -156,7 +160,7 @@ export default {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      this.$api.get('getTopics').then(res => {
+      this.$api.get('getTopicsByCourse/' + this.courseId).then(res => {
         if (res) {
           this.topics = res
           // console.log(this.topics)
@@ -171,6 +175,7 @@ export default {
         })
         const formData = new FormData()
         formData.append('fileExcel', this.file)
+        formData.append('courseId', this.courseId)
         this.$api.post('excel_topic', formData, {
           headers: {
             'Content-Type': undefined

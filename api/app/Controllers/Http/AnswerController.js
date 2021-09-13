@@ -60,7 +60,8 @@ class AnswerController {
   }
 
   async storeN ({ request, response, auth }) {
-    const data = request.body
+    let data = request.body
+    data.course_id = new ObjectId(data.course_id)
     let save = await Answer.create(data)
     response.send(save)
   }

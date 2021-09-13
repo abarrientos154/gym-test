@@ -52,14 +52,15 @@ class QuestionController {
     }
     response.send(data)
   }
-  async getQuestionsByFilter ({ request, response }) {
+  async getQuestionsByFilter ({ request, response, params }) {
     let filter = request.all()
+    const id = new ObjectId(params.id)
     if (filter.topic && filter.type === null) {
-      var data = (await Question.query().where({ topic: filter.topic }).fetch()).toJSON()
+      var data = (await Question.query().where({ topic: filter.topic, course_id: id }).fetch()).toJSON()
     } else if (filter.type && filter.topic === null) {
-      var data = (await Question.query().where({ type: filter.type }).fetch()).toJSON()
+      var data = (await Question.query().where({ type: filter.type, course_id: id }).fetch()).toJSON()
     } else if (filter.topic && filter.type) {
-      var data = (await Question.query().where({ type: filter.type, topic: filter.topic}).fetch()).toJSON()
+      var data = (await Question.query().where({ type: filter.type, topic: filter.topic, course_id: id }).fetch()).toJSON()
     }
     if (data !== []) {
       for (const i in data) {
@@ -139,7 +140,8 @@ class QuestionController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
-    const body = request.all()
+    let body = request.body
+    body.course_id = new ObjectId(body.course_id)
     const save = await Question.create(body)
     response.send(save)
   }

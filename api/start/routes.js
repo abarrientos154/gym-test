@@ -58,6 +58,7 @@ addPrefixToGroup(
     Route.put('updateAsignatura/:id', 'AsignaturaController.update')
 
     Route.get('getTopics', 'TopicController.index')
+    Route.get('getTopicsByCourse/:id', 'TopicController.indexByCourse')
     Route.get('topic_by_id/:id', 'TopicController.getTopicById')
     Route.post('topic_test', 'TopicController.testCreate')
     Route.put('topic_test/:id', 'TopicController.testUpdate')
@@ -137,7 +138,7 @@ addPrefixToGroup(
     Route.post('excel_question', 'UploadController.excelQuestion')
     Route.put('multiplesQuestions', 'QuestionController.multiplesQuestions')
     Route.get('getQuestions', 'QuestionController.index')
-    Route.post('getQuestionsByFilter', 'QuestionController.getQuestionsByFilter')
+    Route.post('getQuestionsByFilter/:id', 'QuestionController.getQuestionsByFilter')
     Route.get('getQuestionsbyTest/:id', 'QuestionController.getQuestionsbyTest')
     Route.get('getQuestionsByTopic/:id', 'QuestionController.getQuestionsByTopic')
     Route.get('getQuestionsbyExam/:id', 'QuestionController.getQuestionsbyExam')
@@ -164,6 +165,9 @@ addPrefixToGroup(
     Route.get('desafioById/:id', 'AnswerController.showDesafio')
     Route.put('desafio/:id', 'AnswerController.edit')
     Route.put('desafio_value/:id', 'AnswerController.editDesafio')
+
+    Route.get('getCourses', 'CourseController.index')
+    Route.post('setCourse', 'CourseController.store')
 
   }).middleware("auth")
 );

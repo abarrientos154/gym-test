@@ -182,13 +182,9 @@ class ExamenController {
   }
 
   async store ({ request, response, auth }) {
-    var dat = request.body
-    // const validation = await validate(dat, Examen.fieldValidationRules())
-    // if (validation.fails()) {
-    //   response.unprocessableEntity(validation.messages())
-    // } else {
-    // }
-    let guardar = await Examen.create(dat)
+    let data = request.body
+    data.course_id = new ObjectId(data.course_id)
+    let guardar = await Examen.create(data)
     response.send(guardar)
   }
 

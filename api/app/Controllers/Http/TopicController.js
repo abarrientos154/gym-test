@@ -48,6 +48,31 @@ class TopicController {
     }
     response.send(data)
   }
+  async indexByCourse ({ response, params }) {
+    const id = new ObjectId(params.id)
+    let data = (await Topic.query().where({ course_id: id }).fetch()).toJSON()
+    if (data !== []) {
+      for (const i in data) {
+        data[i].actions = [
+          {
+            color: "primary",
+            icon: "edit",
+            url: "",
+            action: "",
+            title: "Editar",
+          },
+          {
+            color: "red",
+            icon: "delete",
+            url: "",
+            action: "",
+            title: "Eliminar",
+          }
+        ]
+      }
+    }
+    response.send(data)
+  }
 
   async getTopicById ({ request, response, params }) {
     let tema = (await Topic.query().where({_id: params.id}).with('subTemas').first()).toJSON()
@@ -232,7 +257,8 @@ class TopicController {
   }
   
   async store ({ request, response, auth }) {
-    const data = request.body
+    let data = request.body
+    data.course_id = new ObjectId(data.course_id)
     let save = await Topic.create(data)
     response.send(save)
   }

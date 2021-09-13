@@ -87,7 +87,7 @@ export default {
             this.user = res.SESSION_INFO
             this.login(res)
             if (this.user.roles[0] === 1) {
-              this.$router.push('/administrador')
+              this.$router.push('/courses')
             } else {
               this.$router.push('/inicio')
             }

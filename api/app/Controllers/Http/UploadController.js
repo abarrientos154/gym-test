@@ -105,6 +105,8 @@ class UploadController {
   }
 
   async excelTopic ({ request, response }) {
+    let courseId = request.only(['courseId'])
+    courseId = new ObjectId(courseId.courseId)
     let files = request.file('fileExcel')
     var filePath = await MoveFileService.moveFile(files)
     var workbook = new ExcelJS.Workbook()
@@ -122,6 +124,7 @@ class UploadController {
         topicDB.topic = topic
         topicDB.long_name = long_name
         topicDB.name = name
+        topicDB.course_id = courseId
         let save = await Topic.create(topicDB)
       }
     })
@@ -129,6 +132,8 @@ class UploadController {
   }
 
   async excelQuestion ({ request, response }) {
+    let courseId = request.only(['courseId'])
+    courseId = new ObjectId(courseId.courseId)
     let files = request.file('fileExcel')
     var filePath = await MoveFileService.moveFile(files)
     var workbook = new ExcelJS.Workbook()
@@ -163,6 +168,7 @@ class UploadController {
         question.paragraph_id = paragraph_id
         question.mal = mal
         question.type = type
+        question.course_id = courseId
         if (brand !== null) { question.brand = true } else { question.brand = false }
         question.process = process
         if (only !== null) { question.only = true } else { question.only = false }
@@ -173,6 +179,8 @@ class UploadController {
   }
 
   async excelExam ({ request, response }) {
+    let courseId = request.only(['courseId'])
+    courseId = new ObjectId(courseId.courseId)
     let files = request.file('fileExcel')
     var filePath = await MoveFileService.moveFile(files)
     var workbook = new ExcelJS.Workbook()
@@ -194,6 +202,7 @@ class UploadController {
         exam.date = date
         exam.convocatoria = convocatoria
         exam.name = name
+        exam.course_id = courseId
         let save = await Exam.create(exam)
       }
     })
@@ -201,6 +210,8 @@ class UploadController {
   }
 
   async excelArticle ({ request, response }) {
+    let courseId = request.only(['courseId'])
+    courseId = new ObjectId(courseId.courseId)
     let files = request.file('fileExcel')
     var filePath = await MoveFileService.moveFile(files)
     var workbook = new ExcelJS.Workbook()
@@ -220,6 +231,7 @@ class UploadController {
         article.law = law
         article.article_name = article_name
         article.sub_title = article_text
+        article.course_id = courseId
         
         if (article_name !== articleNumber) {
           articleNumber = article_name
@@ -246,6 +258,7 @@ class UploadController {
             paragraphDB.paragraph_text = paragraph_text
             paragraphDB.order = order
             paragraphDB.id = id
+            paragraphDB.course_id = courseId
             
             if (paragraphDB.paragraph_text.length > 0) {
               order++
@@ -263,6 +276,8 @@ class UploadController {
     response.send(true)
   }
   async excelLaw ({ request, response }) {
+    let courseId = request.only(['courseId'])
+    courseId = new ObjectId(courseId.courseId)
     let files = request.file('fileExcel')
     var filePath = await MoveFileService.moveFile(files)
     var workbook = new ExcelJS.Workbook()
@@ -286,12 +301,15 @@ class UploadController {
         law.revision = revision
         law.mark = mark
         law.note = note
+        law.course_id = courseId
         let save = await Law.create(law)
       }
     })
     response.send(true)
   }
   async excelAnswer ({ request, response }) {
+    let courseId = request.only(['courseId'])
+    courseId = new ObjectId(courseId.courseId)
     let files = request.file('fileExcel')
     var filePath = await MoveFileService.moveFile(files)
     var workbook = new ExcelJS.Workbook()
@@ -311,12 +329,15 @@ class UploadController {
         answer.answer_name = answer_name
         answer.isCorrect = isCorrect === 'N' ? false : true 
         answer.order = order
+        answer.course_id = courseId
         let save = await Answer.create(answer)
       }
     })
     response.send(true)
   }
   async excelSubTopic ({ request, response }) {
+    let courseId = request.only(['courseId'])
+    courseId = new ObjectId(courseId.courseId)
     let files = request.file('fileExcel')
     var filePath = await MoveFileService.moveFile(files)
     var workbook = new ExcelJS.Workbook()
@@ -332,12 +353,15 @@ class UploadController {
         subTopic.id = id 
         subTopic.topic_id = topic_id
         subTopic.process = process
+        subTopic.course_id = courseId
         let save = await SubTopic.create(subTopic)
       }
     })
     response.send(true)
   }
   async excelType ({ request, response }) {
+    let courseId = request.only(['courseId'])
+    courseId = new ObjectId(courseId.courseId)
     let files = request.file('fileExcel')
     var filePath = await MoveFileService.moveFile(files)
     var workbook = new ExcelJS.Workbook()
@@ -351,6 +375,7 @@ class UploadController {
         let type_name = explanation.getCell('B' + rowNumber).value
         type.id = id 
         type.type_name = type_name
+        type.course_id = courseId
         let save = await Type.create(type)
       }
     })

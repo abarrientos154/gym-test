@@ -49,7 +49,8 @@ class SubTopicController {
   }
 
   async store ({ request, response, auth }) {
-    const data = request.body
+    let data = request.body
+    data.course_id = new ObjectId(data.course_id)
     let save = await SubTopic.create(data)
     response.send(save)
   }

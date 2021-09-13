@@ -72,7 +72,8 @@ export default {
       types: [],
       filter: {},
       type: '',
-      topic: ''
+      topic: '',
+      courseId: ''
     }
   },
   validations: {
@@ -86,6 +87,7 @@ export default {
     }
   },
   mounted () {
+    this.courseId = localStorage.getItem('course_id')
     // this.getQuestions()
     this.getTopics()
     this.getTypes()
@@ -110,7 +112,7 @@ export default {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      await this.$api.post('getQuestionsByFilter', this.filter).then(res => {
+      await this.$api.post('getQuestionsByFilter/' + this.courseId, this.filter).then(res => {
         if (res) {
           this.questions = res
           if (val && val === 'set') {
@@ -188,6 +190,7 @@ export default {
     setQuestion () {
       this.$v.$touch()
       if (!this.$v.form.$error) {
+        this.form.course_id = this.courseId
         this.$api.post('newQuest', this.form).then((res) => {
           if (res) {
             this.getQuestions('set')
@@ -221,6 +224,7 @@ export default {
         })
         const formData = new FormData()
         formData.append('fileExcel', this.file)
+        formData.append('courseId', this.courseId)
         this.$api.post('excel_question', formData, {
           headers: {
             'Content-Type': undefined
