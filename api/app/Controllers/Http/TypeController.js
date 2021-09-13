@@ -5,6 +5,7 @@ const TypeTest = use("App/Models/TypeTest")
 const Articulos = use("App/Models/Article")
 const Parrafos = use("App/Models/Paragraph")
 const moment = require('moment')
+var ObjectId = require('mongodb').ObjectId;
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -25,6 +26,31 @@ class TypeController {
    */
   async index ({ response }) {
     let data = (await Type.query().where({}).fetch()).toJSON()
+    if (data !== []) {
+      for (const i in data) {
+        data[i].actions = [
+          {
+            color: "primary",
+            icon: "edit",
+            url: "",
+            action: "",
+            title: "Editar",
+          },
+          {
+            color: "red",
+            icon: "delete",
+            url: "",
+            action: "",
+            title: "Eliminar",
+          }
+        ]
+      }
+    }
+    response.send(data)
+  }
+  async indexByCourse ({ response, params }) {
+    const id = new ObjectId(params.id)
+    let data = (await Type.query().where({ course_id: id }).fetch()).toJSON()
     if (data !== []) {
       for (const i in data) {
         data[i].actions = [

@@ -96,6 +96,7 @@ addPrefixToGroup(
 
     Route.post('excel_type', 'UploadController.excelType')
     Route.get('types', 'TypeController.index')
+    Route.get('getTypesByCourse/:id', 'TypeController.indexByCourse')
     Route.get('mis_rutinas', 'TypeController.misRutinas')
     Route.post('type_test', 'TypeController.testCreate')
     Route.put('type_test/:id', 'TypeController.testUpdate')

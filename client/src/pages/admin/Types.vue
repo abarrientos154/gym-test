@@ -72,7 +72,8 @@ export default {
         { name: 'type_name', label: 'Tipo', align: 'left', field: 'type_name' },
         { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }
       ],
-      show: false
+      show: false,
+      topic: { required }
     }
   },
   validations: {
@@ -81,6 +82,7 @@ export default {
     }
   },
   mounted () {
+    this.courseId = localStorage.getItem('course_id')
     this.getTypes()
   },
   methods: {
@@ -112,6 +114,7 @@ export default {
         this.$q.loading.show({
           message: 'Subiendo tipo, Por Favor Espere...'
         })
+        this.form.course_id = this.courseId
         this.$api.post('setType', this.form).then((res) => {
           if (res) {
             this.$q.loading.hide()
@@ -148,7 +151,7 @@ export default {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      await this.$api.get('types').then(res => {
+      await this.$api.get('getTypesByCourse/' + this.courseId).then(res => {
         if (res) {
           this.types = res
           // console.log(this.types)
@@ -163,6 +166,7 @@ export default {
         })
         const formData = new FormData()
         formData.append('fileExcel', this.file)
+        formData.append('courseId', this.courseId)
         this.$api.post('excel_type', formData, {
           headers: {
             'Content-Type': undefined
