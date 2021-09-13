@@ -72,6 +72,7 @@ addPrefixToGroup(
 
     Route.post('excel_law', 'UploadController.excelLaw')
     Route.get('getLaws', 'LawController.index')
+    Route.get('getLawsByCourse/:id', 'LawController.indexByCourse')
     Route.get('getLawById/:id', 'LawController.show')
     Route.post('setLaw', 'LawController.store')
     Route.put('updateLaw/:id', 'LawController.update')
@@ -83,10 +84,11 @@ addPrefixToGroup(
     Route.post('setAnswer', 'AnswerController.storeN')
     Route.put('updateAnswer/:id', 'AnswerController.updateN')
     Route.delete('deleteAnswer/:id', 'AnswerController.destroyN')
-    Route.post('getAnswersByFilter', 'AnswerController.getAnswersByFilter')
+    Route.post('getAnswersByFilter/:id', 'AnswerController.getAnswersByFilter')
 
     Route.post('excel_subTopic', 'UploadController.excelSubTopic')
     Route.get('subTopics', 'SubTopicController.index')
+    Route.get('getSubTopicsByCourse/:id', 'SubTopicController.indexByCourse')
     Route.get('getSubTopicById/:id', 'SubTopicController.show')
     Route.post('setSubTopic', 'SubTopicController.store')
     Route.put('updateSubTopic/:id', 'SubTopicController.update')
@@ -113,9 +115,10 @@ addPrefixToGroup(
     Route.post('setArticle', 'ArticleController.store')
     Route.put('updateArticle/:id', 'ArticleController.update')
     Route.delete('deleteArticle/:id', 'ArticleController.destroy')
-    Route.post('getArticlesByFilter', 'ArticleController.getArticlesByFilter')
+    Route.post('getArticlesByFilter/:id', 'ArticleController.getArticlesByFilter')
 
     Route.get('examen', 'ExamenController.index')
+    Route.get('getExamByCourse/:id', 'ExamenController.indexByCourse')
     Route.get('mis_examenes', 'ExamenController.misExamenes')
     Route.get('ExamById/:id', 'ExamenController.examById')
     Route.post('examen_test', 'ExamenController.testCreate')

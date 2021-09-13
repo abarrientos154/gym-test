@@ -83,7 +83,8 @@ export default {
       ],
       show: false,
       filter: {},
-      law: ''
+      law: '',
+      courseId: ''
     }
   },
   validations: {
@@ -95,6 +96,7 @@ export default {
   },
   mounted () {
     // this.getArticles()
+    this.courseId = localStorage.getItem('course_id')
     this.getLaws()
   },
   methods: {
@@ -133,6 +135,7 @@ export default {
         this.$q.loading.show({
           message: 'Subiendo Articulo, Por Favor Espere...'
         })
+        this.form.course_id = this.courseId
         this.$api.post('setArticle', this.form).then((res) => {
           if (res) {
             this.$q.loading.hide()
@@ -172,7 +175,7 @@ export default {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      await this.$api.post('getArticlesByFilter', this.filter).then(res => {
+      await this.$api.post('getArticlesByFilter/' + this.courseId, this.filter).then(res => {
         if (res) {
           this.articles = res
           // console.log(this.articles)
@@ -187,6 +190,7 @@ export default {
         })
         const formData = new FormData()
         formData.append('fileExcel', this.file)
+        formData.append('courseId', this.courseId)
         this.$api.post('excel_article', formData, {
           headers: {
             'Content-Type': undefined

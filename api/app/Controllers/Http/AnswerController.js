@@ -2,6 +2,8 @@
 const Answer = use("App/Models/Answer")
 const Desafios = use("App/Models/Desafio")
 const User = use("App/Models/User")
+var ObjectId = require('mongodb').ObjectId;
+
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -21,10 +23,11 @@ class AnswerController {
    * @param {View} ctx.view
    */
   
-  async getAnswersByFilter ({ request, response }) {
+  async getAnswersByFilter ({ request, response, params }) {
+    const id = new ObjectId(params.id)
     let filter = request.all()
     if (filter.question) {
-      var data = (await Answer.query().where({ id_question: filter.question }).fetch()).toJSON()
+      var data = (await Answer.query().where({ id_question: filter.question, course_id: id }).fetch()).toJSON()
     }
     if (data !== []) {
       for (const i in data) {

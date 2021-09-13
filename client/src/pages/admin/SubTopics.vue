@@ -75,7 +75,8 @@ export default {
         { name: 'process', label: 'Nombre Completo', align: 'left', field: 'process' },
         { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }
       ],
-      show: false
+      show: false,
+      courseId: ''
     }
   },
   validations: {
@@ -85,6 +86,7 @@ export default {
     }
   },
   mounted () {
+    this.courseId = localStorage.getItem('course_id')
     this.getSubTopics()
   },
   methods: {
@@ -123,6 +125,7 @@ export default {
         this.$q.loading.show({
           message: 'Subiendo Sub Tema, Por Favor Espere...'
         })
+        this.form.course_id = this.courseId
         this.$api.post('setSubTopic', this.form).then((res) => {
           if (res) {
             this.$q.loading.hide()
@@ -159,7 +162,7 @@ export default {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      await this.$api.get('subTopics').then(res => {
+      await this.$api.get('getSubTopicsByCourse/' + this.courseId).then(res => {
         if (res) {
           this.subTopics = res
         }
@@ -173,6 +176,7 @@ export default {
         })
         const formData = new FormData()
         formData.append('fileExcel', this.file)
+        formData.append('courseId', this.courseId)
         this.$api.post('excel_subTopic', formData, {
           headers: {
             'Content-Type': undefined

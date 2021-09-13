@@ -75,7 +75,8 @@ export default {
         { name: 'acronym_law', label: 'Siglas', align: 'left', field: 'acronym_law' },
         { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }
       ],
-      show: false
+      show: false,
+      courseId: ''
     }
   },
   validations: {
@@ -85,6 +86,7 @@ export default {
     }
   },
   mounted () {
+    this.courseId = localStorage.getItem('course_id')
     this.getLaws()
   },
   methods: {
@@ -126,6 +128,7 @@ export default {
         this.$q.loading.show({
           message: 'Subiendo ley, Por Favor Espere...'
         })
+        this.form.course_id = this.courseId
         this.$api.post('setLaw', this.form).then((res) => {
           if (res) {
             this.$q.loading.hide()
@@ -162,7 +165,7 @@ export default {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      await this.$api.get('getLaws').then(res => {
+      await this.$api.get('getLawsByCourse/' + this.courseId).then(res => {
         if (res) {
           this.laws = res
           // console.log(this.laws)
@@ -177,6 +180,7 @@ export default {
         })
         const formData = new FormData()
         formData.append('fileExcel', this.file)
+        formData.append('courseId', this.courseId)
         this.$api.post('excel_law', formData, {
           headers: {
             'Content-Type': undefined

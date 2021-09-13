@@ -96,7 +96,8 @@ export default {
         { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }
       ],
       show: false,
-      editExam: false
+      editExam: false,
+      courseId: ''
     }
   },
   validations: {
@@ -105,6 +106,7 @@ export default {
     }
   },
   mounted () {
+    this.courseId = localStorage.getItem('course_id')
     this.getExam()
   },
   methods: {
@@ -146,6 +148,7 @@ export default {
         this.$q.loading.show({
           message: 'Subiendo Examen, Por Favor Espere...'
         })
+        this.form.course_id = this.courseId
         this.$api.post('examen', this.form).then((res) => {
           if (res) {
             this.$q.loading.hide()
@@ -182,7 +185,7 @@ export default {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      this.$api.get('examen').then(res => {
+      this.$api.get('getExamByCourse/' + this.courseId).then(res => {
         if (res) {
           this.exams = res
         }
@@ -195,6 +198,7 @@ export default {
           message: 'Subiendo datos, esto puede tomar un tiempo...'
         })
         const formData = new FormData()
+        formData.append('courseId', this.courseId)
         formData.append('fileExcel', this.file)
         this.$api.post('excel_exam', formData, {
           headers: {

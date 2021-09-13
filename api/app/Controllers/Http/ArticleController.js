@@ -1,5 +1,6 @@
 'use strict'
 const Article = use("App/Models/Article")
+var ObjectId = require('mongodb').ObjectId;
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -43,10 +44,11 @@ class ArticleController {
     response.send(data)
   }
 
-  async getArticlesByFilter ({ request, response }) {
+  async getArticlesByFilter ({ request, response, params }) {
+    const id = new ObjectId(params.id)
     let filter = request.all()
     if (filter.law) {
-      var data = (await Article.query().where({ law: filter.law }).fetch()).toJSON()
+      var data = (await Article.query().where({ law: filter.law, course_id: id }).fetch()).toJSON()
     }
     if (data !== []) {
       for (const i in data) {

@@ -6,6 +6,8 @@ const ExamenTest = use("App/Models/ExamenTest")
 const Articulos = use("App/Models/Article")
 const Parrafos = use("App/Models/Paragraph")
 const moment = require('moment')
+var ObjectId = require('mongodb').ObjectId;
+
 // const { validate } = use("Validator")
 // const Helpers = use('Helpers')
 // const mkdirp = use('mkdirp')
@@ -30,6 +32,36 @@ class ExamenController {
    */
   async index ({ request, response, view }) {
     let data = (await Examen.query().where({}).fetch()).toJSON()
+    if (data !== []) {
+      for (const i in data) {
+        if (data[i].date === null) {
+          data[i].date = ''
+        } else {
+          data[i].date = moment(data[i].date).format('DD/MM/YYYY')
+        }
+        data[i].actions = [
+          {
+            color: "primary",
+            icon: "edit",
+            url: "",
+            action: "",
+            title: "Editar",
+          },
+          {
+            color: "red",
+            icon: "delete",
+            url: "",
+            action: "",
+            title: "Eliminar",
+          }
+        ]
+      }
+    }
+    response.send(data)
+  }
+  async indexByCourse ({ response, params }) {
+    const id = new ObjectId(params.id)
+    let data = (await Examen.query().where({ course_id: id }).fetch()).toJSON()
     if (data !== []) {
       for (const i in data) {
         if (data[i].date === null) {
