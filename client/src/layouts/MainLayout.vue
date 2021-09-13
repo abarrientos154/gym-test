@@ -117,6 +117,12 @@ export default {
           ruta: '/types'
         },
         {
+          src: '',
+          src2: '',
+          label: 'Cursos',
+          ruta: '/courses'
+        },
+        {
           src: 'blog 1.png',
           src2: 'blog 12.png',
           label: 'Blog',
