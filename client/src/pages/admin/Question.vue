@@ -13,8 +13,8 @@
     </div>
     <q-btn color="primary" label="Nueva Pregunta" icon="add" dense no-caps size="md" class="q-ml-md" @click="newQuest()"/>
     <div class="row q-my-sm q-mx-md">
-      <q-select style="min-width: 220px" class="q-mr-sm" outlined v-model="topic" label="Escoga un tema" dense :options="topics" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="topic" @input="getQuestions(null, true)" clearable></q-select>
-      <q-select style="min-width: 220px" class="q-mr-sm" outlined v-model="type" label="Escoga un tipo" dense :options="types" map-options emit-value option-value="type_name" options-selected-class="text-primary" option-label="type_name" @input="getQuestions(null, true)" clearable></q-select>
+      <q-select style="min-width: 220px" class="q-mr-sm" outlined v-model="topic" label="Escoga un tema" dense :options="topics" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="topic" @input="getQuestions(true)" clearable></q-select>
+      <q-select style="min-width: 220px" class="q-mr-sm" outlined v-model="type" label="Escoga un tipo" dense :options="types" map-options emit-value option-value="type_name" options-selected-class="text-primary" option-label="type_name" @input="getQuestions(true)" clearable></q-select>
       <!-- <q-select style="min-width: 220px" class="q-mr-sm" outlined v-model="filter.type" label="Escoga un tema" dense :options="types" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="type" clearable></q-select> -->
     </div>
     <div class="row justify-center" style="height: 70%">
@@ -104,7 +104,7 @@ export default {
         this.$q.loading.hide()
       }
     },
-    async getQuestions (val, isFilter) {
+    async getQuestions (isFilter) {
       if (isFilter === true) {
         this.filter.topic = this.topic
         this.filter.type = this.type
@@ -115,17 +115,6 @@ export default {
       await this.$api.post('getQuestionsByFilter/' + this.courseId, this.filter).then(res => {
         if (res) {
           this.questions = res
-          if (val && val === 'set') {
-            this.$q.notify({
-              color: 'positive',
-              message: 'Pregunta Creada Correctamente'
-            })
-          } else if (val && val === 'update') {
-            this.$q.notify({
-              color: 'positive',
-              message: 'Pregunta Actualizada Correctamente'
-            })
-          }
           this.$q.loading.hide()
         }
       })
@@ -176,9 +165,16 @@ export default {
     updateQuestion () {
       this.$v.form.$touch()
       if (!this.$v.form.$error) {
+        this.$q.loading.show({
+          message: 'Actualizando pregunta, Por Favor Espere...'
+        })
         this.$api.put('updateQuest/' + this.form._id, this.form).then((res) => {
           if (res) {
-            this.getQuestions('update')
+            this.$q.loading.hide()
+            this.$q.notify({
+              color: 'positive',
+              message: 'Pregunta Actualizada Correctamente'
+            })
           }
         })
       }
@@ -190,10 +186,17 @@ export default {
     setQuestion () {
       this.$v.$touch()
       if (!this.$v.form.$error) {
+        this.$q.loading.show({
+          message: 'Subiendo pregunta, Por Favor Espere...'
+        })
         this.form.course_id = this.courseId
         this.$api.post('newQuest', this.form).then((res) => {
           if (res) {
-            this.getQuestions('set')
+            this.$q.loading.hide()
+            this.$q.notify({
+              color: 'positive',
+              message: 'Pregunta Creada Correctamente'
+            })
           }
         })
       }
