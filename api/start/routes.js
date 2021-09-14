@@ -172,6 +172,7 @@ addPrefixToGroup(
 
     Route.get('getCourses', 'CourseController.index')
     Route.post('setCourse', 'CourseController.store')
+    Route.put('updateCourse/:id', 'CourseController.update')
 
   }).middleware("auth")
 );

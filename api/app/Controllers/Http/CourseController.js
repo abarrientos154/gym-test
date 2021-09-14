@@ -48,6 +48,11 @@ class CourseController {
     const course = await Course.create(body)
     response.send(course)
   }
+  async update ({ params, request, response }) {
+    const body = request.all()
+    const update = await Course.where('_id', params.id).update(body)
+    response.send(update)
+  }
 
   /**
    * Display a single course.
@@ -81,8 +86,6 @@ class CourseController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
-  }
 
   /**
    * Delete a course with id.
@@ -92,8 +95,6 @@ class CourseController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
-  }
 }
 
 module.exports = CourseController
