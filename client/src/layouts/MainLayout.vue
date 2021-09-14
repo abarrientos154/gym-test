@@ -2,7 +2,7 @@
   <div>
     <q-layout view="lHh Lpr lFf">
       <q-header v-if="rol === 1" style="background: linear-gradient(to right, #002938, #004e6d);">
-        <q-toolbar>
+        <!-- <q-toolbar>
           <div class="row no-wrap q-px-lg">
             <q-btn flat dense rounded color="white" class="q-px-md" v-for="(item, index) in 5" :key="index">{{menu[index].label}}</q-btn>
             <q-input dense borderless v-model="buscar" style="background: #838383cc; border-radius: 20px; height: 35px;">
@@ -11,7 +11,7 @@
               </template>
             </q-input>
           </div>
-        </q-toolbar>
+        </q-toolbar> -->
       </q-header>
 
       <q-drawer v-if="rol === 1" v-model="DrawerOpen" style="width: 175px;">
@@ -26,7 +26,9 @@
         <q-list class="row q-pa-sm">
           <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-pa-sm" v-for="(item, index) in menu" :key="index">
             <q-btn flat stack dense :color="selecBtn === item.label ? 'white' : 'primary'" class="q-pa-md text-no-wrap" @click="item.label === 'Salir' ? cerrarSesion() : rutas(item)" :style="`${selecBtn === item.label ? 'background: linear-gradient(to right, #002938, #004e6d);' : ''} width: 100%;`" no-caps>
-              <q-img :src="selecBtn === item.label ? item.src2 : item.src" style="width: 70px; height: 70px;"/>
+              <q-avatar style="width: 70px; height: 70px;">
+                <q-icon :name="item.icon" size="xl" :color="selecBtn === item.label ? 'white' : 'primary'"/>
+              </q-avatar>
               {{item.label}}
             </q-btn>
           </div>
@@ -66,72 +68,84 @@ export default {
           src: 'home 3.png',
           src2: 'home 2.png',
           label: 'Home',
+          icon: 'home',
           ruta: '/administrador'
         },
         {
           src: 'temas 1.png',
           src2: '',
           label: 'Temas',
+          icon: 'style',
           ruta: '/topics'
         },
         {
           src: 'pregunta 1.png',
           src2: 'pregunta 12.png',
           label: 'Preguntas',
+          icon: 'quiz',
           ruta: '/questions'
         },
         {
           src: 'examen 12.png',
           src2: 'examen 1.png',
           label: 'Examenes',
+          icon: 'rule',
           ruta: '/exams'
         },
         {
-          src: '',
-          src2: '',
+          src: 'article',
+          src2: 'article',
           label: 'Articulos',
+          icon: 'article',
           ruta: '/articles'
         },
         {
           src: '',
           src2: '',
           label: 'Leyes',
+          icon: 'gavel',
           ruta: '/laws'
         },
         {
           src: '',
           src2: '',
           label: 'Respuestas',
+          icon: 'question_answer',
           ruta: '/answers'
         },
         {
           src: '',
           src2: '',
           label: 'Sub Temas',
+          icon: 'list_alt',
           ruta: '/subTopics'
         },
         {
           src: '',
           src2: '',
           label: 'Tipos',
+          icon: 'list',
           ruta: '/types'
         },
         {
           src: '',
           src2: '',
           label: 'Cursos',
+          icon: 'book',
           ruta: '/courses'
         },
         {
           src: 'blog 1.png',
           src2: 'blog 12.png',
           label: 'Blog',
+          icon: 'web',
           ruta: '/blog'
         },
         {
           src: 'salir 2.png',
           src2: '',
           label: 'Salir',
+          icon: 'logout',
           ruta: ''
         }
       ],
