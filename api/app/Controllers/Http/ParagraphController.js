@@ -27,6 +27,61 @@ class ParagraphController {
     response.send(data)
   }
 
+  async getParagraphsByFilter ({ request, response, params }) {
+    const id = new ObjectId(params.id)
+    let filter = request.all()
+    if (filter.article) {
+      var data = (await Paragraph.query().where({ article_id: filter.article, course_id: id }).fetch()).toJSON()
+    }
+    console.log('data :>> ', data);
+    if (data !== []) {
+      for (const i in data) {
+        data[i].actions = [
+          {
+            color: "primary",
+            icon: "edit",
+            url: "",
+            action: "",
+            title: "Editar",
+          },
+          {
+            color: "red",
+            icon: "delete",
+            url: "",
+            action: "",
+            title: "Eliminar",
+          }
+        ]
+        
+      }
+    }
+    response.send(data)
+  }
+
+  async show ({ params, response }) {
+    let data = (await Paragraph.find(params.id)).toJSON()
+    response.send(data)
+  }
+
+  async store ({ request, response, auth }) {
+    let data = request.body
+    data.course_id = new ObjectId(data.course_id)
+    let save = await Paragraph.create(data)
+    response.send(save)
+  }
+
+  async update ({ params, request, response }) {
+    const body = request.all()
+    body.course_id = new ObjectId(body.course_id)
+    const update = await Paragraph.where('_id', params.id).update(body)
+    response.send(update)
+  }
+
+  async destroy ({ params, response }) {
+    const data = await Paragraph.where('_id', params.id).delete()
+    response.send(data)
+  }
+
   /**
    * Render a form to be used for creating a new paragraph.
    * GET paragraphs/create
@@ -47,8 +102,6 @@ class ParagraphController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
-  }
 
   /**
    * Display a single paragraph.
@@ -59,8 +112,6 @@ class ParagraphController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-  }
 
   /**
    * Render a form to update an existing paragraph.
@@ -82,8 +133,6 @@ class ParagraphController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
-  }
 
   /**
    * Delete a paragraph with id.
@@ -93,8 +142,6 @@ class ParagraphController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
-  }
 }
 
 module.exports = ParagraphController

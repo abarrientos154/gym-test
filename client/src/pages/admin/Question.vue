@@ -57,7 +57,7 @@ export default {
       file: null,
       columns: [
         { name: 'title', label: 'Título', align: 'left', field: 'title' },
-        { name: 'lawName', label: 'Ley', align: 'left', field: 'lawName' },
+        { name: 'lawName', label: 'Ley', align: 'left', field: 'law_id' },
         { name: 'topic', align: 'left', label: 'Tema', field: 'topic' },
         { name: 'article', label: 'Articulo', field: 'article' },
         { name: 'type', label: 'Tipo', field: 'type' },

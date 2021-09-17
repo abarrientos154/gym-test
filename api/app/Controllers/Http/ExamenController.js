@@ -227,6 +227,7 @@ class ExamenController {
     //   response.unprocessableEntity(validation.messages())
     // } else {
     // }
+    dat.course_id = new ObjectId(dat.course_id)
     let modificar = await Examen.query().where('_id', params.id).update(dat)
     response.send(modificar)
   }

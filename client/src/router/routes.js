@@ -9,6 +9,7 @@ const routes = [
       { path: '/topics', component: () => import('pages/admin/Topics.vue') },
       { path: '/questions', component: () => import('pages/admin/Question.vue') },
       { path: '/articles', component: () => import('pages/admin/Articles.vue') },
+      { path: '/paragraphs', component: () => import('pages/admin/Paragraphs.vue') },
       { path: '/laws', component: () => import('pages/admin/Laws.vue') },
       { path: '/subTopics', component: () => import('pages/admin/SubTopics.vue') },
       { path: '/answers', component: () => import('pages/admin/Answers.vue') },

@@ -87,6 +87,7 @@ class ArticleController {
 
   async update ({ params, request, response }) {
     const body = request.all()
+    body.course_id = new ObjectId(body.course_id)
     const update = await Article.where('_id', params.id).update(body)
     response.send(update)
   }

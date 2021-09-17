@@ -111,12 +111,19 @@ addPrefixToGroup(
     Route.post('excel_article', 'UploadController.excelArticle')
     Route.get('articles', 'ArticleController.index')
     Route.get('getArticlesByLaw/:id', 'ArticleController.getArticlesByLaw')
-    Route.get('getParagraphsByArticle/:id', 'ParagraphController.getParagraphsByArticle')
     Route.get('getArticleById/:id', 'ArticleController.show')
     Route.post('setArticle', 'ArticleController.store')
     Route.put('updateArticle/:id', 'ArticleController.update')
     Route.delete('deleteArticle/:id', 'ArticleController.destroy')
     Route.post('getArticlesByFilter/:id', 'ArticleController.getArticlesByFilter')
+    
+  
+    Route.get('getParagraphsByArticle/:id', 'ParagraphController.getParagraphsByArticle')
+    Route.get('getParagraphById/:id', 'ParagraphController.show')
+    Route.post('setParagraph', 'ParagraphController.store')
+    Route.put('updateParagraph/:id', 'ParagraphController.update')
+    Route.delete('deleteParagraph/:id', 'ParagraphController.destroy')
+    Route.post('getParagraphsByFilter/:id', 'ParagraphController.getParagraphsByFilter')
 
     Route.get('examen', 'ExamenController.index')
     Route.get('getExamByCourse/:id', 'ExamenController.indexByCourse')
