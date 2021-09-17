@@ -152,11 +152,8 @@ class UploadController {
         let article = explanation.getCell('G' + rowNumber).value
         let article_id = explanation.getCell('H' + rowNumber).value
         let paragraph_id = explanation.getCell('I' + rowNumber).value
-        let mal = explanation.getCell('J' + rowNumber).value
-        let type = explanation.getCell('K' + rowNumber).value
-        let brand = explanation.getCell('L' + rowNumber).value
-        let process = explanation.getCell('M' + rowNumber).value
-        let only = explanation.getCell('N' + rowNumber).value
+        let type = explanation.getCell('J' + rowNumber).value
+        let process = explanation.getCell('K' + rowNumber).value
         question.id = parseInt(id)
         question.title = title
         question.topic = topic
@@ -166,12 +163,8 @@ class UploadController {
         question.article = article
         question.article_id = article_id
         question.paragraph_id = paragraph_id
-        question.mal = mal
         question.type = type
         question.course_id = courseId
-        if (brand !== null) { question.brand = true } else { question.brand = false }
-        question.process = process
-        if (only !== null) { question.only = true } else { question.only = false }
         let save = await Question.create(question)
       }
     })
