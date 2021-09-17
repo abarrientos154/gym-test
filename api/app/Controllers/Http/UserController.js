@@ -85,16 +85,18 @@ class UserController {
   async update ({ params, request, response }) {
     var dat = request.only(['dat'])
     dat = JSON.parse(dat.dat)
-    const profilePic = request.file('files', {
-      types: ['image']
-    })
-    if (Helpers.appRoot('storage/uploads/perfil')) {
-      await profilePic.move(Helpers.appRoot('storage/uploads/perfil'), {
-        name: params.id,
-        overwrite: true
+    if (request.file('files', { types: ['image'] })) {
+      const profilePic = request.file('files', {
+        types: ['image']
       })
-    } else {
-      mkdirp.sync(`${__dirname}/storage/Excel`)
+      if (Helpers.appRoot('storage/uploads/perfil')) {
+        await profilePic.move(Helpers.appRoot('storage/uploads/perfil'), {
+          name: params.id,
+          overwrite: true
+        })
+      } else {
+        mkdirp.sync(`${__dirname}/storage/Excel`)
+      }
     }
     // const validation = await validate(dat, Asignatura.fieldValidationRules())
     // if (validation.fails()) {
@@ -129,6 +131,7 @@ class UserController {
       if (!profilePic.moved()) {
         return profilePic.error()
       } else {
+        await User.query().where('_id', user._id.toString()).update({ perfile: true })
         response.send(user)
       }
     }

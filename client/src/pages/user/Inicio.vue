@@ -10,7 +10,7 @@
               <div class="text-subtitle1 text-white">Hola, {{user.name}}</div>
               <div class="text-white text-caption">Vamos a por todas en esta semana!</div>
             </div>
-            <q-img :src="user._id ? baseuPerfil + user._id : ''" style="width: 50px; height: 50px; border-radius: 100%"/>
+            <q-img :src="user._id && user.perfile ? baseuPerfil + user._id : 'avatar gris 1.png'" class="bg-grey-5" style="width: 50px; height: 50px; border-radius: 100%"/>
           </div>
         </div>
       </q-img>

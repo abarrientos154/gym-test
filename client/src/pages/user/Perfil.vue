@@ -7,8 +7,8 @@
           <div class="text-white">Puedes modificar tu perfil</div>
           <div class="column items-center justify-center q-pt-md">
             <q-avatar size="140px" class="bg-grey-5">
-              <q-img :src="imgPerfil" style="height: 100%"/>
-              <q-badge round class="bg-grey-5" floating style="border-radius: 100%; margin-top: 80px; width: 50px; height: 50px;">
+              <q-img :src="form.perfile ? imgPerfil : 'avatar gris 1.png'" style="height: 100%"/>
+              <q-badge round class="bg-grey-5" floating style="border-radius: 100%; margin-top: 95px; width: 50px; height: 50px;">
                 <q-avatar style="width: 100%; height: 50px;">
                   <q-file borderless v-model="perfile" @input="changeProfile()" accept=".jpg, image/*" style="height: 50px; font-size: 0px">
                     <q-icon color="white" class="absolute-center" size="25px" name="photo_camera"/>
@@ -102,7 +102,9 @@ export default {
       this.$api.get('user_info').then(v => {
         if (v) {
           this.form = v
-          this.imgPerfil = this.baseuPerfil + v._id
+          if (this.form.perfile) {
+            this.imgPerfil = this.baseuPerfil + v._id
+          }
           this.getComunidades()
           this.$q.loading.hide()
         }
@@ -142,6 +144,7 @@ export default {
       this.$q.loading.show({
         message: 'Cambiando foto de perfil...'
       })
+      this.form.perfile = true
       const formData = new FormData()
       formData.append('files', this.perfile)
       await this.$api.put('update_perfilImg', formData, {
