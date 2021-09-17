@@ -61,6 +61,7 @@ export default {
         { name: 'topic', align: 'left', label: 'Tema', field: 'topic' },
         { name: 'article', label: 'Articulo', field: 'article' },
         { name: 'type', label: 'Tipo', field: 'type' },
+        { name: 'process', label: 'Proceso', field: 'process' },
         { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }
       ],
       show: false,
