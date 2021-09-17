@@ -93,11 +93,18 @@ export default {
           ruta: '/exams'
         },
         {
-          src: 'article',
-          src2: 'article',
+          src: '',
+          src2: '',
           label: 'Articulos',
           icon: 'article',
           ruta: '/articles'
+        },
+        {
+          src: '',
+          src2: '',
+          label: 'Parrafos',
+          icon: 'view_headline',
+          ruta: '/paragraphs'
         },
         {
           src: '',

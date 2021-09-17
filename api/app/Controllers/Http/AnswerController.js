@@ -71,6 +71,7 @@ class AnswerController {
 
   async updateN ({ params, request, response }) {
     const body = request.all()
+    body.course_id = new ObjectId(body.course_id)
     const update = await Answer.where('_id', params.id).update(body)
     response.send(update)
   }

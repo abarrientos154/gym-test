@@ -83,6 +83,7 @@ class SubTopicController {
 
   async update ({ params, request, response }) {
     const body = request.all()
+    body.course_id = new ObjectId(body.course_id)
     const update = await SubTopic.where('_id', params.id).update(body)
     response.send(update)
   }
