@@ -165,6 +165,7 @@ class UploadController {
         question.paragraph_id = paragraph_id
         question.type = type
         question.course_id = courseId
+        question.process = process
         let save = await Question.create(question)
       }
     })
