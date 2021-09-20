@@ -26,11 +26,11 @@
             loading...
           </template>
         </q-btn>
-        <div class="row justify-center text-h6 q-mb-xl">
+        <div class="row justify-center text-h6 q-mb-lg">
           <div class="text-grey q-mr-xs">Olvide</div>
           <div class="text-bold text-primary cursor-pointer" @click="$router.push('/recuperar_clave')">mi contraseña</div>
         </div>
-        <div class="row justify-center items-center q-mb-lg">
+        <!-- <div class="row justify-center items-center q-mb-lg">
           <q-separator color="grey" class="col"/>
           <div class="text-grey q-px-sm">O conectate usando</div>
           <q-separator color="grey" class="col"/>
@@ -45,7 +45,7 @@
           <q-avatar rounded class="q-mx-md" size="50px" style="border-radius: 15px;">
             <q-img src="twte 1.png" class="full-height"/>
           </q-avatar>
-        </div>
+        </div> -->
         <div class="row justify-center">
           <div class="text-grey q-mr-xs">¿No tienes cuenta aun?</div>
           <div class="text-bold text-primary cursor-pointer" @click="$router.push('/registro')">Crear una cuenta</div>

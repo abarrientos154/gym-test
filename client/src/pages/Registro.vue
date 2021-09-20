@@ -72,13 +72,13 @@
           </template>
         </q-select>
       </div>
-      <q-btn color="primary" text-color="white" :label="register ? 'Crear cuenta' : 'Guardar'" :loading="loading" @click="register ? registrarse() : profile()" no-caps class="full-width q-py-xs q-mb-xl">
+      <q-btn color="primary" text-color="white" :label="register ? 'Crear cuenta' : 'Guardar'" :loading="loading" @click="register ? registrarse() : profile()" no-caps class="full-width q-py-xs">
         <template v-slot:loading>
           <q-spinner-hourglass class="on-center" />
           Registrando...
         </template>
       </q-btn>
-      <div v-if="register">
+      <!-- <div v-if="register">
         <div class="row justify-center items-center q-pt-lg q-mb-lg">
           <q-separator color="grey" class="col"/>
           <div class="text-grey q-px-sm">O conectate usando</div>
@@ -95,7 +95,7 @@
             <q-img src="twte 1.png" class="full-height"/>
           </q-avatar>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
