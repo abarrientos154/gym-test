@@ -9,25 +9,33 @@
             <q-carousel-slide :name="index + 1" class="q-pa-none" v-for="(item, index) in preguntas" :key="index">
                 <div class="row justify-center">
                     <q-img src="fondo.png" style="height: 200px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
-                        <div v-if="!esExamen" class="row justify-end bg-transparent" style="width:100%; z-index: 3">
-                          <q-btn :loading="loading" rounded no-caps color="primary" label="Terminar test" class="q-px-sm"
-                          @click="terminado = true, !listo ? responder(true, item) : ''" >
+                        <div class="row justify-between items-center bg-transparent" style="width:100%; z-index: 3">
+                          <div>
+                            <q-field v-if="esExamen && test.tiempo" outlined dense stack-label>
+                              <template v-slot:control>
+                                <div class="row justify-end no-wrap" tabindex="0" style="width:100%">
+                                  <div class="text-bold text-white text-subtitle1">{{minutos + ':' + segundos}}</div>
+                                </div>
+                              </template>
+                            </q-field>
+                          </div>
+                          <q-btn v-if="!esExamen" :loading="loading" rounded no-caps color="primary" label="Terminar test" class="q-px-sm" @click="terminado = true, !listo ? responder(true, item) : ''">
                             <template v-slot:loading>
                               <q-spinner-hourglass class="on-left" />
                               Procesando...
                             </template>
                           </q-btn>
                         </div>
-                        <div class="row no-wrap items-center q-mb-xl absolute-bottom bg-transparent">
+                        <div class="row no-wrap items-center bg-transparent q-mt-xl">
                             <!-- <img src="balance 3.png" style="width: 50px" > -->
-                            <div class="text-h5 text-bold q-pl-sm ellipsis-2-lines">{{esTema ? test.tema_name : esExamen ? test.examen_name : test.type_name}}</div>
+                            <div class="text-subtitle1 text-bold q-pl-sm ellipsis-2-lines" style="font-size: 17px">{{esTema ? test.tema_name : esExamen ? test.examen_name : test.type_name}}</div>
                         </div>
                     </q-img>
                 </div>
 
-                <div class="q-mx-md q-px-md q-pt-md bg-white" style="position:relative; top: -40px; border-top-left-radius: 20px; border-top-right-radius: 20px">
+                <div class="q-mx-md q-px-md q-pt-md bg-white" style="position:relative; top: -70px; border-top-left-radius: 20px; border-top-right-radius: 20px">
                     <q-card class="bordes q-pa-none q-mb-md" style="width: 100%; border-radius: 10px;">
-                        <div class="row no-wrap items-center justify-between q-py-xs q-px-xs">
+                        <!-- <div class="row no-wrap items-center justify-between q-py-xs q-px-xs">
                             <div class="row no-wrap items-center">
                               <q-icon name="help" color="primary" size="40px" />
                               <div class="text-primary q-pl-xs">Pregunta</div>
@@ -41,9 +49,9 @@
                                 </template>
                               </q-field>
                             </div>
-                        </div>
-                        <div class="bg-primary q-py-md q-px-md q-ma-none">
-                            <div class="text-white text-center text-caption">{{item.title}}</div>
+                        </div> -->
+                        <div class="bg-primary q-pa-sm q-ma-none">
+                            <div class="text-white text-center text-bold text-h6">{{item.title}}</div>
                         </div>
                     </q-card>
 
@@ -52,8 +60,8 @@
                       <q-item class="q-pa-none row" style="width:100%">
                         <q-item-section side class="q-py-sm q-px-md q-ma-none text-h6 bg-primary text-white"
                         style="border-top-left-radius: 10px; border-bottom-left-radius: 10px">{{index2 === 0 ? 'A' : index2 === 1 ? 'B' : index2 === 2 ? 'C' : 'D'}}</q-item-section>
-                        <q-item-section :class="!listo ? option.isActive ? 'bg-primary text-white' : 'bg-white text-primary' : (option.isActive && item.selected) || option.isCorrect ? 'bg-positive text-white' : option.isActive && !item.selected ? 'bg-negative text-white' : 'bg-white text-primary'" class="q-px-sm q-ma-none"
-                        style="border-top-right-radius: 10px; border-bottom-right-radius: 10px">{{option.answer_name}}</q-item-section>
+                        <q-item-section :class="!listo ? option.isActive ? 'bg-primary text-white text-bold' : 'bg-white text-primary text-bold' : (option.isActive && item.selected) || option.isCorrect ? 'bg-positive text-white' : option.isActive && !item.selected ? 'bg-negative text-white' : 'bg-white text-primary'" class="q-px-sm q-ma-none"
+                        style="border-top-right-radius: 10px; border-bottom-right-radius: 10px; font-size: 17px">{{option.answer_name}}</q-item-section>
                       </q-item>
                     </q-card>
 
