@@ -107,7 +107,7 @@ class TopicController {
         questions = allQuestions
       }
       for (let i = 0; i < questions.length; i++) {
-        if (questions[i].answers[0].order === null) {
+        if (questions[i].answers[0].order === null || questions[i].answers[0].order === '') {
           questions[i].answers = questions[i].answers.sort(() => Math.random() - 0.5)
         } else {
           var arrayAnswers = []
