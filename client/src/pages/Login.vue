@@ -89,7 +89,7 @@ export default {
             if (this.user.roles[0] === 1) {
               this.$router.push('/courses')
             } else {
-              this.$router.push('/inicio')
+              this.$router.push('/courses_client')
             }
           } else {
             console.log('error de ususario')

@@ -162,6 +162,7 @@ export default {
     }
   },
   mounted () {
+    this.courseId = localStorage.getItem('course_id')
     this.baseuPerfil = env.apiUrl + 'perfil_img/'
     this.getUser()
     this.getRutinas()
@@ -190,21 +191,22 @@ export default {
       })
     },
     getTemas () {
-      this.$api.get('getTopics').then(res => {
+      this.$api.get('getTopicsByCourse/' + this.courseId).then(res => {
         if (res) {
           this.materias = res
+          console.log('materias :>> ', this.materias)
         }
       })
     },
     getGym () {
-      this.$api.get('types').then(res => {
+      this.$api.get('gettypesByCourse/' + this.courseId).then(res => {
         if (res) {
           this.gym = res
         }
       })
     },
     getExamenes () {
-      this.$api.get('examen').then(res => {
+      this.$api.get('getExamByCourse/' + this.courseId).then(res => {
         if (res) {
           this.examenes = res
         }

@@ -39,6 +39,7 @@ const routes = [
 
   { path: '/splash', component: () => import('pages/Splash.vue') },
   { path: '/courses', component: () => import('pages/Courses.vue') },
+  { path: '/courses_client', component: () => import('pages/CoursesClient.vue') },
   { path: '/login', component: () => import('pages/Login.vue') },
   { path: '/registro', component: () => import('pages/Registro.vue') },
   { path: '/recuperar_clave', component: () => import('pages/NewPassword.vue') },
