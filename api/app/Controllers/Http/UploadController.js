@@ -125,7 +125,14 @@ class UploadController {
         topicDB.long_name = long_name
         topicDB.name = name
         topicDB.course_id = courseId
-        let save = await Topic.create(topicDB)
+        try {
+          var existTopic = (await Topic.query().where({ id: topicDB.id }).first()).toJSON()
+        } catch (error) {
+          if (existTopic === null || existTopic === undefined) {
+            let save = await Topic.create(topicDB)
+          }
+          console.error('error.message :>> ', error.message);
+        }
       }
     })
     response.send(true)
@@ -166,7 +173,14 @@ class UploadController {
         question.type = type
         question.course_id = courseId
         question.process = process
-        let save = await Question.create(question)
+        try {
+          var existQuestion = (await Question.query().where({ id: id }).first()).toJSON()
+        } catch (error) {
+          if (existQuestion === null || existQuestion === undefined) {
+            let save = await Question.create(question)
+          }
+          console.error('error.message :>> ', error.message);
+        }
       }
     })
     response.send(true)
@@ -197,7 +211,14 @@ class UploadController {
         exam.convocatoria = convocatoria
         exam.name = name
         exam.course_id = courseId
-        let save = await Exam.create(exam)
+        try {
+          var existExam = (await Exam.query().where({ id: exam.id }).first()).toJSON()
+        } catch (error) {
+          if (existExam === null || existExam === undefined) {
+            let save = await Exam.create(exam)
+          }
+          console.error('error.message :>> ', error.message);
+        }
       }
     })
     response.send(true)
@@ -229,7 +250,14 @@ class UploadController {
         
         if (article_name !== articleNumber) {
           articleNumber = article_name
-          var newArticle = await Article.create(article)
+          try {
+            var existArticle = (await Article.query().where({ article_name: article_name, law: law }).first()).toJSON()
+          } catch (error) {
+            if (existArticle === null || existArticle === undefined) {
+              var newArticle = await Article.create(article)
+            }
+            console.error('error.message :>> ', error.message);
+          }
         }
       }
     })
@@ -258,7 +286,14 @@ class UploadController {
               order++
               var articleCreated = (await Article.query().where({ law: law, article_name: article_name }).first()).toJSON()
               paragraphDB.article_id = articleCreated._id
-              var newParagrahp = await Paragraph.create(paragraphDB)
+              try {
+                var existParagraph = (await Paragraph.query().where({ paragraph_text: paragraph_text }).first()).toJSON()
+              } catch (error) {
+                if (existParagraph === null || existParagraph === undefined) {
+                  var newParagrahp = await Paragraph.create(paragraphDB)
+                }
+                console.error('error.message :>> ', error.message);
+              }
             }
           } catch (error) {
             console.error('fallo: ' + error.message)
@@ -296,7 +331,14 @@ class UploadController {
         law.mark = mark
         law.note = note
         law.course_id = courseId
-        let save = await Law.create(law)
+        try {
+          var existLaw = (await Law.query().where({ id: id }).first()).toJSON()
+        } catch (error) {
+          if (existLaw === null || existLaw === undefined) {
+            let save = await Law.create(law)
+          }
+          console.error('error.message :>> ', error.message);
+        }
       }
     })
     response.send(true)
@@ -324,7 +366,14 @@ class UploadController {
         answer.isCorrect = isCorrect === 'N' ? false : true 
         answer.order = order
         answer.course_id = courseId
-        let save = await Answer.create(answer)
+        try {
+          var existAnswer = (await Answer.query().where({ id: id }).first()).toJSON()
+        } catch (error) {
+          if (existAnswer === null || existAnswer === undefined) {
+            let save = await Answer.create(answer)
+          }
+          console.error('error.message :>> ', error.message);
+        }
       }
     })
     response.send(true)
@@ -348,7 +397,14 @@ class UploadController {
         subTopic.topic_id = topic_id
         subTopic.process = process
         subTopic.course_id = courseId
-        let save = await SubTopic.create(subTopic)
+        try {
+          var existSubTopic = (await SubTopic.query().where({ id: id }).first()).toJSON()
+        } catch (error) {
+          if (existSubTopic === null || existSubTopic === undefined) {
+            let save = await SubTopic.create(subTopic)
+          }
+          console.error('error.message :>> ', error.message);
+        }
       }
     })
     response.send(true)
@@ -370,7 +426,14 @@ class UploadController {
         type.id = id 
         type.type_name = type_name
         type.course_id = courseId
-        let save = await Type.create(type)
+        try {
+          var existType = (await Type.query().where({ id: id }).first()).toJSON()
+        } catch (error) {
+          if (existType === null || existType === undefined) {
+            let save = await Type.create(type)
+          }
+          console.error('error.message :>> ', error.message);
+        }
       }
     })
     response.send(true)
