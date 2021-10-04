@@ -178,6 +178,11 @@ export default {
           ruta: '/perfil'
         },
         {
+          icon: 'book',
+          label: 'Cursos',
+          ruta: '/courses_client'
+        },
+        {
           icon: 'logout',
           label: 'Salir',
           ruta: ''
