@@ -4,7 +4,7 @@
       <q-card class="row justify-center bg-grey-3" style="border-radius: 25px;">
         <q-img src="gymtest 1.png" style="width: 150px"/>
       </q-card>
-      <div class="text-h3 text-center text-grey-3 text-weight-medium">Mis Cursos</div>
+      <div class="text-h5 text-center text-grey-3 text-weight-medium q-my-xs">Cursos Disponibles</div>
       <q-card class="bg-grey-3 row items-center justify-center q-mt-sm" style="border-radius: 16px" v-for="(item, index) in courses" :key="index">
         <div class="text-h6 text-bold">{{item.name}}</div>
         <q-btn class="q-ml-xs" icon="arrow_forward" flat color="primary" @click="selectCourse(item._id)"/>

@@ -194,7 +194,6 @@ export default {
       this.$api.get('getTopicsByCourse/' + this.courseId).then(res => {
         if (res) {
           this.materias = res
-          console.log('materias :>> ', this.materias)
         }
       })
     },
