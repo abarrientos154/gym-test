@@ -158,12 +158,7 @@ addPrefixToGroup(
     Route.get('getQuestionById/:id', 'QuestionController.show')
     Route.delete('destroyQuest/:id', 'QuestionController.destroy')
 
-    Route.post('newBlog', 'BlogController.store')
-    Route.put('updateBlog/:id', 'BlogController.update')
-    Route.get('blogs', 'BlogController.index')
     // Route.get('dateExamUser', 'DateExamController.dateExamUser')
-    Route.delete('destroyBlog/:id', 'BlogController.destroy')
-    Route.get('blogById/:id', 'BlogController.show')
 
     Route.post('answer', 'AnswerController.store')
     Route.put('answer/:id', 'AnswerController.update')
@@ -180,6 +175,13 @@ addPrefixToGroup(
     Route.get('getCourses', 'CourseController.index')
     Route.post('setCourse', 'CourseController.store')
     Route.put('updateCourse/:id', 'CourseController.update')
+    
+    
+    Route.get('News', 'NewsController.index')
+    Route.get('NewsByCourse/:id', 'NewsController.indexByCourse')
+    Route.post('setNews', 'NewsController.store')
+    Route.put('updateNews/:id', 'NewsController.update')
+    Route.delete('deleteNews/:id', 'NewsController.destroy')
 
   }).middleware("auth")
 );
