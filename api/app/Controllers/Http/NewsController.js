@@ -116,16 +116,19 @@ class NewsController {
       types: ['image'],
       size: '20mb'
     })
-    if (Helpers.appRoot('storage/uploads/news')) {
-      await image.move(Helpers.appRoot('storage/uploads/news'), {
-        name: params._id,
-        overwrite: true
-      })
-    } else {
-      mkdirp.sync(`${__dirname}/storage/Excel`)
+    if (image !== null) {
+      if (Helpers.appRoot('storage/uploads/news')) {
+        await image.move(Helpers.appRoot('storage/uploads/news'), {
+          name: params._id,
+          overwrite: true
+        })
+      } else {
+        mkdirp.sync(`${__dirname}/storage/Excel`)
+      }
+      const fileName = image.fileName
+      body.image = fileName
     }
-    const fileName = image.fileName
-    body.image = fileName
+    body.course_id = new ObjectId(body.course_id)
     const id = new ObjectId(params.id)
     let news = await News.query().where({ _id: id }).update(body)
     response.send(news)

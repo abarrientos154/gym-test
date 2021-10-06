@@ -86,29 +86,33 @@ export default {
   },
   methods: {
     updateNews () {
-      this.$v.form.$touch()
-      if (!this.$v.form.$error) {
-        this.$q.loading.show({
-          message: 'Actualizando Noticia, Por Favor Espere...'
-        })
-        this.form.text = this.textEdit
-        const formData = new FormData()
-        formData.append('image', this.file)
-        formData.append('data', JSON.stringify(this.form))
-        this.$api.put('updateNews/' + this.form._id, formData, {
-          headers: {
-            'Content-Type': undefined
-          }
-        }).then((res) => {
-          if (res) {
-            this.$q.loading.hide()
-            this.$q.notify({
-              color: 'positive',
-              message: 'Noticia Actualizada Correctamente'
-            })
-            this.getNews()
-          }
-        })
+      if (this.textEdit !== '') {
+        this.$v.form.$touch()
+        if (!this.$v.form.$error) {
+          this.$q.loading.show({
+            message: 'Actualizando Noticia, Por Favor Espere...'
+          })
+          this.form.text = this.textEdit
+          const formData = new FormData()
+          formData.append('image', this.file)
+          formData.append('data', JSON.stringify(this.form))
+          this.$api.put('updateNews/' + this.form._id, formData, {
+            headers: {
+              'Content-Type': undefined
+            }
+          }).then((res) => {
+            if (res) {
+              this.$q.loading.hide()
+              this.$q.notify({
+                color: 'positive',
+                message: 'Noticia Actualizada Correctamente'
+              })
+              this.getNews()
+            }
+          })
+        }
+      } else {
+        this.isWrittren = false
       }
     },
     decartarCamb () {
@@ -191,6 +195,7 @@ export default {
     },
     setEditNews (item) {
       this.form = item
+      this.textEdit = item.text
       this.edit = true
       this.show = true
     },
