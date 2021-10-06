@@ -1,34 +1,10 @@
 <template>
   <div>
     <div style="background: linear-gradient(to right, #002938, #004e6d); height: 200px; width: 100%;"></div>
-    <!-- <q-img src="noimg.png" style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; height: 265px; width: 100%;"/> -->
     <div class="column q-pa-lg no-wrap" style="margin-top: -200px">
       <div class="text-h4 text-white text-bold q-mb-xl q-px-xl">Tipos</div>
       <div>
         <div class="text-h5 text-white q-mb-sm q-px-md">Tipos recientes</div>
-        <!-- <q-scroll-area horizontal style="height: 230px">
-          <div class="full-width row no-wrap">
-            <q-card class="q-mr-md column bordes" v-for="(item, index) in types" :key="index" style="width: 260px; border-radius: 20px;">
-              <q-img src="noimg.png" style="height: 130px"/>
-              <q-card-section class="items-center" horizontal>
-                <q-card-section class="ellipsis" style="width: 150px">
-                  <div class="text-subtitle1 text-bold text-primary ellipsis">{{item.type_name}}</div>
-                  <div class="text-subtitle2 text-grey">Gestion</div>
-                </q-card-section>
-                <q-card-section>
-                  <div class="row no-wrap items-center">
-                    <q-btn flat dense @click="editType(item)">
-                      <q-img src="edit.png" style="height: 35px; width: 35px;"/>
-                    </q-btn>
-                    <q-btn flat dense @click="deleteType(item._id)">
-                      <q-img src="delete.png" style="height: 35px; width: 35px;"/>
-                    </q-btn>
-                  </div>
-                </q-card-section>
-              </q-card-section>
-            </q-card>
-          </div>
-        </q-scroll-area> -->
       </div>
       <q-btn color="primary" dense no-caps size="md">
         <q-file borderless v-model="file" hint="(.xls, .xlsx, .xltx, .ods, .ots, .csv)" accept=".xls, .xlsx, .xltx, .ods, .ots, .csv/*" @input="uploadFile()" style="height: 30px; font-size: 0px"/>

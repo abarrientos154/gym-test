@@ -144,9 +144,9 @@ export default {
         {
           src: 'blog 1.png',
           src2: 'blog 12.png',
-          label: 'Blog',
+          label: 'Noticias',
           icon: 'web',
-          ruta: '/blog'
+          ruta: '/news'
         },
         {
           src: 'salir 2.png',
@@ -169,8 +169,8 @@ export default {
         }, */
         {
           icon: 'apps',
-          label: 'Blog',
-          ruta: '/blog_user'
+          label: 'Noticias',
+          ruta: '/nes_user'
         },
         {
           icon: 'person',

@@ -53,13 +53,14 @@ class NewsController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
+    console.log('aqui estamos :>> ');
     let body = request.only(['data'])
-    //body = JSON.parse(data.data) */
+    body = JSON.parse(body.data)
     const image = request.file('image', {
       types: ['image'],
       size: '20mb'
     })
-    //body.course_id = new ObjectId(body.course_id)
+    body.course_id = new ObjectId(body.course_id)
     let news = await News.create(body)
     const id = ObjectId(news._id).toString()
     if (Helpers.appRoot('storage/uploads/news')) {
@@ -83,7 +84,9 @@ class NewsController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show ({ params, response }) {
+    let data = (await News.find(params.id)).toJSON()
+    response.send(data)
   }
 
   /**
@@ -108,7 +111,7 @@ class NewsController {
    */
   async update ({ params, request, response }) {
     let body = request.only(['data'])
-    //body = JSON.parse(data.data) */
+    body = JSON.parse(body.data)
     const image = request.file('image', {
       types: ['image'],
       size: '20mb'

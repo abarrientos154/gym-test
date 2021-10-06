@@ -115,13 +115,18 @@
         </q-scroll-area>
         <div v-else class="text-center text-bold text-grey-9 q-py-lg">Sin examenes actualmente</div>
 
-        <div class="text-h6 text-bold text-primary q-mt-sm">Nuestro Blog</div>
+        <div class="text-h6 text-bold text-primary q-mt-sm">Nuestras Noticias</div>
         <div class="row justify-between">
-          <div class="col text-caption text-grey-8">Lee nuestro blog para potenciar tu aprendizaje</div>
-          <div class="col-2 text-caption text-primary cursor-pointer"
-          @click="$router.push('/blog_user')">Ver todo</div>
+          <div class="col text-caption text-grey-8">Lee nuestras noticias para potenciar tu aprendizaje</div>
+          <!-- <div class="col-2 text-caption text-primary cursor-pointer"
+          @click="$router.push('/blog_user')">Ver todo</div> -->
         </div>
-        <q-scroll-area v-if="blogs.length" horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 270px; width: 100%;">
+        <q-card class="bg-grey-2 q-pa-sm">
+          <div v-for="(item, index) in news" :key="index" class="text-subtitle2 q-ml-sm">
+            <li @click="$router.push('/publicidad/' + item._id)">{{item.title}}</li>
+          </div>
+        </q-card>
+        <!-- <q-scroll-area v-if="blogs.length" horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 270px; width: 100%;">
           <div class="row no-wrap q-gutter-md">
             <q-card flat style="width: 200px; height: 200px" clickable v-ripple v-for="(item, index) in blogs" :key="index"
             @click="$router.push('/publicidad/' + item)">
@@ -133,7 +138,7 @@
               <div class="text-caption text-grey-7 q-pt-sm q-px-xs ellipsis-3-lines">Descripción del blog</div>
             </q-card>
           </div>
-        </q-scroll-area>
+        </q-scroll-area> -->
       </div>
   </div>
 </template>
@@ -158,7 +163,8 @@ export default {
       materias: [],
       gym: [],
       examenes: [],
-      blogs: [1, 2, 3]
+      blogs: [1, 2, 3],
+      news: []
     }
   },
   mounted () {
@@ -169,6 +175,7 @@ export default {
     this.getTemas()
     this.getGym()
     this.getExamenes()
+    this.getNews()
   },
   methods: {
     getUser () {
@@ -208,6 +215,13 @@ export default {
       this.$api.get('getExamByCourse/' + this.courseId).then(res => {
         if (res) {
           this.examenes = res
+        }
+      })
+    },
+    getNews () {
+      this.$api.get('newsByCourse/' + this.courseId).then(res => {
+        if (res) {
+          this.news = res
         }
       })
     }

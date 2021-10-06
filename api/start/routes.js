@@ -40,6 +40,7 @@ addPrefixToGroup(
     Route.get('perfil_img/:file', 'UploadController.getFileByDirectoryPerfil')
     Route.get('nivel_img/:file', 'UploadController.getFileByDirectoryNiveles')
     Route.get('pregunta_img/:file', 'UploadController.getFileByDirectoryPreguntas')
+    Route.get('news_img/:file', 'UploadController.getFileByDirectoryNews')
 
   })
 );
@@ -177,8 +178,9 @@ addPrefixToGroup(
     Route.put('updateCourse/:id', 'CourseController.update')
     
     
-    Route.get('News', 'NewsController.index')
-    Route.get('NewsByCourse/:id', 'NewsController.indexByCourse')
+    Route.get('news', 'NewsController.index')
+    Route.get('newsByCourse/:id', 'NewsController.indexByCourse')
+    Route.get('newsById/:id', 'NewsController.show')
     Route.post('setNews', 'NewsController.store')
     Route.put('updateNews/:id', 'NewsController.update')
     Route.delete('deleteNews/:id', 'NewsController.destroy')
