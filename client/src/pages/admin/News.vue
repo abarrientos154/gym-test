@@ -107,6 +107,10 @@ export default {
                 color: 'positive',
                 message: 'Noticia Actualizada Correctamente'
               })
+              this.form = {}
+              this.file = null
+              this.textEdit = ''
+              this.show = false
               this.getNews()
             }
           })
@@ -118,8 +122,9 @@ export default {
     decartarCamb () {
       this.form = {}
       this.file = null
+      this.textEdit = ''
       this.edit = false
-      this.$v.reset()
+      this.$v.$reset()
     },
     setNews () {
       if (this.textEdit !== '') {
