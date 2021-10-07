@@ -149,6 +149,13 @@ export default {
           ruta: '/news'
         },
         {
+          src: '',
+          src2: '',
+          label: 'Fallos',
+          icon: 'feedback',
+          ruta: '/faults'
+        },
+        {
           src: 'salir 2.png',
           src2: '',
           label: 'Salir',

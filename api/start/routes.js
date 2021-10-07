@@ -184,6 +184,10 @@ addPrefixToGroup(
     Route.post('setNews', 'NewsController.store')
     Route.put('updateNews/:id', 'NewsController.update')
     Route.delete('deleteNews/:id', 'NewsController.destroy')
+    
+    Route.post('setFault', 'FaultController.store')
+    Route.get('faultsByCourse/:id', 'FaultController.indexByCourse')
+    
 
   }).middleware("auth")
 );

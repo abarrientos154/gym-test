@@ -78,6 +78,10 @@
                         @click="infoSelec = item, verLey = true" />
                       </div>
                     </div>
+                    <div class="row justify-end">
+                      <q-btn flat no-caps color="red" label="Reportar fallo"
+                      @click="question_id = item._id, report = true" />
+                    </div>
                 </div>
             </q-carousel-slide>
         </q-carousel>
@@ -96,10 +100,21 @@
             </div>
           </q-card>
         </q-dialog>
+        <q-dialog v-model="report" v-if="report">
+          <q-card class="q-pa-md bordes" style="width: 100%; border-radius: 15px">
+            <div class="text-bold text-primary">Reportar Fallo</div>
+            <q-input dense outlined type="textarea" v-model="form.message" label="Mensaje" :error="$v.form.message.$error" error-message="Este campo es requerido"  @blur="$v.form.message.$touch()"></q-input>
+            <q-card-actions align="right">
+              <q-btn flat label="Cancelar" color="primary" v-close-popup @click="discardChanges()" no-caps/>
+              <q-btn flat label="Enviar" color="primary" v-close-popup @click="setFault()" no-caps/>
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
   </div>
 </template>
 
 <script>
+import { required } from 'vuelidate/lib/validators'
 export default {
   data () {
     return {
@@ -121,10 +136,20 @@ export default {
       user: {},
       test: {},
       infoSelec: {},
-      preguntas: []
+      preguntas: [],
+      report: false,
+      form: {},
+      courseId: '',
+      question_id: ''
+    }
+  },
+  validations: {
+    form: {
+      message: { required }
     }
   },
   mounted () {
+    this.courseId = localStorage.getItem('course_id')
     this.getUser()
     if (this.$route.params.idTema) {
       this.idTest = this.$route.params.idTema
@@ -262,6 +287,31 @@ export default {
       this.$refs.carousel.previous()
       this.listo = true
       this.atras = true
+    },
+    setFault () {
+      this.$v.form.$touch()
+      if (!this.$v.form.$error) {
+        this.$q.loading.show({
+          message: 'Cargando Datos...'
+        })
+        this.form.course_id = this.courseId
+        this.form.question_id = this.question_id
+        this.form.user_id = this.user._id
+        this.$api.post('setFault', this.form).then(res => {
+          if (res) {
+            this.$q.loading.hide()
+            this.form = {}
+            this.$q.notify({
+              color: 'positive',
+              message: 'Reporte de fallo creado correctamente'
+            })
+          }
+        })
+      }
+    },
+    discardChanges () {
+      this.form = {}
+      this.$v.$reset()
     }
   }
 }

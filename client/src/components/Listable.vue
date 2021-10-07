@@ -38,6 +38,50 @@
             </q-tooltip>
           </q-btn>
       </q-td>
+      <q-td
+          slot="body-cell-questionButton"
+          slot-scope="props"
+          :props="props"
+          v-if="checkIfQuestion()"
+        >
+          <q-btn
+            v-for="action in props.row.questionButton"
+            :key="action.icon"
+            :to="action.url"
+            :icon="action.icon"
+            @click="executeB(props.row.question, action.title)"
+            :color="action.color"
+            size="sm"
+            outline
+            style="margin-right:4px"
+          >
+            <q-tooltip>
+              {{action.question}}
+            </q-tooltip>
+          </q-btn>
+      </q-td>
+      <q-td
+          slot="body-cell-userButton"
+          slot-scope="props"
+          :props="props"
+          v-if="checkIfUser()"
+        >
+          <q-btn
+            v-for="action in props.row.userButton"
+            :key="action.icon"
+            :to="action.url"
+            :icon="action.icon"
+            @click="executeB(props.row.user, action.title)"
+            :color="action.color"
+            size="sm"
+            outline
+            style="margin-right:4px"
+          >
+            <q-tooltip>
+              {{action.user}}
+            </q-tooltip>
+          </q-btn>
+      </q-td>
     </q-table>
   </div>
 </template>
@@ -54,9 +98,22 @@ export default {
     checkIfActions () {
       return this.columns.find((element) => element.name === 'actions')
     },
+    checkIfQuestion () {
+      return this.columns.find((element) => element.name === 'questionButton')
+    },
+    checkIfUser () {
+      return this.columns.find((element) => element.name === 'userButton')
+    },
     execute (id, title) {
       const emit = {
         id,
+        title
+      }
+      this.$emit('function', emit)
+    },
+    executeB (element, title) {
+      const emit = {
+        element,
         title
       }
       this.$emit('function', emit)
