@@ -70,6 +70,7 @@
           </q-input>
           <q-input dense outlined type="text" v-model="form.order" label="Orden" :error="$v.form.order.$error" error-message="Este campo es requerido"  @blur="$v.form.order.$touch()">
           </q-input>
+          <q-checkbox left-label v-model="form.isCorrect" label="Respuesta correcta" :error="$v.form.isCorrect.$error" error-message="Este campo es requerido"  @blur="$v.form.isCorrect.$touch()"/>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
@@ -97,10 +98,10 @@ export default {
         { name: 'id_question', label: '# de Pregunta', align: 'left', field: 'id_question' },
         { name: 'answer_name', label: 'Respuesta', align: 'left', field: 'answer_name' },
         {
-          name: 'isCorrect',
+          name: 'isCorrectL',
           align: 'left',
           label: 'Correcta',
-          field: 'isCorrect'/* ,
+          field: 'isCorrectL'/* ,
           format: (val) => {
             if (val === true) {
               val = 'Si'

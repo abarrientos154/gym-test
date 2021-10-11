@@ -187,6 +187,7 @@ addPrefixToGroup(
     
     Route.post('setFault', 'FaultController.store')
     Route.get('faultsByCourse/:id', 'FaultController.indexByCourse')
+    Route.put('checkFault/:id', 'FaultController.checkFault')
     
 
   }).middleware("auth")

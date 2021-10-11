@@ -1,5 +1,6 @@
 'use strict'
 const Answer = use("App/Models/Answer")
+const Question = use("App/Models/Question")
 const Desafios = use("App/Models/Desafio")
 const User = use("App/Models/User")
 var ObjectId = require('mongodb').ObjectId;
@@ -27,6 +28,7 @@ class AnswerController {
     const id = new ObjectId(params.id)
     let filter = request.all()
     if (filter.question) {
+      console.log('filter.question :>> ', filter.question);
       var data = (await Answer.query().where({ id_question: filter.question, course_id: id }).fetch()).toJSON()
     }
     if (data !== []) {
@@ -48,9 +50,9 @@ class AnswerController {
           }
         ]
         if (data[i].isCorrect === true) {
-          data[i].isCorrect = 'Si'
+          data[i].isCorrectL = 'Si'
         } else if (data[i].isCorrect === false) {
-          data[i].isCorrect = 'No'
+          data[i].isCorrectL = 'No'
         }
       }
     }
@@ -72,6 +74,14 @@ class AnswerController {
   async updateN ({ params, request, response }) {
     const body = request.all()
     body.course_id = new ObjectId(body.course_id)
+    console.log('body :>> ', body);
+    if (body.isCorrect === true) {
+      let answers = (await Answer.query().where({ id_question: body.id_question }).fetch()).toJSON()
+      console.log('answers :>> ', answers);
+      for (const i in answers) {
+        const answerUp = await Answer.query().where({ _id: answers[i]._id }).update({ isCorrect: false })
+      }
+    }
     const update = await Answer.where('_id', params.id).update(body)
     response.send(update)
   }

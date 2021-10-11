@@ -51,11 +51,38 @@ class FaultController {
             user: data[i].user.name
           }
         ]
+        data[i].actions = [
+          {
+            color: "primary",
+            icon: "edit",
+            url: "",
+            action: "",
+            title: "Editar Pregunta",
+          },
+          {
+            color: "green",
+            icon: "check",
+            url: "",
+            action: "",
+            title: "Revisar",
+          }
+        ]
         data[i].user.communityName = community.name
         data[i].user.placeName = place.name
+        if (data[i].status === false) {
+          data[i].status = 'Por revisar'
+        } else if (data[i].status === true) {
+          data[i].status = 'Revisado'
+        }
       }
     }
     response.send(data)
+  }
+
+  async checkFault ({ response, params }) {
+    const id = new ObjectId(params.id)
+    const fautlChecked = await Fault.query().where({ _id: id }).update({ status: true })
+    response.send(fautlChecked)
   }
 
   /**

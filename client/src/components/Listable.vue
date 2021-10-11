@@ -27,10 +27,11 @@
             :key="action.icon"
             :to="action.url"
             :icon="action.icon"
-            @click="execute(props.row._id, action.title)"
+            @click="execute(props.row._id, action.title, props.row)"
             :color="action.color"
             size="sm"
             outline
+            :disable="props.row.status === 'Revisado' ? true : false"
             style="margin-right:4px"
           >
             <q-tooltip>
@@ -104,10 +105,11 @@ export default {
     checkIfUser () {
       return this.columns.find((element) => element.name === 'userButton')
     },
-    execute (id, title) {
+    execute (id, title, element) {
       const emit = {
         id,
-        title
+        title,
+        element
       }
       this.$emit('function', emit)
     },
