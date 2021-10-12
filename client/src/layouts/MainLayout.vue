@@ -156,6 +156,13 @@ export default {
           ruta: '/faults'
         },
         {
+          src: '',
+          src2: '',
+          label: 'Audios',
+          icon: 'headphones',
+          ruta: '/audio'
+        },
+        {
           src: 'salir 2.png',
           src2: '',
           label: 'Salir',

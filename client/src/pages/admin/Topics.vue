@@ -46,7 +46,7 @@
         </q-card-section>
         <q-card-section class="q-pt-none">
           <q-avatar square size="200px" style="width: 100%" class="bg-grey row justify-center">
-            <q-img :src="file2 !== null ? imgFile : editTopic ? baseu + form.image : 'noimg.png'" style="height: 100%">
+            <q-img :src="file2 !== null ? imgFile : editTopic ? baseu + form._id : 'noimg.png'" style="height: 100%">
               <q-file borderless v-model="file2" @input="test()" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px" :error="$v.file2.$error" @blur="$v.file2.$touch()">
                 <q-icon name="image" size="50px" color="white" />
               </q-file>
@@ -131,7 +131,6 @@ export default {
               message: 'Tema Actualizado Correctamente'
             })
             this.file2 = null
-            this.form = {}
             this.getTopics()
           }
         })
@@ -196,7 +195,6 @@ export default {
       await this.$api.get('getTopicsByCourse/' + this.courseId).then(res => {
         if (res) {
           this.topics = res
-          // console.log(this.topics)
         }
         this.$q.loading.hide()
       })
@@ -226,11 +224,11 @@ export default {
         })
       }
     },
-    execute (emit) {
+    async execute (emit) {
       if (emit.title === 'Eliminar') {
         this.deleteTopic(emit.id)
       } else if (emit.title === 'Editar') {
-        this.getTopicById(emit.id)
+        await this.getTopicById(emit.id)
         this.editTopic = true
         this.show = true
       }
@@ -238,8 +236,8 @@ export default {
     async getTopicById (id) {
       await this.$api.get('getTopicById/' + id).then(res => {
         if (res) {
-          console.log('res :>> ', res)
-          this.form = res
+          this.form = { ...res }
+          console.log('res :>> ', this.form._id)
         }
       })
     },

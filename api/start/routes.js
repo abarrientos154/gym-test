@@ -190,6 +190,11 @@ addPrefixToGroup(
     Route.get('faultsByCourse/:id', 'FaultController.indexByCourse')
     Route.put('checkFault/:id', 'FaultController.checkFault')
     
-
+    Route.get('audiosByCourse/:id', 'AudioController.indexByCourse')
+    Route.get('audioById/:id', 'AudioController.show')
+    Route.post('setAudio', 'AudioController.store')
+    Route.put('updateAudio/:id', 'AudioController.update')
+    Route.delete('deleteAudio/:id', 'AudioController.destroy')
+    
   }).middleware("auth")
 );

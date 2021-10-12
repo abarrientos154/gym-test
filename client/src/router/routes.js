@@ -17,6 +17,7 @@ const routes = [
       { path: '/exams', component: () => import('pages/admin/Examenes.vue') },
       { path: '/news', component: () => import('pages/admin/News.vue') },
       { path: '/faults', component: () => import('pages/admin/Faults.vue') },
+      { path: '/audio', component: () => import('pages/admin/Audio.vue') },
       /* onent: () => import('pages/admin/Examenes.vue') },
       { path: '/tests_exam/:id', component: () => import('pages/admin/TestsExam.vue') },
       { path: '/exam/:id', component: () => import('pages/admin/Exam.vue') },
