@@ -1,6 +1,7 @@
 'use strict'
 const Type = use("App/Models/Type")
 const Question = use("App/Models/Question")
+const Examen = use("App/Models/Examen")
 const TypeTest = use("App/Models/TypeTest")
 const Articulos = use("App/Models/Article")
 const Parrafos = use("App/Models/Paragraph")
@@ -133,8 +134,13 @@ class TypeController {
   async getTestById ({ request, response, params }) {
     try {
       let type = (await TypeTest.query().where({_id: params.id}).first()).toJSON()
-      let questions = (await Question.query().where({type: type.type_name}).with('answers').with('leyInfo').fetch()).toJSON()
+      let questions = (await Question.query().where({ type: type.type_name }).with('answers').with('leyInfo').fetch()).toJSON()
       for (let i = 0; i < questions.length; i++) {
+        if (questions[i].exam !== '') {
+          const id = Number(questions[i].exam)
+          const exam = (await Examen.query().where({ id: id }).first()).toJSON()
+          questions[i].examData = exam
+        }
         if (questions[i].answers[0].order === null || questions[i].answers[0].order === '') {
           questions[i].answers = questions[i].answers.sort(() => Math.random() - 0.5)
         } else {

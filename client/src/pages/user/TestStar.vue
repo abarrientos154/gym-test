@@ -30,6 +30,9 @@
                             <!-- <img src="balance 3.png" style="width: 50px" > -->
                             <div class="text-subtitle1 text-bold q-pl-sm ellipsis-2-lines" style="font-size: 17px">{{esTema ? test.tema_name : esExamen ? test.examen_name : test.type_name}}</div>
                         </div>
+                        <div style="width: 100%" class="bg-transparent text-h6 row justify-center">
+                          <div v-if="item.examData !== null && item.examData !== undefined" class="ellipsis" style="position:relative; top: 75px;">Examen: {{item.examData.name ? item.examData.name : ''}}</div>
+                        </div>
                     </q-img>
                 </div>
 

@@ -2,6 +2,7 @@
 const Topic = use("App/Models/Topic")
 const TopicTest = use("App/Models/TopicTest")
 const Question = use("App/Models/Question")
+const Examen = use("App/Models/Examen")
 const Articulos = use("App/Models/Article")
 const Parrafos = use("App/Models/Paragraph")
 const moment = require('moment')
@@ -93,7 +94,7 @@ class TopicController {
   async getTestById ({ request, response, params }) {
     try {
       let tema = (await TopicTest.query().where({_id: params.id}).first()).toJSON()
-      let allQuestions = (await Question.query().where({topic: tema.tema_id}).with('answers').with('leyInfo').fetch()).toJSON()
+      let allQuestions = (await Question.query().where({ topic: tema.tema_id }).with('answers').with('leyInfo').fetch()).toJSON()
       let questions = []
       if (tema.subTemas.length) {
         questions = allQuestions.filter(v => {
@@ -107,6 +108,11 @@ class TopicController {
         questions = allQuestions
       }
       for (let i = 0; i < questions.length; i++) {
+        if (questions[i].exam !== '') {
+          const id = Number(questions[i].exam)
+          const exam = (await Examen.query().where({ id: id }).first()).toJSON()
+          questions[i].examData = exam
+        }
         if (questions[i].answers[0].order === null || questions[i].answers[0].order === '') {
           questions[i].answers = questions[i].answers.sort(() => Math.random() - 0.5)
         } else {
