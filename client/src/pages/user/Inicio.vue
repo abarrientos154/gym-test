@@ -29,7 +29,6 @@
         <div class="text-caption text-grey-8 q-mb-sm">Conoce tus últimos resultados</div>
         <q-card class="bordes q-pa-none" style="width: 100%; border-radius: 10px;">
           <div class="row items-center q-py-xs q-pl-xs">
-            <q-img src="Vector-1.png" style="width: 40px" />
             <div class="q-pl-xs">
               <div class="text-primary">MIS EXAMENES</div>
               <div class="text-grey-8 text-caption">Conoce el historial de tus examenes</div>
@@ -49,7 +48,6 @@
 
         <q-card class="bordes q-pa-none q-mt-md" style="width: 100%; border-radius: 10px;">
           <div class="row items-center q-py-xs q-pl-xs">
-            <q-img src="Vector-1.png" style="width: 40px" />
             <div class="q-pl-xs">
               <div class="text-primary">MIS RUTINAS DE ENTRENAMIENTO</div>
               <div class="text-grey-8 text-caption">Conoce el historial de tus rutinas</div>

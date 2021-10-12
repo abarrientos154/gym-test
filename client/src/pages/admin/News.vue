@@ -29,7 +29,7 @@
         </q-card-section>
         <q-card-section class="q-pt-none">
           <q-avatar square size="200px" style="width: 100%" class="bg-grey row justify-center">
-            <q-img :src="file ? imgFile : edit ? baseu + form.image : ''" style="height: 100%">
+            <q-img :src="file !== null ? imgFile : edit ? baseu + form.image : ''" style="height: 100%">
               <q-file borderless v-model="file" @input="test()" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px" @blur="$v.file.$touch()">
                 <q-icon name="image" size="50px" color="white" />
               </q-file>
@@ -110,8 +110,8 @@ export default {
               this.form = {}
               this.file = null
               this.textEdit = ''
-              this.show = false
               this.getNews()
+              this.show = false
             }
           })
         }
@@ -181,11 +181,11 @@ export default {
         // console.log('>>>> Cancel')
       })
     },
-    getNews () {
+    async getNews () {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      this.$api.get('newsByCourse/' + this.courseId).then(res => {
+      await this.$api.get('newsByCourse/' + this.courseId).then(res => {
         if (res) {
           this.news = res
           // console.log(this.News)

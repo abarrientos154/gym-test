@@ -53,7 +53,6 @@ class NewsController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
-    console.log('aqui estamos :>> ');
     let body = request.only(['data'])
     body = JSON.parse(body.data)
     const image = request.file('image', {
@@ -119,7 +118,7 @@ class NewsController {
     if (image !== null) {
       if (Helpers.appRoot('storage/uploads/news')) {
         await image.move(Helpers.appRoot('storage/uploads/news'), {
-          name: params._id,
+          name: params.id,
           overwrite: true
         })
       } else {

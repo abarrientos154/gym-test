@@ -41,6 +41,7 @@ addPrefixToGroup(
     Route.get('nivel_img/:file', 'UploadController.getFileByDirectoryNiveles')
     Route.get('pregunta_img/:file', 'UploadController.getFileByDirectoryPreguntas')
     Route.get('news_img/:file', 'UploadController.getFileByDirectoryNews')
+    Route.get('topics_img/:file', 'UploadController.getFileByDirectoryTopics')
 
   })
 );

@@ -7,6 +7,8 @@ const Articulos = use("App/Models/Article")
 const Parrafos = use("App/Models/Paragraph")
 const moment = require('moment')
 var ObjectId = require('mongodb').ObjectId;
+const Helpers = use('Helpers')
+const mkdirp = use('mkdirp')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -69,6 +71,13 @@ class TopicController {
             action: "",
             title: "Eliminar",
           }
+          /* {
+            color: "green",
+            icon: "upload",
+            url: "",
+            action: "",
+            title: "Cargar Imagen",
+          } */
         ]
       }
     }
@@ -296,16 +305,50 @@ class TopicController {
   }
   
   async store ({ request, response, auth }) {
-    let data = request.body
-    data.course_id = new ObjectId(data.course_id)
-    let save = await Topic.create(data)
-    response.send(save)
+    let body = request.only(['data'])
+    body = JSON.parse(body.data)
+    const image = request.file('image', {
+      types: ['image'],
+      size: '20mb'
+    })
+    body.course_id = new ObjectId(body.course_id)
+    let topic = await Topic.create(body)
+    const id = ObjectId(topic._id).toString()
+    if (Helpers.appRoot('storage/uploads/topics')) {
+      await image.move(Helpers.appRoot('storage/uploads/topics'), {
+        name: id,
+        overwrite: true
+      })
+    } else {
+      mkdirp.sync(`${__dirname}/storage/Excel`)
+    }
+    let updateTopic = await Topic.query().where({ _id: id }).update({ image: image.fileName })
+    response.send(topic)
   }
 
   async update ({ params, request, response }) {
-    const body = request.all()
+    let body = request.only(['data'])
+    body = JSON.parse(body.data)
+    const image = request.file('image', {
+      types: ['image'],
+      size: '20mb'
+    })
+    if (image !== null) {
+      if (Helpers.appRoot('storage/uploads/topics')) {
+        await image.move(Helpers.appRoot('storage/uploads/topics'), {
+          name: params.id,
+          overwrite: true
+        })
+      } else {
+        mkdirp.sync(`${__dirname}/storage/Excel`)
+      }
+      const fileName = image.fileName
+      body.image = fileName
+    }
     body.course_id = new ObjectId(body.course_id)
-    const update = await Topic.where('_id', params.id).update(body)
+    const id = new ObjectId(params.id)
+    console.log('params :>> ', params);  
+    const update = await Topic.where('_id', id).update(body)
     response.send(update)
   }
 

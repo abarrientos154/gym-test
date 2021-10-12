@@ -45,6 +45,14 @@
           <div class="text-h6">{{editTopic ? 'Editar Tema' : 'Crear Tema'}}</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
+          <q-avatar square size="200px" style="width: 100%" class="bg-grey row justify-center">
+            <q-img :src="file2 !== null ? imgFile : editTopic ? baseu + form.image : 'noimg.png'" style="height: 100%">
+              <q-file borderless v-model="file2" @input="test()" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px" :error="$v.file2.$error" @blur="$v.file2.$touch()">
+                <q-icon name="image" size="50px" color="white" />
+              </q-file>
+            </q-img>
+          </q-avatar>
+          <div :class="$v.file2.$error ? 'text-negative' : ''" class="q-my-sm">Sube la portada del Tema</div>
           <q-input dense outlined type="text" v-model="form.name" label="Nuevo Tema" :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()">
           </q-input>
           <q-input dense outlined type="text" v-model="form.long_name" label="Nombre Completo" :error="$v.form.long_name.$error" error-message="Este campo es requerido"  @blur="$v.form.long_name.$touch()">
@@ -62,6 +70,7 @@
 </template>
 
 <script>
+import env from '../../env'
 import Listable from '../../components/Listable.vue'
 import { required } from 'vuelidate/lib/validators'
 export default {
@@ -79,7 +88,10 @@ export default {
         { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }
       ],
       show: false,
-      courseId: ''
+      courseId: '',
+      imgFile: '',
+      baseu: '',
+      file2: null
     }
   },
   validations: {
@@ -87,9 +99,11 @@ export default {
       name: { required },
       long_name: { required },
       topic: { required }
-    }
+    },
+    file2: { required }
   },
   mounted () {
+    this.baseu = env.apiUrl + 'topics_img/'
     this.courseId = localStorage.getItem('course_id')
     this.getTopics()
     console.log('idCourse :>> ', this.courseId)
@@ -101,13 +115,23 @@ export default {
         this.$q.loading.show({
           message: 'Actualizando Tema, Por Favor Espere...'
         })
-        this.$api.put('updateTopic/' + this.form._id, this.form).then((res) => {
+        this.form.text = this.textEdit
+        const formData = new FormData()
+        formData.append('image', this.file2)
+        formData.append('data', JSON.stringify(this.form))
+        this.$api.put('updateTopic/' + this.form._id, formData, {
+          headers: {
+            'Content-Type': undefined
+          }
+        }).then((res) => {
           if (res) {
             this.$q.loading.hide()
             this.$q.notify({
               color: 'positive',
               message: 'Tema Actualizado Correctamente'
             })
+            this.file2 = null
+            this.form = {}
             this.getTopics()
           }
         })
@@ -115,16 +139,25 @@ export default {
     },
     decartarCamb () {
       this.form = {}
+      this.file2 = null
       this.show = false
+      this.$v.$reset()
     },
     setTopic () {
       this.$v.$touch()
-      if (!this.$v.form.$error) {
+      if (!this.$v.form.$error && !this.$v.file2.$error) {
         this.$q.loading.show({
           message: 'Subiendo Tema, Por Favor Espere...'
         })
         this.form.course_id = this.courseId
-        this.$api.post('setTopic', this.form).then((res) => {
+        const formData = new FormData()
+        formData.append('image', this.file2)
+        formData.append('data', JSON.stringify(this.form))
+        this.$api.post('setTopic', formData, {
+          headers: {
+            'Content-Type': undefined
+          }
+        }).then((res) => {
           if (res) {
             this.$q.loading.hide()
             this.$q.notify({
@@ -156,11 +189,11 @@ export default {
         // console.log('>>>> Cancel')
       })
     },
-    getTopics () {
+    async getTopics () {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      this.$api.get('getTopicsByCourse/' + this.courseId).then(res => {
+      await this.$api.get('getTopicsByCourse/' + this.courseId).then(res => {
         if (res) {
           this.topics = res
           // console.log(this.topics)
@@ -205,6 +238,7 @@ export default {
     async getTopicById (id) {
       await this.$api.get('getTopicById/' + id).then(res => {
         if (res) {
+          console.log('res :>> ', res)
           this.form = res
         }
       })
@@ -213,6 +247,9 @@ export default {
       this.editTopic = false
       this.form = {}
       this.show = true
+    },
+    test () {
+      if (this.file2) { this.imgFile = URL.createObjectURL(this.file2) }
     }
   }
 }

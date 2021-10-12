@@ -3,7 +3,6 @@
     <q-btn class="absolute-top" round flat color="white" icon="arrow_back" @click="$router.go(-1)" />
     <q-img src="image 5.png" style="height: 330px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
         <div class="row no-wrap items-center q-mb-xl absolute-bottom bg-transparent">
-          <img src="balance 3.png" style="width: 50px" >
           <div class="text-h5 text-bold q-pl-sm">{{esGym ? tema.type_name : tema.name}}</div>
         </div>
     </q-img>
