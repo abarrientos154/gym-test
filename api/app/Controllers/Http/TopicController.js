@@ -88,37 +88,14 @@ class TopicController {
     let tema = (await Topic.query().where({_id: params.id}).with('subTemas').first()).toJSON()
     let arr = []
     for (const i in tema.subTemas) {
-      let num = tema.subTemas[i].process.split(' ')[0]
+      let num = tema.subTemas[i].process.split(' ')
       arr.push(num)
-      /* try {
-        num = Number(num)
-      } catch (e) {
-        console.error('error: ' + error.message)
-      } */
-      // console.log('num :>> ', num);
     }
     arr = arr.sort()
     for (const j in arr) {
-      let name = tema.subTemas[j].process.split(' ')
-      // console.log('name :>> ', name);
-      for (const x in arr) {
-        console.log('typeof arr[j], typeof name[0]  :>> ', arr[x], name[0] );
-        if (arr[x] === name[0]) {
-          let delete0 = name.shift()
-          name = name.join(' ')
-          arr[j] = arr[j] + ' ' + name
-        }
-      }
-      /* if (arr[j] === name[0]) {
-        let newName = ''
-        for (let x = 1; x < name.length; x++) {
-          newName = newName + ' ' + name[x]
-          // console.log('name[x] :>> ', name[x]);
-        }
-        arr[j] = arr[j] + ' ' + newName
-      } */
+      arr[j] = arr[j].join(' ')
+      tema.subTemas[j].process = arr[j]
     }
-    console.log('arr :>> ', arr);
     let questions = (await Question.query().where({topic: tema.topic}).with('answers').fetch()).toJSON()
     for (let i = 0; i < questions.length; i++) {
       questions[i].answers = questions[i].answers.map(v => {
