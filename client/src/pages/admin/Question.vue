@@ -206,7 +206,7 @@ export default {
     deleteQuestion (id) {
       this.$q.dialog({
         title: 'Confirma',
-        message: '¿Seguro deseas eliminar esta pregunta?',
+        message: '¿Seguro deseas eliminar esta pregunta? Al eliminar la pregunta, se eliminaran sus respectivas respuestas',
         cancel: true,
         persistent: true
       }).onOk(() => {

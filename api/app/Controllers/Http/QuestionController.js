@@ -1,5 +1,6 @@
 'use strict'
 const Question = use("App/Models/Question")
+const Answer = use("App/Models/Answer")
 const Law = use("App/Models/Law")
 // const Asignatura = use("App/Models/Asignatura")
 // const Niveles = use("App/Models/Nivele")
@@ -216,7 +217,12 @@ class QuestionController {
    * @param {Response} ctx.response
    */
   async destroy ({ params, response }) {
+    const id = (await Question.query().find(params.id)).id
     const questToDestroy = await Question.where('_id', params.id).delete()
+    const answers = (await Answer.query().where('id_question', id).fetch()).toJSON()
+    for (const i in answers) {
+      const answToDestroy = await Answer.where({ _id: answers[i]._id }).delete()
+    }
     response.send(questToDestroy)
   }
 }

@@ -1,5 +1,7 @@
 'use strict'
 const Law = use("App/Models/Law")
+const Article = use("App/Models/Article")
+const Paragraph = use("App/Models/Paragraph")
 var ObjectId = require('mongodb').ObjectId;
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
@@ -92,7 +94,18 @@ class LawController {
   }
 
   async destroy ({ params, response }) {
+    console.log('params.id :>> ', params.id);
+    const id = (await Law.query().find(params.id)).id
+    console.log('id :>> ', id);
     const data = await Law.where('_id', params.id).delete()
+    const articles = (await Article.query().where('law', id).fetch()).toJSON()
+    for (const i in articles) {
+      const paragraphs = (await Paragraph.query().where('article_id', articles[i]._id).fetch()).toJSON()
+      const artToDestroy = await Article.where({ _id: articles[i]._id }).delete()
+      for (const i in paragraphs) {
+        const parToDestroy = await Paragraph.where({ _id: paragraphs[i]._id }).delete()
+      }
+    }
     response.send(data)
   }
 

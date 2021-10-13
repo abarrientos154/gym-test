@@ -145,7 +145,7 @@ export default {
     deleteLaw (id) {
       this.$q.dialog({
         title: 'Confirma',
-        message: '¿Seguro deseas eliminar esta Ley?',
+        message: '¿Seguro deseas eliminar esta Ley? Al eliminar esta ley, se eliminaran sus respectivos articulos y parrafos.',
         cancel: true,
         persistent: true
       }).onOk(() => {
