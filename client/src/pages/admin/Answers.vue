@@ -95,6 +95,7 @@ export default {
       file: null,
       questions: [],
       columns: [
+        { name: 'id', label: 'ID', align: 'left', field: 'id' },
         { name: 'id_question', label: '# de Pregunta', align: 'left', field: 'id_question' },
         { name: 'answer_name', label: 'Respuesta', align: 'left', field: 'answer_name' },
         {

@@ -82,6 +82,7 @@ export default {
       topics: [],
       file: null,
       columns: [
+        { name: 'id', label: 'ID', align: 'left', field: 'id' },
         { name: 'topic', label: 'Tema', align: 'left', field: 'topic' },
         { name: 'long_name', label: 'Nombre Completo', align: 'left', field: 'long_name' },
         { name: 'name', align: 'left', label: 'Nombre', field: 'name' },

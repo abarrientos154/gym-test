@@ -71,6 +71,7 @@ export default {
       topics: [],
       file: null,
       columns: [
+        { name: 'id', label: 'ID', align: 'left', field: 'id' },
         { name: 'topic_id', label: 'Tema', align: 'left', field: 'topic_id' },
         { name: 'process', label: 'Nombre Completo', align: 'left', field: 'process' },
         { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }

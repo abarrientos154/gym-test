@@ -45,6 +45,7 @@ export default {
       types: [],
       file: null,
       columns: [
+        { name: 'id', label: 'ID', align: 'left', field: 'id' },
         { name: 'type_name', label: 'Tipo', align: 'left', field: 'type_name' },
         { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }
       ],

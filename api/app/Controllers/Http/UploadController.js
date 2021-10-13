@@ -393,7 +393,7 @@ class UploadController {
         let id = explanation.getCell('A' + rowNumber).value
         let topic_id = explanation.getCell('B' + rowNumber).value
         let process = explanation.getCell('C' + rowNumber).value
-        subTopic.id = id 
+        subTopic.id = id.result ? id.result : id 
         subTopic.topic_id = topic_id
         subTopic.process = process
         subTopic.course_id = courseId

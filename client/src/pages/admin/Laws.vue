@@ -71,6 +71,7 @@ export default {
       laws: [],
       file: null,
       columns: [
+        { name: 'id', label: 'ID', align: 'left', field: 'id' },
         { name: 'law_name', label: 'Nombre', align: 'left', field: 'law_name' },
         { name: 'acronym_law', label: 'Siglas', align: 'left', field: 'acronym_law' },
         { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }

@@ -56,6 +56,7 @@ export default {
       questions: [],
       file: null,
       columns: [
+        { name: 'id', label: 'ID', align: 'left', field: 'id' },
         { name: 'title', label: 'Título', align: 'left', field: 'title' },
         { name: 'lawName', label: 'Ley', align: 'left', field: 'law_id' },
         { name: 'topic', align: 'left', label: 'Tema', field: 'topic' },

@@ -87,6 +87,9 @@ class ExamenController {
         ]
       }
     }
+    data = data.sort(function (a, b) {
+      return a.id - b.id
+    })
     response.send(data)
   }
 

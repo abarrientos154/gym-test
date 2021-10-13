@@ -65,6 +65,7 @@ export default {
       paragraphs: [],
       file: null,
       columns: [
+        { name: 'id', label: 'ID', align: 'left', field: 'id' },
         { name: 'paragraph_text', label: 'Párrafo', align: 'left', field: 'paragraph_text' },
         { name: 'order', label: 'Orden', align: 'left', field: 'order' },
         { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }

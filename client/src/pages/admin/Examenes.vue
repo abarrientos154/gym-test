@@ -90,6 +90,7 @@ export default {
       exams: [],
       file: null,
       columns: [
+        { name: 'id', label: 'ID', align: 'left', field: 'id' },
         { name: 'date', label: 'Fecha', align: 'left', field: 'date' },
         { name: 'convocatoria', label: 'Convocatoria', align: 'left', field: 'convocatoria' },
         { name: 'name', align: 'left', label: 'Nombre', field: 'name' },

@@ -81,6 +81,9 @@ class TopicController {
         ]
       }
     }
+    data = data.sort(function(a, b) {
+      return a.id - b.id
+    })
     response.send(data)
   }
 
@@ -127,7 +130,7 @@ class TopicController {
         questions = allQuestions
       }
       for (let i = 0; i < questions.length; i++) {
-        if (questions[i].exam !== '') {
+        if (questions[i].exam !== '' && questions[i].exam !== null) {
           const id = Number(questions[i].exam)
           const exam = (await Examen.query().where({ id: id }).first()).toJSON()
           questions[i].examData = exam
