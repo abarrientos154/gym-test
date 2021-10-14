@@ -211,8 +211,10 @@ class UploadController {
         exam.convocatoria = convocatoria
         exam.name = name
         exam.course_id = courseId
+        console.log('exam', exam);
         try {
           var existExam = (await Exam.query().where({ id: exam.id }).first()).toJSON()
+          console.log('existExam :>> ', existExam);
         } catch (error) {
           if (existExam === null || existExam === undefined) {
             let save = await Exam.create(exam)
@@ -460,6 +462,10 @@ class UploadController {
   async getFileByDirectoryTopics ({ params, request, response }) {
     const dir = params.file
     response.download(Helpers.appRoot('storage/uploads/topics') + `/${dir}`)
+  }
+  async getFileByDirectoryAudios ({ params, request, response }) {
+    const dir = params.file
+    response.download(Helpers.appRoot('storage/uploads/audios') + `/${dir}`)
   }
 }
 

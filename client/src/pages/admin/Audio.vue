@@ -40,6 +40,7 @@
 <script>
 import Listable from '../../components/Listable.vue'
 import { required } from 'vuelidate/lib/validators'
+import env from '../../env'
 export default {
   components: { Listable },
   data () {
@@ -53,7 +54,9 @@ export default {
         { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }
       ],
       show: false,
-      topic: { required }
+      topic: { required },
+      baseu: '',
+      id: ''
     }
   },
   validations: {
@@ -63,6 +66,7 @@ export default {
     file: { required }
   },
   mounted () {
+    this.baseu = env.apiUrl + 'audios/'
     this.courseId = localStorage.getItem('course_id')
     this.getAudios()
   },
@@ -171,6 +175,9 @@ export default {
         this.getAudioById(emit.id)
         this.editAudio = true
         this.show = true
+      } else if (emit.title === 'Reproducir') {
+        this.id = emit.id
+        console.log('this.id >> ', this.id)
       }
     },
     async getAudioById (id) {

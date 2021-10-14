@@ -35,7 +35,10 @@
         <div class="absolute-center">Importar archivo</div>
       </q-btn>
     </div>
-    <q-btn color="primary" label="Nueva Ley" icon="add" dense no-caps size="md" class="q-ml-md" @click="newLaw()"/>
+    <div class="row justify-between">
+      <q-btn color="primary" label="Nueva Ley" icon="add" dense no-caps size="md" class="q-ml-md" @click="newLaw()"/>
+      <q-btn color="red" label="Eliminar Leyes" icon="delete" dense no-caps size="md" class="q-mr-md" @click="deleteAllLaws()"/>
+    </div>
     <div class="row justify-center" style="height: 70%">
       <listable class="col" :columns="columns" :data="laws" title="Leyes" @function="execute"/>
     </div>
@@ -154,6 +157,26 @@ export default {
             this.$q.notify({
               color: 'positive',
               message: 'Eliminado Correctamente'
+            })
+            this.getLaws()
+          }
+        })
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      })
+    },
+    deleteAllLaws () {
+      this.$q.dialog({
+        title: 'Confirma',
+        message: '¿Seguro deseas eliminar todas las Leyes?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$api.delete('deleteAllLaws').then(res => {
+          if (res) {
+            this.$q.notify({
+              color: 'positive',
+              message: 'Leyes eliminadas Correctamente'
             })
             this.getLaws()
           }

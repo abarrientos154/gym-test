@@ -102,6 +102,11 @@ class TypeController {
     response.send(data)
   }
 
+  async destroyAll ({ response }) {
+    const data = await Type.where({}).delete()
+    response.send(data)
+  }
+
   async misRutinas ({ request, response, auth }) {
     const user = (await auth.getUser()).toJSON()
     let allData = (await TypeTest.query().where({user_id: user._id}).fetch()).toJSON()

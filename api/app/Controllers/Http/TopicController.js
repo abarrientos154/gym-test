@@ -336,6 +336,10 @@ class TopicController {
     const data = await Topic.where('_id', params.id).delete()
     response.send(data)
   }
+  async destroyAll ({ response }) {
+    const data = await Topic.where({}).delete()
+    response.send(data)
+  }
 
   async testByCourse ({ request, response, params }) {
     /* let data = (await Nivele.query().where({ family_id: params.id }).fetch()).toJSON()

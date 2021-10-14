@@ -11,7 +11,10 @@
         <div class="absolute-center">Importar archivo</div>
       </q-btn>
     </div>
-    <q-btn color="primary" label="Nueva Pregunta" icon="add" dense no-caps size="md" class="q-ml-md" @click="newQuest()"/>
+    <div class="row justify-between">
+      <q-btn color="primary" label="Nueva Pregunta" icon="add" dense no-caps size="md" class="q-ml-md" @click="newQuest()"/>
+      <q-btn color="red" label="Eliminar Preguntas" icon="delete" dense no-caps size="md" class="q-mr-md" @click="deleteAllQuestions()"/>
+    </div>
     <div class="row q-my-sm q-mx-md">
       <q-select style="min-width: 220px" class="q-mr-sm" outlined v-model="topic" label="Escoga un tema" dense :options="topics" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="topic" @input="getQuestions(true)" clearable></q-select>
       <q-select style="min-width: 220px" class="q-mr-sm" outlined v-model="type" label="Escoga un tipo" dense :options="types" map-options emit-value option-value="type_name" options-selected-class="text-primary" option-label="type_name" @input="getQuestions(true)" clearable></q-select>
@@ -220,6 +223,26 @@ export default {
           }
         })
       }).onCancel(() => {
+      })
+    },
+    deleteAllQuestions () {
+      this.$q.dialog({
+        title: 'Confirma',
+        message: '¿Seguro deseas eliminar todas las Preguntas con  sus Respuestas?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$api.delete('deleteAllQuestions').then(res => {
+          if (res) {
+            this.$q.notify({
+              color: 'positive',
+              message: 'Preguntas eliminados Correctamente'
+            })
+            this.getTopics()
+          }
+        })
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
       })
     },
     changeFile () {

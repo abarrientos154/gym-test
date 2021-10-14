@@ -35,7 +35,10 @@
         <div class="absolute-center">Importar archivo</div>
       </q-btn>
     </div>
-    <q-btn color="primary" label="Nuevo Sub Tema" icon="add" dense no-caps size="md" class="q-ml-md" @click="newSubTopic()"/>
+    <div class="row justify-between">
+      <q-btn color="primary" label="Nuevo Sub Tema" icon="add" dense no-caps size="md" class="q-ml-md" @click="newSubTopic()"/>
+      <q-btn color="red" label="Eliminar Sub-Temas" icon="delete" dense no-caps size="md" class="q-mr-md" @click="deleteAllSubTopics()"/>
+    </div>
     <div class="row justify-center" style="height: 70%">
       <listable class="col" :columns="columns" :data="subTopics" title="Sub Temas" @function="execute"/>
     </div>
@@ -151,6 +154,26 @@ export default {
             this.$q.notify({
               color: 'positive',
               message: 'Eliminado Correctamente'
+            })
+            this.getSubTopics()
+          }
+        })
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      })
+    },
+    deleteAllSubTopics () {
+      this.$q.dialog({
+        title: 'Confirma',
+        message: '¿Seguro deseas eliminar todos los Sub-Temas?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$api.delete('deleteAllSubTopics').then(res => {
+          if (res) {
+            this.$q.notify({
+              color: 'positive',
+              message: 'Sub-Temas eliminados Correctamente'
             })
             this.getSubTopics()
           }

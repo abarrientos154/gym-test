@@ -11,7 +11,10 @@
         <div class="absolute-center">Importar archivo</div>
       </q-btn>
     </div>
-    <q-btn color="primary" label="Nuevo Tipo" icon="add" dense no-caps size="md" class="q-ml-md" @click="newType()"/>
+    <div class="row justify-between">
+      <q-btn color="primary" label="Nuevo Tipo" icon="add" dense no-caps size="md" class="q-ml-md" @click="newType()"/>
+      <q-btn color="red" label="Eliminar Tipos" icon="delete" dense no-caps size="md" class="q-mr-md" @click="deleteAllTypes()"/>
+    </div>
     <div class="row justify-center" style="height: 70%">
       <listable class="col" :columns="columns" :data="types" title="Tipos" @function="execute"/>
     </div>
@@ -116,6 +119,26 @@ export default {
             this.$q.notify({
               color: 'positive',
               message: 'Eliminado Correctamente'
+            })
+            this.getTypes()
+          }
+        })
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      })
+    },
+    deleteAllTypes () {
+      this.$q.dialog({
+        title: 'Confirma',
+        message: '¿Seguro deseas eliminar todos los Tipos?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$api.delete('deleteAllTypes').then(res => {
+          if (res) {
+            this.$q.notify({
+              color: 'positive',
+              message: 'Tipos eliminados Correctamente'
             })
             this.getTypes()
           }

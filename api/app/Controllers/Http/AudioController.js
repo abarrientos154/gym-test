@@ -42,6 +42,13 @@ class AudioController {
             url: "",
             action: "",
             title: "Eliminar",
+          },
+          {
+            color: "green",
+            icon: "headphones",
+            url: "",
+            action: "",
+            title: "Reproducir",
           }
         ]
       }

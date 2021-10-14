@@ -1,5 +1,6 @@
 'use strict'
 const Article = use("App/Models/Article")
+const Paragraph = use("App/Models/Paragraph")
 var ObjectId = require('mongodb').ObjectId;
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
@@ -94,6 +95,12 @@ class ArticleController {
 
   async destroy ({ params, response }) {
     const data = await Article.where('_id', params.id).delete()
+    response.send(data)
+  }
+
+  async destroyAll ({ response }) {
+    const data = await Article.where({}).delete()
+    const data2 = await Paragraph.where({}).delete()
     response.send(data)
   }
 

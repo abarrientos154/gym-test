@@ -91,6 +91,11 @@ class AnswerController {
     response.send(data)
   }
 
+  async destroyAll ({ response }) {
+    const data = await Answer.where({}).delete()
+    response.send(data)
+  }
+
   async indexAnswer ({ response }) {
     let data = await Answer.all()
     response.send(data)

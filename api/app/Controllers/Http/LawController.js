@@ -108,6 +108,10 @@ class LawController {
     }
     response.send(data)
   }
+  async destroyAll ({ response }) {
+    const data = await Law.where({}).delete()
+    response.send(data)
+  }
 
   /**
    * Render a form to be used for creating a new law.

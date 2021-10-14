@@ -96,6 +96,11 @@ class SubTopicController {
     response.send(data)
   }
 
+  async destroyAll ({ response }) {
+    const data = await SubTopic.where({}).delete()
+    response.send(data)
+  }
+
   /**
    * Render a form to be used for creating a new subtopic.
    * GET subtopics/create

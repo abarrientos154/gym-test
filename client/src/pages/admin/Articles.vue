@@ -35,7 +35,10 @@
         <div class="absolute-center">Importar archivo</div>
       </q-btn>
     </div>
-    <q-btn color="primary" label="Nuevo Artículo" icon="add" dense no-caps size="md" class="q-ml-md" @click="newArticle()"/>
+    <div class="row justify-between">
+      <q-btn color="primary" label="Nuevo Artículo" icon="add" dense no-caps size="md" class="q-ml-md" @click="newArticle()"/>
+      <q-btn color="red" label="Eliminar Artículos" icon="delete" dense no-caps size="md" class="q-mr-md" @click="deleteAllArticles()"/>
+    </div>
     <div class="row q-my-sm q-mx-md">
       <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="law" label="Escoga una ley" dense :options="laws" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="law_name" @input="getArticles(true)" clearable></q-select>
     </div>
@@ -160,6 +163,26 @@ export default {
             this.$q.notify({
               color: 'positive',
               message: 'Eliminado Correctamente'
+            })
+            this.getArticles()
+          }
+        })
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      })
+    },
+    deleteAllArticles () {
+      this.$q.dialog({
+        title: 'Confirma',
+        message: '¿Seguro deseas eliminar todos los Artículos con sus Párrafos?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$api.delete('deleteAllArticles').then(res => {
+          if (res) {
+            this.$q.notify({
+              color: 'positive',
+              message: 'Artículos eliminados Correctamente'
             })
             this.getArticles()
           }

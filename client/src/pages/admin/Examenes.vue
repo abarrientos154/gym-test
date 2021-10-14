@@ -51,7 +51,10 @@
         <div class="absolute-center">Importar archivo</div>
       </q-btn>
     </div>
-    <q-btn color="primary" label="Nuevo Examen" icon="add" dense no-caps size="md" class="q-ml-md" @click="newExam()"/>
+    <div class="row justify-between">
+      <q-btn color="primary" label="Nuevo Examen" icon="add" dense no-caps size="md" class="q-ml-md" @click="newExam()"/>
+      <q-btn color="red" label="Eliminar Examenes" icon="delete" dense no-caps size="md" class="q-mr-md" @click="deleteAllExams()"/>
+    </div>
     <div class="row justify-center" style="height: 70%">
       <listable class="col" :columns="columns" :data="exams" title="Examenes" @function="execute"/>
     </div>
@@ -174,6 +177,26 @@ export default {
             this.$q.notify({
               color: 'positive',
               message: 'Eliminado Correctamente'
+            })
+            this.getExam()
+          }
+        })
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      })
+    },
+    deleteAllExams () {
+      this.$q.dialog({
+        title: 'Confirma',
+        message: '¿Seguro deseas eliminar todos los Examenes?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$api.delete('deleteAllExams').then(res => {
+          if (res) {
+            this.$q.notify({
+              color: 'positive',
+              message: 'Examenes eliminados Correctamente'
             })
             this.getExam()
           }

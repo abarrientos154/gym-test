@@ -35,7 +35,10 @@
         <div class="absolute-center">Importar archivo</div>
       </q-btn>
     </div>
-    <q-btn color="primary" label="Nuevo Tema" icon="add" dense no-caps size="md" class="q-ml-md" @click="newTopic()"/>
+    <div class="row justify-between">
+      <q-btn color="primary" label="Nuevo Tema" icon="add" dense no-caps size="md" class="q-ml-md" @click="newTopic()"/>
+      <q-btn color="red" label="Eliminar Temas" icon="delete" dense no-caps size="md" class="q-mr-md" @click="deleteAllTopics()"/>
+    </div>
     <div class="row justify-center" style="height: 70%">
       <listable class="col" :columns="columns" :data="topics" title="Temas" @function="execute"/>
     </div>
@@ -181,6 +184,26 @@ export default {
             this.$q.notify({
               color: 'positive',
               message: 'Eliminado Correctamente'
+            })
+            this.getTopics()
+          }
+        })
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      })
+    },
+    deleteAllTopics () {
+      this.$q.dialog({
+        title: 'Confirma',
+        message: '¿Seguro deseas eliminar todos los temas?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$api.delete('deleteAllTopics').then(res => {
+          if (res) {
+            this.$q.notify({
+              color: 'positive',
+              message: 'Temas eliminados Correctamente'
             })
             this.getTopics()
           }
