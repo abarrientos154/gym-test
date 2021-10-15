@@ -55,13 +55,14 @@ class QuestionController {
   }
   async getQuestionsByFilter ({ request, response, params }) {
     let filter = request.all()
+    var data = []
     const id = new ObjectId(params.id)
     if (filter.topic && filter.type === null) {
-      var data = (await Question.query().where({ topic: filter.topic, course_id: id }).fetch()).toJSON()
+      data = (await Question.query().where({ topic: filter.topic, course_id: id }).fetch()).toJSON()
     } else if (filter.type && filter.topic === null) {
-      var data = (await Question.query().where({ type: filter.type, course_id: id }).fetch()).toJSON()
+      data = (await Question.query().where({ type: filter.type, course_id: id }).fetch()).toJSON()
     } else if (filter.topic && filter.type) {
-      var data = (await Question.query().where({ type: filter.type, topic: filter.topic, course_id: id }).fetch()).toJSON()
+      data = (await Question.query().where({ type: filter.type, topic: filter.topic, course_id: id }).fetch()).toJSON()
     }
     if (data !== []) {
       for (const i in data) {
@@ -87,9 +88,11 @@ class QuestionController {
         ]
       }
     }
-    data = data.sort(function (a, b) {
-      return a.id - b.id
-    })
+    if (data !== null && data !== undefined) {
+      data = data.sort(function (a, b) {
+        return a.id - b.id
+      })
+    }
     response.send(data)
   }
 

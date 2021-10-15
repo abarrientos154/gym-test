@@ -238,7 +238,7 @@ export default {
               color: 'positive',
               message: 'Preguntas eliminados Correctamente'
             })
-            this.getTopics()
+            this.getQuestions()
           }
         })
       }).onCancel(() => {
@@ -264,7 +264,6 @@ export default {
               color: 'positive'
             })
             this.file = null
-            this.getQuestions()
           }
           this.$q.loading.hide()
         })

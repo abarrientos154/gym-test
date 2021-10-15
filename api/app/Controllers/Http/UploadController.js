@@ -147,7 +147,7 @@ class UploadController {
     workbook = await workbook.xlsx.readFile(filePath)
     let explanation = workbook.getWorksheet('Hoja1')
     let colComment = explanation.getColumn('B')
-    colComment.eachCell(async (cell, rowNumber) => {
+    await colComment.eachCell(async (cell, rowNumber) => {
       if (rowNumber >= 2) {
         let question = {}
         let id = explanation.getCell('A' + rowNumber).value
@@ -237,7 +237,7 @@ class UploadController {
     let colComment = explanation.getColumn('B')
     var articleNumber = ''
     var order = 0
-    colComment.eachCell(async (cell, rowNumber) => {
+    await colComment.eachCell(async (cell, rowNumber) => {
       if (rowNumber >= 2) {
         var article = {}
         //var paragraph = explanation.getCell('A' + rowNumber).value
@@ -264,7 +264,7 @@ class UploadController {
       }
     })
     let setParagraph = async () => {
-      colComment.eachCell(async (cell, rowNumber) => {
+      await colComment.eachCell(async (cell, rowNumber) => {
         if (rowNumber >= 2) {
           var paragraphDB = {}
           var id = explanation.getCell('A' + rowNumber).value
