@@ -140,7 +140,7 @@ export default {
               color: 'positive',
               message: 'Tipos eliminados Correctamente'
             })
-            this.getTypes()
+            this.$router.go()
           }
         })
       }).onCancel(() => {
@@ -155,8 +155,8 @@ export default {
         if (res) {
           this.types = res
           // console.log(this.types)
+          this.$q.loading.hide()
         }
-        this.$q.loading.hide()
       })
     },
     uploadFile () {
@@ -179,8 +179,8 @@ export default {
             })
             this.file = null
             this.getTypes()
+            this.$q.loading.hide()
           }
-          this.$q.loading.hide()
         })
       }
     },

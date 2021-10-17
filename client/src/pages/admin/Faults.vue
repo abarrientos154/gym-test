@@ -285,8 +285,8 @@ export default {
         if (res) {
           this.answers = res
           console.log(this.answers)
+          this.$q.loading.hide()
         }
-        this.$q.loading.hide()
       })
     },
     updateAnswer () {

@@ -164,7 +164,7 @@ export default {
               color: 'positive',
               message: 'Eliminado Correctamente'
             })
-            this.getArticles()
+            this.$router.go()
           }
         })
       }).onCancel(() => {
@@ -184,7 +184,7 @@ export default {
               color: 'positive',
               message: 'Artículos eliminados Correctamente'
             })
-            this.getArticles()
+            this.$router.go()
           }
         })
       }).onCancel(() => {
@@ -202,8 +202,8 @@ export default {
         if (res) {
           this.articles = res
           // console.log(this.articles)
+          this.$q.loading.hide()
         }
-        this.$q.loading.hide()
       })
     },
     uploadFile () {
@@ -225,9 +225,9 @@ export default {
               color: 'positive'
             })
             this.file = null
-            this.getArticles()
+            // this.getArticles()
+            this.$q.loading.hide()
           }
-          this.$q.loading.hide()
         })
       }
     },

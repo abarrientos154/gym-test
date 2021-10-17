@@ -178,7 +178,7 @@ export default {
               color: 'positive',
               message: 'Leyes eliminadas Correctamente'
             })
-            this.getLaws()
+            this.$router.go()
           }
         })
       }).onCancel(() => {
@@ -193,8 +193,8 @@ export default {
         if (res) {
           this.laws = res
           // console.log(this.laws)
+          this.$q.loading.hide()
         }
-        this.$q.loading.hide()
       })
     },
     uploadFile () {
@@ -217,8 +217,8 @@ export default {
             })
             this.file = null
             this.getLaws()
+            this.$q.loading.hide()
           }
-          this.$q.loading.hide()
         })
       }
     },

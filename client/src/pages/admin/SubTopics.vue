@@ -175,7 +175,7 @@ export default {
               color: 'positive',
               message: 'Sub-Temas eliminados Correctamente'
             })
-            this.getSubTopics()
+            this.$router.go()
           }
         })
       }).onCancel(() => {
@@ -189,8 +189,8 @@ export default {
       await this.$api.get('getSubTopicsByCourse/' + this.courseId).then(res => {
         if (res) {
           this.subTopics = res
+          this.$q.loading.hide()
         }
-        this.$q.loading.hide()
       })
     },
     uploadFile () {
@@ -213,8 +213,8 @@ export default {
             })
             this.file = null
             this.getSubTopics()
+            this.$q.loading.hide()
           }
-          this.$q.loading.hide()
         })
       }
     },

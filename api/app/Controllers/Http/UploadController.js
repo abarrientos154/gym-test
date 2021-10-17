@@ -303,8 +303,9 @@ class UploadController {
         }
       })
     }
-    setTimeout(setParagraph, 8000);
+    await setTimeout(setParagraph, 8000);
     response.send(true)
+    //await setTimeout(sendRes, 1000);
   }
   async excelLaw ({ request, response }) {
     let courseId = request.only(['courseId'])

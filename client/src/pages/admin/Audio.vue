@@ -164,8 +164,8 @@ export default {
         if (res) {
           this.audios = res
           // console.log(this.audios)
+          this.$q.loading.hide()
         }
-        this.$q.loading.hide()
       })
     },
     execute (emit) {

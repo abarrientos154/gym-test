@@ -198,7 +198,7 @@ export default {
               color: 'positive',
               message: 'Examenes eliminados Correctamente'
             })
-            this.getExam()
+            this.$router.go()
           }
         })
       }).onCancel(() => {
@@ -212,8 +212,8 @@ export default {
       this.$api.get('getExamByCourse/' + this.courseId).then(res => {
         if (res) {
           this.exams = res
+          this.$q.loading.hide()
         }
-        this.$q.loading.hide()
       })
     },
     changeFile () {
@@ -236,8 +236,8 @@ export default {
             })
             this.file = null
             this.getExam()
+            this.$q.loading.hide()
           }
-          this.$q.loading.hide()
         })
       }
     },

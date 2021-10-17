@@ -189,8 +189,8 @@ export default {
         if (res) {
           this.news = res
           // console.log(this.News)
+          this.$q.loading.hide()
         }
-        this.$q.loading.hide()
       })
     },
     newNews () {

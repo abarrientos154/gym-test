@@ -205,7 +205,7 @@ export default {
               color: 'positive',
               message: 'Temas eliminados Correctamente'
             })
-            this.getTopics()
+            this.$router.go()
           }
         })
       }).onCancel(() => {
@@ -219,8 +219,8 @@ export default {
       await this.$api.get('getTopicsByCourse/' + this.courseId).then(res => {
         if (res) {
           this.topics = res
+          this.$q.loading.hide()
         }
-        this.$q.loading.hide()
       })
     },
     changeFile () {
@@ -243,8 +243,8 @@ export default {
             })
             this.file = null
             this.getTopics()
+            this.$q.loading.hide()
           }
-          this.$q.loading.hide()
         })
       }
     },

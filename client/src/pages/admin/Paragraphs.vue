@@ -100,8 +100,8 @@ export default {
         if (res) {
           this.laws = res
           // console.log(this.laws)
+          this.$q.loading.hide()
         }
-        this.$q.loading.hide()
       })
     },
     async getArticlesByLaw (id) {
@@ -183,8 +183,8 @@ export default {
         if (res) {
           this.paragraphs = res
           // console.log(this.answers)
+          this.$q.loading.hide()
         }
-        this.$q.loading.hide()
       })
     },
     execute (emit) {
