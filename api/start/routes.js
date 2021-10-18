@@ -117,6 +117,7 @@ addPrefixToGroup(
     Route.delete('deleteAllTypes', 'TypeController.destroyAll')
     
     Route.post('excel_article', 'UploadController.excelArticle')
+    Route.post('excel_paragraph', 'UploadController.excelParagraph')
     Route.get('articles', 'ArticleController.index')
     Route.get('getArticlesByLaw/:id', 'ArticleController.getArticlesByLaw')
     Route.get('getArticleById/:id', 'ArticleController.show')

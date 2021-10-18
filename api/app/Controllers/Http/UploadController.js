@@ -195,6 +195,7 @@ class UploadController {
     workbook = await workbook.xlsx.readFile(filePath)
     let explanation = workbook.getWorksheet('Hoja1')
     let colComment = explanation.getColumn('D')
+    console.log('colComment._worksheet._rows :>> ', colComment._worksheet._rows);
     colComment.eachCell(async (cell, rowNumber) => {
       if (rowNumber >= 2) {
         let exam = {}
@@ -225,7 +226,7 @@ class UploadController {
     })
     response.send(true)
   }
-
+  
   async excelArticle ({ request, response }) {
     let courseId = request.only(['courseId'])
     courseId = new ObjectId(courseId.courseId)
@@ -236,15 +237,14 @@ class UploadController {
     let explanation = workbook.getWorksheet('Hoja1')
     let colComment = explanation.getColumn('B')
     var articleNumber = ''
-    var order = 0
-    await colComment.eachCell(async (cell, rowNumber) => {
+    var lastArticleNumber = 0
+    colComment.eachCell(async (cell, rowNumber) => {
       if (rowNumber >= 2) {
         var article = {}
         //var paragraph = explanation.getCell('A' + rowNumber).value
         var law = explanation.getCell('B' + rowNumber).value
         var article_name = explanation.getCell('C' + rowNumber).value
         var article_text = explanation.getCell('E' + rowNumber).value
-        var paragraph_text = explanation.getCell('F' + rowNumber).value
         article.law = law
         article.article_name = article_name
         article.sub_title = article_text
@@ -252,60 +252,60 @@ class UploadController {
         
         if (article_name !== articleNumber) {
           articleNumber = article_name
-          try {
-            var existArticle = (await Article.query().where({ article_name: article_name, law: law }).first()).toJSON()
-          } catch (error) {
-            if (existArticle === null || existArticle === undefined) {
-              var newArticle = await Article.create(article)
-            }
-            console.error('error.message :>> ', error.message);
+          if (lastArticleNumber <= rowNumber) {
+            lastArticleNumber = rowNumber
+          }
+          var existArticle = (await Article.query().where({ article_name: article_name, law: law }).first())
+          if (existArticle === null || existArticle === undefined) {
+            var newArticle = await Article.create(article)
           }
         }
       }
     })
-    let setParagraph = async () => {
-      await colComment.eachCell(async (cell, rowNumber) => {
-        if (rowNumber >= 2) {
-          var paragraphDB = {}
-          var id = explanation.getCell('A' + rowNumber).value
-          var law = explanation.getCell('B' + rowNumber).value
-          var article_name = explanation.getCell('C' + rowNumber).value
-          var article_text = explanation.getCell('E' + rowNumber).value
-          var paragraph_text = explanation.getCell('F' + rowNumber).value
-          try {
-            
-            if (article_name !== articleNumber) {
-              articleNumber = article_name
-              order = 0
+    response.send(true)
+  }
+  async excelParagraph ({ request, response }) {
+    let courseId = request.only(['courseId'])
+    courseId = new ObjectId(courseId.courseId)
+    let files = request.file('fileExcel')
+    var filePath = await MoveFileService.moveFile(files)
+    var workbook = new ExcelJS.Workbook()
+    workbook = await workbook.xlsx.readFile(filePath)
+    let explanation = workbook.getWorksheet('Hoja1')
+    let colComment = explanation.getColumn('B')
+    const end = colComment._worksheet._rows.length
+    var articleNumber = ''
+    var order = 0
+    await colComment.eachCell(async (cell, rowNumber) => {
+      if (rowNumber >= 2) {
+        var paragraphDB = {}
+        var id = explanation.getCell('A' + rowNumber).value
+        var law = explanation.getCell('B' + rowNumber).value
+        var article_name = explanation.getCell('C' + rowNumber).value
+        var paragraph_text = explanation.getCell('F' + rowNumber).value
+        if (article_name !== articleNumber) {
+          articleNumber = article_name
+          order = 0
+        }
+        // Creacion de los registros de la colección de parrafos de los articulos //
+        paragraphDB.paragraph_text = paragraph_text !== null ? paragraph_text : ''
+        paragraphDB.order = order
+        paragraphDB.id = id
+        paragraphDB.course_id = courseId
+        if (paragraphDB.paragraph_text !== null) {
+          if (paragraphDB.paragraph_text.length > 0) {
+            order++
+            var articleCreated = (await Article.query().where({ law: law, article_name: article_name }).first()).toJSON()
+            paragraphDB.article_id = articleCreated._id
+            var existParagraph = (await Paragraph.query().where({ paragraph_text: paragraph_text }).first())
+            if (existParagraph === null || existParagraph === undefined) {
+              var newParagrahp = await Paragraph.create(paragraphDB)
             }
-            // Creacion de los registros de la colección de parrafos de los articulos //
-            paragraphDB.paragraph_text = paragraph_text
-            paragraphDB.order = order
-            paragraphDB.id = id
-            paragraphDB.course_id = courseId
-            
-            if (paragraphDB.paragraph_text.length > 0) {
-              order++
-              var articleCreated = (await Article.query().where({ law: law, article_name: article_name }).first()).toJSON()
-              paragraphDB.article_id = articleCreated._id
-              try {
-                var existParagraph = (await Paragraph.query().where({ paragraph_text: paragraph_text }).first()).toJSON()
-              } catch (error) {
-                if (existParagraph === null || existParagraph === undefined) {
-                  var newParagrahp = await Paragraph.create(paragraphDB)
-                }
-                console.error('error.message :>> ', error.message);
-              }
-            }
-          } catch (error) {
-            console.error('fallo: ' + error.message)
           }
         }
-      })
-    }
-    await setTimeout(setParagraph, 8000);
-    response.send(true)
-    //await setTimeout(sendRes, 1000);
+      }
+    })
+    await response.send(true)
   }
   async excelLaw ({ request, response }) {
     let courseId = request.only(['courseId'])

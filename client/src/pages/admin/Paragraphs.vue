@@ -6,8 +6,12 @@
       <div>
         <div class="text-h5 text-white q-mb-sm q-px-md">Párrafos recientes</div>
       </div>
-      <q-btn color="primary" label="Nuevo Párrafo" icon="add" dense no-caps size="md" class="q-ml-md" @click="newParagraph()"/>
+      <q-btn color="primary" dense no-caps size="md">
+        <q-file borderless v-model="file" hint="(.xls, .xlsx, .xltx, .ods, .ots, .csv)" accept=".xls, .xlsx, .xltx, .ods, .ots, .csv/*" @input="uploadFile()" style="height: 30px; font-size: 0px"/>
+        <div class="absolute-center">Importar archivo</div>
+      </q-btn>
     </div>
+    <q-btn color="primary" label="Nuevo Párrafo" icon="add" dense no-caps size="md" class="q-ml-md" @click="newParagraph()"/>
     <div class="row q-my-sm q-mx-md">
       <q-select style="min-width: 220px" class="q-mr-sm q-my-sm" outlined v-model="law" label="Escoga una ley" dense :options="laws" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="law_name" @input="getArticlesByLaw(law)" clearable></q-select>
       <q-select style="min-width: 220px" class="q-mr-md q-my-sm" outlined v-model="article" label="Escoga un articulo" dense :options="articles" map-options emit-value option-value="_id" options-selected-class="text-primary" option-label="article_name" @input="getParagraphs(true)" clearable>
@@ -186,6 +190,31 @@ export default {
           this.$q.loading.hide()
         }
       })
+    },
+    uploadFile () {
+      if (this.file !== null) {
+        this.$q.loading.show({
+          message: 'Subiendo datos, esto puede tomar un tiempo...'
+        })
+        const formData = new FormData()
+        formData.append('fileExcel', this.file)
+        formData.append('courseId', this.courseId)
+        this.$api.post('excel_paragraph', formData, {
+          headers: {
+            'Content-Type': undefined
+          }
+        }).then(res => {
+          if (res) {
+            this.$q.notify({
+              message: 'Párrafos Cargados Correctamente',
+              color: 'positive'
+            })
+            this.file = null
+            // this.getArticles()
+            this.$q.loading.hide()
+          }
+        })
+      }
     },
     execute (emit) {
       if (emit.title === 'Eliminar') {
