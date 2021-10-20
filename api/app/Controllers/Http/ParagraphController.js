@@ -31,6 +31,7 @@ class ParagraphController {
     const id = new ObjectId(params.id)
     var data = []
     let filter = request.all()
+    console.log('filter :>> ', filter);
     if (filter.article) {
       data = (await Paragraph.query().where({ article_id: filter.article, course_id: id }).fetch()).toJSON()
     }
