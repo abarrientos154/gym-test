@@ -94,20 +94,18 @@ export default {
   mounted () {
     this.courseId = localStorage.getItem('course_id')
     // this.getQuestions()
-    this.getTopics()
+    this.getData()
     this.getTypes()
   },
   methods: {
-    getData () {
+    async getData () {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      this.getTopics()
-      this.getLaws()
-      this.getTypes()
-      if (this.topics !== [] && this.laws !== []) {
-        this.$q.loading.hide()
-      }
+      await this.getTopics()
+      await this.getLaws()
+      await this.getTypes()
+      this.$q.loading.hide()
     },
     async getQuestions (isFilter) {
       if (isFilter === true) {

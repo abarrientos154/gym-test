@@ -47,9 +47,10 @@ class ArticleController {
 
   async getArticlesByFilter ({ request, response, params }) {
     const id = new ObjectId(params.id)
+    var data = []
     let filter = request.all()
     if (filter.law) {
-      var data = (await Article.query().where({ law: filter.law, course_id: id }).fetch()).toJSON()
+      data = (await Article.query().where({ law: filter.law, course_id: id }).fetch()).toJSON()
     }
     if (data !== []) {
       for (const i in data) {
@@ -70,6 +71,11 @@ class ArticleController {
           }
         ]
       }
+    }
+    if (data !== null && data !== undefined) {
+      data = data.sort(function (a, b) {
+        return a.id - b.id
+      })
     }
     response.send(data)
   }

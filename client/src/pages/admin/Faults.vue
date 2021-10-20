@@ -160,12 +160,18 @@ export default {
   mounted () {
     this.baseu = env.apiUrl + 'perfil_img/'
     this.courseId = localStorage.getItem('course_id')
-    this.getTopics()
-    this.getTypes()
-    this.getFaults()
-    this.getLaws()
   },
   methods: {
+    async getData () {
+      this.$q.loading.show({
+        message: 'Cargando datos...'
+      })
+      await this.getTopics()
+      await this.getTypes()
+      await this.getFaults()
+      await this.getLaws()
+      this.$q.loading.hide()
+    },
     async getFaults () {
       this.$q.loading.show({
         message: 'Cargando datos...'

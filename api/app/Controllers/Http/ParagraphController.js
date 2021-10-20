@@ -29,9 +29,10 @@ class ParagraphController {
 
   async getParagraphsByFilter ({ request, response, params }) {
     const id = new ObjectId(params.id)
+    var data = []
     let filter = request.all()
     if (filter.article) {
-      var data = (await Paragraph.query().where({ article_id: filter.article, course_id: id }).fetch()).toJSON()
+      data = (await Paragraph.query().where({ article_id: filter.article, course_id: id }).fetch()).toJSON()
     }
     console.log('data :>> ', data);
     if (data !== []) {
@@ -55,9 +56,11 @@ class ParagraphController {
         
       }
     }
-    data = data.sort(function (a, b) {
-      return a.id - b.id
-    })
+    if (data !== null && data !== undefined) {
+      data = data.sort(function (a, b) {
+        return a.order - b.order
+      })
+    }
     response.send(data)
   }
 

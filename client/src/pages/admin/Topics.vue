@@ -110,7 +110,6 @@ export default {
     this.baseu = env.apiUrl + 'topics_img/'
     this.courseId = localStorage.getItem('course_id')
     this.getTopics()
-    console.log('idCourse :>> ', this.courseId)
   },
   methods: {
     updateTopic () {

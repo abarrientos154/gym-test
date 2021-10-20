@@ -138,16 +138,24 @@ export default {
   },
   methods: {
     async getTopics () {
+      this.$q.loading.show({
+        message: 'Cargando datos...'
+      })
       await this.$api.get('getTopics').then(res => {
         if (res) {
           this.topics = res
+          this.$q.loading.hide()
         }
       })
     },
     async getQuestionsByTopic (topic) {
+      this.$q.loading.show({
+        message: 'Cargando datos...'
+      })
       await this.$api.get('getQuestionsByTopic/' + topic).then(res => {
         if (res) {
           this.questions = res
+          this.$q.loading.hide()
         }
       })
     },

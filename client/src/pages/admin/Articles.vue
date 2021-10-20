@@ -104,9 +104,13 @@ export default {
   },
   methods: {
     async getLaws () {
+      this.$q.loading.show({
+        message: 'Cargando datos...'
+      })
       await this.$api.get('getLaws').then(res => {
         if (res) {
           this.laws = res
+          this.$q.loading.hide()
         }
       })
     },

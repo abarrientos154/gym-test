@@ -26,10 +26,11 @@ class AnswerController {
   
   async getAnswersByFilter ({ request, response, params }) {
     const id = new ObjectId(params.id)
+    var data = []
     let filter = request.all()
     if (filter.question) {
       console.log('filter.question :>> ', filter.question);
-      var data = (await Answer.query().where({ id_question: filter.question, course_id: id }).fetch()).toJSON()
+      data = (await Answer.query().where({ id_question: filter.question, course_id: id }).fetch()).toJSON()
     }
     if (data !== []) {
       for (const i in data) {

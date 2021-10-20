@@ -95,9 +95,13 @@ export default {
   },
   methods: {
     async getTopics () {
+      this.$q.loading.show({
+        message: 'Cargando datos...'
+      })
       await this.$api.get('getTopics').then(res => {
         if (res) {
           this.topics = res
+          this.$q.loading.hide()
         }
       })
     },

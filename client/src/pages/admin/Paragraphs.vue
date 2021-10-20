@@ -109,9 +109,13 @@ export default {
       })
     },
     async getArticlesByLaw (id) {
+      this.$q.loading.show({
+        message: 'Cargando datos...'
+      })
       await this.$api.get('getArticlesByLaw/' + id).then(res => {
         if (res) {
           this.articles = res
+          this.$q.loading.hide()
         }
       })
     },
