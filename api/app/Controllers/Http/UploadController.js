@@ -276,7 +276,7 @@ class UploadController {
     const end = colComment._worksheet._rows.length
     var articleNumber = ''
     var order = 0
-    await colComment.eachCell(async (cell, rowNumber) => {
+    colComment.eachCell(async (cell, rowNumber) => {
       if (rowNumber >= 2) {
         var paragraphDB = {}
         var id = explanation.getCell('A' + rowNumber).value
@@ -305,7 +305,7 @@ class UploadController {
         }
       }
     })
-    await response.send(true)
+    response.send(true)
   }
   async excelLaw ({ request, response }) {
     let courseId = request.only(['courseId'])
@@ -468,6 +468,11 @@ class UploadController {
     const dir = params.file
     response.download(Helpers.appRoot('storage/uploads/audios') + `/${dir}`)
   }
+  /* async pruebas ({ response }) {
+    const data = (await Type.query().where({ id: { $lt: 10 } }).fetch()).toJSON()
+    console.log('data :>> ', data);
+    response.send(data)
+  } */
 }
 
 module.exports = UploadController

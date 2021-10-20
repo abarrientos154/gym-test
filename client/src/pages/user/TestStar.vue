@@ -10,14 +10,17 @@
                 <div class="row justify-center">
                     <q-img src="fondo.png" style="height: 200px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
                         <div class="row justify-between items-center bg-transparent" style="width:100%; z-index: 3">
-                          <div>
-                            <q-field v-if="esExamen && test.tiempo" outlined dense stack-label>
+                          <div v-if="esExamen && test.tiempo">
+                            <q-field outlined dense stack-label>
                               <template v-slot:control>
                                 <div class="row justify-end no-wrap" tabindex="0" style="width:100%">
                                   <div class="text-bold text-white text-subtitle1">{{minutos + ':' + segundos}}</div>
                                 </div>
                               </template>
                             </q-field>
+                          </div>
+                          <div style="width: 50%; border-radius: 20px" class="bg-green text-h6 row q-py-xs q-px-sm">
+                            <div v-if="item.examData !== null && item.examData !== undefined" class="ellipsis">{{item.examData.name ? item.examData.name : ''}}</div>
                           </div>
                           <q-btn v-if="!esExamen" :loading="loading" rounded no-caps color="primary" label="Terminar test" class="q-px-sm" @click="terminado = true, !listo ? responder(true, item) : ''">
                             <template v-slot:loading>
@@ -29,9 +32,6 @@
                         <div class="row no-wrap items-center bg-transparent q-mt-xl">
                             <!-- <img src="balance 3.png" style="width: 50px" > -->
                             <div class="text-subtitle1 text-bold q-pl-sm ellipsis-2-lines" style="font-size: 17px">{{esTema ? test.tema_name : esExamen ? test.examen_name : test.type_name}}</div>
-                        </div>
-                        <div style="width: 100%" class="bg-transparent text-h6 row justify-center">
-                          <div v-if="item.examData !== null && item.examData !== undefined" class="ellipsis" style="position:relative; top: 75px;">Examen: {{item.examData.name ? item.examData.name : ''}}</div>
                         </div>
                     </q-img>
                 </div>
@@ -81,8 +81,8 @@
                         @click="infoSelec = item, verLey = true" />
                       </div>
                     </div>
-                    <div class="row justify-end">
-                      <q-btn flat no-caps color="red" label="Reportar fallo"
+                    <div class="row justify-end q-mt-sm">
+                      <q-btn no-caps color="red" label="Reportar fallo"
                       @click="question_id = item._id, report = true" />
                     </div>
                 </div>
