@@ -205,9 +205,6 @@ addPrefixToGroup(
     Route.post('setAudio', 'AudioController.store')
     Route.put('updateAudio/:id', 'AudioController.update')
     Route.delete('deleteAudio/:id', 'AudioController.destroy')
-    
-    // Route.get('pruebas', 'UploadController.pruebas')
-    
   }).middleware("auth")
   );
   

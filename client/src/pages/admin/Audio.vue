@@ -34,9 +34,17 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+    <q-dialog v-model="show2" @hide="decartarCamb()">
+      <div style="max-width: 800px; width: 90%;">
+        <q-media-player
+          type="audio"
+          :sources="audio.sources"
+        >
+        </q-media-player>
+      </div>
+    </q-dialog>
   </div>
 </template>
-
 <script>
 import Listable from '../../components/Listable.vue'
 import { required } from 'vuelidate/lib/validators'
@@ -54,9 +62,19 @@ export default {
         { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }
       ],
       show: false,
+      show2: false,
       topic: { required },
       baseu: '',
-      id: ''
+      id: '',
+      audio: {
+        sources: [
+          {
+            src: '',
+            type: 'audio/mp3'
+          }
+        ]
+      }
+
     }
   },
   validations: {
@@ -93,7 +111,6 @@ export default {
             })
             this.form = {}
             this.file = null
-            this.textEdit = ''
             this.getAudios()
             this.show = false
           }
@@ -121,7 +138,7 @@ export default {
             'Content-Type': undefined
           }
         }).then((res) => {
-          if (res) {
+          if (res !== false) {
             this.$q.loading.hide()
             this.$q.notify({
               color: 'positive',
@@ -129,9 +146,17 @@ export default {
             })
             this.form = {}
             this.file = null
-            this.textEdit = ''
             this.show = false
             this.getAudios()
+          } else {
+            this.$q.loading.hide()
+            this.$q.notify({
+              color: 'negative',
+              message: 'El audio debe pesar menos de 200 Mb'
+            })
+            this.form = {}
+            this.file = null
+            this.show = false
           }
         })
       }
@@ -177,7 +202,10 @@ export default {
         this.show = true
       } else if (emit.title === 'Reproducir') {
         this.id = emit.id
+        this.audio.sources[0].src = this.baseu + this.id
+        console.log('this.audio :>> ', this.audio)
         console.log('this.id >> ', this.id)
+        this.show2 = true
       }
     },
     async getAudioById (id) {

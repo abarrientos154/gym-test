@@ -236,29 +236,21 @@ class UploadController {
     workbook = await workbook.xlsx.readFile(filePath)
     let explanation = workbook.getWorksheet('Hoja1')
     let colComment = explanation.getColumn('B')
-    var articleNumber = ''
-    var lastArticleNumber = 0
     colComment.eachCell(async (cell, rowNumber) => {
       if (rowNumber >= 2) {
         var article = {}
-        //var paragraph = explanation.getCell('A' + rowNumber).value
-        var law = explanation.getCell('B' + rowNumber).value
-        var article_name = explanation.getCell('C' + rowNumber).value
-        var article_text = explanation.getCell('E' + rowNumber).value
+        var id = explanation.getCell('A' + rowNumber).value
+        var article_name = explanation.getCell('B' + rowNumber).value
+        var law = explanation.getCell('C' + rowNumber).value
+        var article_text = explanation.getCell('D' + rowNumber).value
+        article.id = id
         article.law = law
         article.article_name = article_name
-        article.sub_title = article_text
+        article.sub_title = article_text !== null ? article_text : ''
         article.course_id = courseId
-        
-        if (article_name !== articleNumber) {
-          articleNumber = article_name
-          if (lastArticleNumber <= rowNumber) {
-            lastArticleNumber = rowNumber
-          }
-          var existArticle = (await Article.query().where({ article_name: article_name, law: law }).first())
-          if (existArticle === null || existArticle === undefined) {
-            var newArticle = await Article.create(article)
-          }
+        var existArticle = (await Article.query().where({ article_name: article_name, law: law }).first())
+        if (existArticle === null || existArticle === undefined) {
+          var newArticle = await Article.create(article)
         }
       }
     })
@@ -273,35 +265,22 @@ class UploadController {
     workbook = await workbook.xlsx.readFile(filePath)
     let explanation = workbook.getWorksheet('Hoja1')
     let colComment = explanation.getColumn('B')
-    const end = colComment._worksheet._rows.length
-    var articleNumber = ''
-    var order = 0
     colComment.eachCell(async (cell, rowNumber) => {
       if (rowNumber >= 2) {
         var paragraphDB = {}
         var id = explanation.getCell('A' + rowNumber).value
-        var law = explanation.getCell('B' + rowNumber).value
-        var article_name = explanation.getCell('C' + rowNumber).value
-        var paragraph_text = explanation.getCell('F' + rowNumber).value
-        if (article_name !== articleNumber) {
-          articleNumber = article_name
-          order = 0
-        }
+        var article_id = explanation.getCell('B' + rowNumber).value
+        var paragraph_text = explanation.getCell('C' + rowNumber).value
+        var order = explanation.getCell('D' + rowNumber).value
         // Creacion de los registros de la colección de parrafos de los articulos //
+        paragraphDB.id = id
+        paragraphDB.article_id = article_id
         paragraphDB.paragraph_text = paragraph_text !== null ? paragraph_text : ''
         paragraphDB.order = order
-        paragraphDB.id = id
         paragraphDB.course_id = courseId
-        if (paragraphDB.paragraph_text !== null) {
-          if (paragraphDB.paragraph_text.length > 0) {
-            order++
-            var articleCreated = (await Article.query().where({ law: law, article_name: article_name }).first()).toJSON()
-            paragraphDB.article_id = articleCreated._id
-            var existParagraph = (await Paragraph.query().where({ paragraph_text: paragraph_text }).first())
-            if (existParagraph === null || existParagraph === undefined) {
-              var newParagrahp = await Paragraph.create(paragraphDB)
-            }
-          }
+        var existParagraph = (await Paragraph.query().where({ paragraph_text: paragraph_text }).first())
+        if (existParagraph === null || existParagraph === undefined) {
+          var newParagrahp = await Paragraph.create(paragraphDB)
         }
       }
     })
@@ -468,11 +447,6 @@ class UploadController {
     const dir = params.file
     response.download(Helpers.appRoot('storage/uploads/audios') + `/${dir}`)
   }
-  /* async pruebas ({ response }) {
-    const data = (await Type.query().where({ id: { $lt: 10 } }).fetch()).toJSON()
-    console.log('data :>> ', data);
-    response.send(data)
-  } */
 }
 
 module.exports = UploadController

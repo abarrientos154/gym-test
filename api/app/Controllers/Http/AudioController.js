@@ -51,6 +51,7 @@ class AudioController {
             title: "Reproducir",
           }
         ]
+        data[i].isActive = false
       }
     }
     response.send(data)
@@ -83,19 +84,23 @@ class AudioController {
       types: ['audio'],
       size: '200mb'
     })
-    body.course_id = new ObjectId(body.course_id)
-    let audio = await Audio.create(body)
-    const id = ObjectId(audio._id).toString()
-    if (Helpers.appRoot('storage/uploads/audios')) {
-      await file.move(Helpers.appRoot('storage/uploads/audios'), {
-        name: id,
-        overwrite: true
-      })
+    if (file.size <= 200000000) {
+      body.course_id = new ObjectId(body.course_id)
+      let audio = await Audio.create(body)
+      const id = ObjectId(audio._id).toString()
+      if (Helpers.appRoot('storage/uploads/audios')) {
+        await file.move(Helpers.appRoot('storage/uploads/audios'), {
+          name: id,
+          overwrite: true
+        })
+      } else {
+        mkdirp.sync(`${__dirname}/storage/Excel`)
+      }
+      let updateAudio = await Audio.query().where({ _id: id }).update({ file: file.fileName })
+      response.send(audio)
     } else {
-      mkdirp.sync(`${__dirname}/storage/Excel`)
+      response.send(false)
     }
-    let updateAudio = await Audio.query().where({ _id: id }).update({ file: file.fileName })
-    response.send(audio)
   }
 
   /**

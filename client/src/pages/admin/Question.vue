@@ -7,7 +7,7 @@
       <div class="column">
       </div>
       <q-btn color="primary" dense no-caps size="md">
-        <q-file borderless v-model="file" hint="(.xls, .xlsx, .xltx, .ods, .ots, .csv)" accept=".xls, .xlsx, .xltx, .ods, .ots, .csv/*" @input="changeFile()" style="height: 30px; font-size: 0px"/>
+        <q-file borderless v-model="file" hint="(.xlsx)" accept=".xlsx, /*" @input="changeFile()" style="height: 30px; font-size: 0px"/>
         <div class="absolute-center">Importar archivo</div>
       </q-btn>
     </div>
