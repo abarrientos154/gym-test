@@ -136,6 +136,10 @@ class UploadController {
             if (rowNumber === end) {
               resolve(response.send(true))
             }
+          } else {
+            if (rowNumber === end) {
+              resolve(response.send(true))
+            }
           }
         }
       })
@@ -188,6 +192,10 @@ class UploadController {
             if (rowNumber === end) {
               resolve(response.send(true))
             }
+          } else {
+            if (rowNumber === end) {
+              resolve(response.send(true))
+            }
           }
         }
       })
@@ -231,6 +239,10 @@ class UploadController {
             if (rowNumber === end) {
               resolve(response.send(true))
             }
+          } else {
+            if (rowNumber === end) {
+              resolve(response.send(true))
+            }
           }
         }
       })
@@ -269,6 +281,10 @@ class UploadController {
             if (rowNumber === end) {
               resolve(response.send(true))
             }
+          } else {
+            if (rowNumber === end) {
+              resolve(response.send(true))
+            }
           }
         }
       })
@@ -301,13 +317,17 @@ class UploadController {
           if (rowNumber >= end) {
             end = rowNumber
           }
-          var newParagrahp = await Paragraph.create(paragraphDB)
-          if (rowNumber === end) {
-            resolve(response.send(true))
-          }
-          /* var existParagraph = (await Paragraph.query().where({ id: id }).first())
+          var existParagraph = (await Paragraph.query().where({ id: id }).first())
           if (existParagraph === null || existParagraph === undefined) {
-          } */
+            var newParagrahp = await Paragraph.create(paragraphDB)
+            if (rowNumber === end) {
+              resolve(response.send(true))
+            }
+          } else {
+            if (rowNumber === end) {
+              resolve(response.send(true))
+            }
+          }
         }
       })
     })
@@ -350,6 +370,10 @@ class UploadController {
             if (rowNumber === end) {
               resolve(response.send(true))
             }
+          } else {
+            if (rowNumber === end) {
+              resolve(response.send(true))
+            }
           }
         }
       })
@@ -389,6 +413,10 @@ class UploadController {
             if (rowNumber === end) {
               resolve(response.send(true))
             }
+          } else {
+            if (rowNumber === end) {
+              resolve(response.send(true))
+            }
           }
         }
       })
@@ -424,6 +452,10 @@ class UploadController {
             if (rowNumber === end) {
               resolve(response.send(true))
             }
+          } else {
+            if (rowNumber === end) {
+              resolve(response.send(true))
+            }
           }
         }
       })
@@ -454,6 +486,10 @@ class UploadController {
           var existType = (await Type.query().where({ id: id }).first())
           if (existType === null || existType === undefined) {
             let save = await Type.create(type)
+            if (rowNumber === end) {
+              resolve(response.send(true))
+            }
+          } else {
             if (rowNumber === end) {
               resolve(response.send(true))
             }
