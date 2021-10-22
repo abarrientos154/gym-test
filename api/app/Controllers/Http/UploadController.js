@@ -301,7 +301,7 @@ class UploadController {
           if (rowNumber >= end) {
             end = rowNumber
           }
-          var existParagraph = (await Paragraph.query().where({ paragraph_text: paragraph_text }).first())
+          var existParagraph = (await Paragraph.query().where({ id: id }).first())
           if (existParagraph === null || existParagraph === undefined) {
             var newParagrahp = await Paragraph.create(paragraphDB)
             if (rowNumber === end) {
