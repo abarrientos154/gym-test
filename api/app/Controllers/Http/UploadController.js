@@ -301,13 +301,13 @@ class UploadController {
           if (rowNumber >= end) {
             end = rowNumber
           }
-          var existParagraph = (await Paragraph.query().where({ id: id }).first())
-          if (existParagraph === null || existParagraph === undefined) {
-            var newParagrahp = await Paragraph.create(paragraphDB)
-            if (rowNumber === end) {
-              resolve(response.send(true))
-            }
+          var newParagrahp = await Paragraph.create(paragraphDB)
+          if (rowNumber === end) {
+            resolve(response.send(true))
           }
+          /* var existParagraph = (await Paragraph.query().where({ id: id }).first())
+          if (existParagraph === null || existParagraph === undefined) {
+          } */
         }
       })
     })
