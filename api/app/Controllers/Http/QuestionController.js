@@ -230,7 +230,6 @@ class QuestionController {
   }
   async destroyAll ({ response }) {
     const data = await Question.where({}).delete()
-    const data2 = await Answer.where({}).delete()
     response.send(data)
   }
 }

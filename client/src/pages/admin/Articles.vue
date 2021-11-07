@@ -178,7 +178,7 @@ export default {
     deleteAllArticles () {
       this.$q.dialog({
         title: 'Confirma',
-        message: '¿Seguro deseas eliminar todos los Artículos con sus Párrafos?',
+        message: '¿Seguro deseas eliminar todos los Artículos?',
         cancel: true,
         persistent: true
       }).onOk(() => {

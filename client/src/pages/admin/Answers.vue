@@ -36,6 +36,9 @@
       </q-btn>
     </div>
     <!-- <q-btn color="primary" label="Nueva Respuesta" icon="add" dense no-caps size="md" class="q-ml-md" @click="newAnswer()"/> -->
+    <div class="row justify-end">
+      <q-btn color="red" label="Eliminar Respuestas" icon="delete" dense no-caps size="md" class="q-mr-md" @click="deleteAllAnswers()"/>
+    </div>
     <div class="row q-my-sm q-mx-md">
       <q-select style="min-width: 220px" class="q-mr-sm q-my-sm" outlined v-model="topic" label="Escoga un tema" dense :options="topics" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="topic" @input="getQuestionsByTopic(topic)" clearable></q-select>
       <q-select style="min-width: 220px" class="q-mr-md q-my-sm" outlined v-model="question" label="Escoga una pregunta" dense :options="questions" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="title" @input="getAnswers(true)" clearable>
@@ -214,6 +217,26 @@ export default {
               message: 'Eliminado Correctamente'
             })
             this.getAnswers()
+          }
+        })
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      })
+    },
+    deleteAllAnswers () {
+      this.$q.dialog({
+        title: 'Confirma',
+        message: '¿Seguro deseas eliminar todas las Respuestas?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$api.delete('deleteAllAnswers').then(res => {
+          if (res) {
+            this.$q.notify({
+              color: 'positive',
+              message: 'Respuestas eliminadas Correctamente'
+            })
+            this.$router.go()
           }
         })
       }).onCancel(() => {

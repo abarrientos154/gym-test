@@ -226,7 +226,7 @@ export default {
     deleteAllQuestions () {
       this.$q.dialog({
         title: 'Confirma',
-        message: '¿Seguro deseas eliminar todas las Preguntas con  sus Respuestas?',
+        message: '¿Seguro deseas eliminar todas las Preguntas?',
         cancel: true,
         persistent: true
       }).onOk(() => {

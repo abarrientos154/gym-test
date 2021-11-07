@@ -6,7 +6,10 @@
       <div>
         <div class="text-h5 text-white q-mb-sm q-px-md">Audio recientes</div>
       </div>
+    </div>
+    <div class="row justify-between q-mt-xl">
       <q-btn color="primary" label="Nuevo Audio" icon="add" dense no-caps size="md" class="q-ml-md" @click="newAudio()"/>
+      <q-btn color="red" label="Eliminar Audios" icon="delete" dense no-caps size="md" class="q-mr-md" @click="deleteAllAudios()"/>
     </div>
     <div class="row justify-center" style="height: 70%">
       <listable class="col" :columns="columns" :data="audios" title="Audios" @function="execute"/>
@@ -175,6 +178,26 @@ export default {
               message: 'Eliminado Correctamente'
             })
             this.getAudios()
+          }
+        })
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      })
+    },
+    deleteAllAudios () {
+      this.$q.dialog({
+        title: 'Confirma',
+        message: '¿Seguro deseas eliminar todas los Audios?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$api.delete('deleteAllAudios').then(res => {
+          if (res) {
+            this.$q.notify({
+              color: 'positive',
+              message: 'Audios eliminados Correctamente'
+            })
+            this.$router.go()
           }
         })
       }).onCancel(() => {

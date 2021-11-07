@@ -174,6 +174,11 @@ class AudioController {
     const data = await Audio.where('_id', params.id).delete()
     response.send(data)
   }
+  
+  async destroyAll ({ response }) {
+    const data = await Audio.where({}).delete()
+    response.send(data)
+  }
 }
 
 module.exports = AudioController

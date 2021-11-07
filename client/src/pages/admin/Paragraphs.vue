@@ -11,7 +11,10 @@
         <div class="absolute-center">Importar archivo</div>
       </q-btn>
     </div>
-    <q-btn color="primary" label="Nuevo Párrafo" icon="add" dense no-caps size="md" class="q-ml-md" @click="newParagraph()"/>
+    <div class="row justify-between">
+      <q-btn color="primary" label="Nuevo Párrafo" icon="add" dense no-caps size="md" class="q-ml-md" @click="newParagraph()"/>
+      <q-btn color="red" label="Eliminar Párrafos" icon="delete" dense no-caps size="md" class="q-mr-md" @click="deleteAllParagraphs()"/>
+    </div>
     <div class="row q-my-sm q-mx-md">
       <q-select style="min-width: 220px" class="q-mr-sm q-my-sm" outlined v-model="law" label="Escoga una ley" dense :options="laws" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="law_name" @input="getArticlesByLaw(law)" clearable></q-select>
       <q-select style="min-width: 220px" class="q-mr-md q-my-sm" outlined v-model="article" label="Escoga un articulo" dense :options="articles" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="article_name" @input="getParagraphs(true)" clearable>
@@ -174,6 +177,26 @@ export default {
               message: 'Eliminado Correctamente'
             })
             this.getParagraphs()
+          }
+        })
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      })
+    },
+    deleteAllParagraphs () {
+      this.$q.dialog({
+        title: 'Confirma',
+        message: '¿Seguro deseas eliminar todos los Párrafos?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$api.delete('deleteAllParagraphs').then(res => {
+          if (res) {
+            this.$q.notify({
+              color: 'positive',
+              message: 'Párrafos eliminados Correctamente'
+            })
+            this.$router.go()
           }
         })
       }).onCancel(() => {

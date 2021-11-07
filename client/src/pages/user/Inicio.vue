@@ -25,8 +25,7 @@
           </q-img>
         </q-card>
 
-        <div class="text-h6 text-bold text-primary q-mt-sm">Tu ranking</div>
-        <div class="text-caption text-grey-8 q-mb-sm">Conoce tus últimos resultados</div>
+        <div class="text-h6 text-bold text-primary q-mt-sm">Últimos resultados</div>
         <q-card class="bordes q-pa-none" style="width: 100%; border-radius: 10px;">
           <div class="row items-center q-py-xs q-pl-xs">
             <div class="q-pl-xs">
@@ -65,15 +64,14 @@
           </div>
         </q-card>
 
-        <div class="text-h6 text-bold text-primary q-mt-sm">Materias</div>
-        <div class="text-caption text-grey-8">Todas nuestras materias</div>
+        <div class="text-h6 text-bold text-primary q-mt-sm">Temas</div>
         <q-scroll-area v-if="materias.length" horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 140px; width: 100%;">
           <div class="row no-wrap q-gutter-md">
             <q-card flat style="width: 130px; height: 130px" clickable v-ripple v-for="(item, index) in materias" :key="index"
             @click="$router.push('/tema/' + item._id)">
               <q-img src="materia2 2.png" style="height: 100%; width: 100%; border-radius: 10px">
                 <div class="absolute-full row items-end">
-                  <div class="text-subtitle2 ellipsis-2-lines">{{item.name}}</div>
+                  <div class="text-subtitle2 ellipsis-3-lines">{{item.name}}</div>
                 </div>
               </q-img>
             </q-card>
@@ -82,7 +80,6 @@
         <div v-else class="text-center text-bold text-grey-9 q-py-lg">Sin materias actualmente</div>
 
         <div class="text-h6 text-bold text-primary q-mt-sm">Gym</div>
-        <div class="text-caption text-grey-8">Todas nuestras materias</div>
         <q-scroll-area v-if="gym.length" horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 140px; width: 100%;">
           <div class="row no-wrap q-gutter-md">
             <q-card flat style="width: 130px; height: 130px" clickable v-ripple v-for="(item, index) in gym" :key="index"
@@ -98,7 +95,6 @@
         <div v-else class="text-center text-bold text-grey-9 q-py-lg">Sin entrenamiento actualmente</div>
 
         <div class="text-h6 text-bold text-primary q-mt-sm">Examenes</div>
-        <div class="text-caption text-grey-8">Todas nuestras materias</div>
         <q-scroll-area v-if="examenes.length" horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 140px; width: 100%;">
           <div class="row no-wrap q-gutter-md">
             <q-card flat style="width: 130px; height: 130px" clickable v-ripple v-for="(item, index) in examenes" :key="index"
@@ -113,18 +109,6 @@
         </q-scroll-area>
         <div v-else class="text-center text-bold text-grey-9 q-py-lg">Sin examenes actualmente</div>
 
-        <div class="text-h6 text-bold text-primary q-mt-sm">Nuestras Noticias</div>
-        <div class="row justify-between">
-          <div class="col text-caption text-grey-8">Lee nuestras noticias para potenciar tu aprendizaje</div>
-        </div>
-        <q-card class="bg-grey-2 q-pa-sm" v-if="news.length > 0">
-          <div v-for="(item, index) in news" :key="index" class="text-subtitle2 q-ml-sm">
-            <li @click="$router.push('/publicidad/' + item._id)">{{item.title}}</li>
-          </div>
-        </q-card>
-        <q-card class="bg-grey-2 q-pa-sm" v-else>
-          <div class="row justify-center text-grey-8">Aun no hay nuevas Noticias</div>
-        </q-card>
         <div class="text-h6 text-bold text-primary q-mt-sm">Nuestros Audios</div>
         <div class="row justify-between">
           <div class="col text-caption text-grey-8">Escucha nuestros audios para potenciar tu aprendizaje</div>
@@ -148,6 +132,19 @@
         </div>
         <q-card class="bg-grey-2 q-pa-sm" v-else>
           <div class="row justify-center text-grey-8">Aun no hay nuevos Audios</div>
+        </q-card>
+
+        <div class="text-h6 text-bold text-primary q-mt-sm">Nuestras Noticias</div>
+        <div class="row justify-between">
+          <div class="col text-caption text-grey-8">Lee nuestras noticias para potenciar tu aprendizaje</div>
+        </div>
+        <q-card class="bg-grey-2 q-pa-sm" v-if="news.length > 0">
+          <div v-for="(item, index) in news" :key="index" class="text-subtitle2 q-ml-sm">
+            <li @click="$router.push('/publicidad/' + item._id)">{{item.title}}</li>
+          </div>
+        </q-card>
+        <q-card class="bg-grey-2 q-pa-sm" v-else>
+          <div class="row justify-center text-grey-8">Aun no hay nuevas Noticias</div>
         </q-card>
       </div>
   </div>

@@ -134,6 +134,7 @@ addPrefixToGroup(
     Route.put('updateParagraph/:id', 'ParagraphController.update')
     Route.delete('deleteParagraph/:id', 'ParagraphController.destroy')
     Route.post('getParagraphsByFilter/:id', 'ParagraphController.getParagraphsByFilter')
+    Route.delete('deleteAllParagraphs', 'ParagraphController.destroyAll')
     
     Route.get('examen', 'ExamenController.index')
     Route.get('getExamByCourse/:id', 'ExamenController.indexByCourse')
@@ -175,6 +176,7 @@ addPrefixToGroup(
     Route.post('answer', 'AnswerController.store')
     Route.put('answer/:id', 'AnswerController.update')
     Route.get('answerById/:id', 'AnswerController.show')
+    Route.delete('deleteAllAnswers', 'AnswerController.destroyAll')
     
     Route.post('desafio', 'AnswerController.storeDesafio')
     Route.get('desafio', 'AnswerController.index')
@@ -205,6 +207,8 @@ addPrefixToGroup(
     Route.post('setAudio', 'AudioController.store')
     Route.put('updateAudio/:id', 'AudioController.update')
     Route.delete('deleteAudio/:id', 'AudioController.destroy')
+    Route.delete('deleteAllAudios', 'AudioController.destroyAll')
+    
   }).middleware("auth")
   );
   

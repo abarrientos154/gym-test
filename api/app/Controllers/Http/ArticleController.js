@@ -106,7 +106,6 @@ class ArticleController {
 
   async destroyAll ({ response }) {
     const data = await Article.where({}).delete()
-    const data2 = await Paragraph.where({}).delete()
     response.send(data)
   }
 

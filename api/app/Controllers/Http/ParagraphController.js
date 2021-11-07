@@ -89,6 +89,11 @@ class ParagraphController {
     response.send(data)
   }
 
+  async destroyAll ({ response }) {
+    const data = await Paragraph.where({}).delete()
+    response.send(data)
+  }
+
   /**
    * Render a form to be used for creating a new paragraph.
    * GET paragraphs/create
