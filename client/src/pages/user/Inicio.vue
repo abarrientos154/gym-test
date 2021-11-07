@@ -16,14 +16,14 @@
       </q-img>
 
       <div class="q-pa-md bg-white" style="position:absolute; top: 130px; padding-bottom: 100px; width:93%; border-top-left-radius: 20px; border-top-right-radius: 20px">
-        <q-card style="width: 100%; border-radius: 10px">
+        <!-- <q-card style="width: 100%; border-radius: 10px">
           <q-img src="Group.png" style="width: 100%; height: 200px; border-radius: 10px">
             <div class="absolute-full">
               <div class="text-h6">Nuevo módulo</div>
               <div class="text-caption">Prueba nuestro nuevo set de preguntas</div>
             </div>
           </q-img>
-        </q-card>
+        </q-card> -->
 
         <div class="text-h6 text-bold text-primary q-mt-sm">Últimos resultados</div>
         <q-card class="bordes q-pa-none" style="width: 100%; border-radius: 10px;">

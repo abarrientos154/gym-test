@@ -4,7 +4,10 @@ const Helpers = use('Helpers')
 const mkdirp = use('mkdirp')
 // const fs = require('fs')
 const User = use("App/Models/User")
+const License = use("App/Models/License")
 const Role = use("App/Models/Role")
+const moment = require('moment')
+var ObjectId = require('mongodb').ObjectId;
 // const { validate } = use("Validator")
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
@@ -71,6 +74,10 @@ class UserController {
     } else {
       let body = dat
       const rol = body.roles
+      body.license_id = new ObjectId('6187fd1aff8458493d558f4c')
+      let date = moment().format('YYYY-MM-DD')
+      console.log('date :>> ', date);
+      body.licenseExpirationDate = moment(date).add(1, 'months').format('YYYY-MM-DD')
       body.roles = [rol]
       const user = await User.create(body)
       response.send(user)
@@ -79,6 +86,14 @@ class UserController {
 
   async userInfo({ request, response, auth }) {
     const user = (await auth.getUser()).toJSON()
+    response.send(user)
+  }
+  async userInfoLicense({ request, response, auth }) {
+    const user = (await auth.getUser()).toJSON()
+    let license = (await License.query().find(user.license_id)).toJSON()
+    let date = moment().format('YYYY-MM-DD')
+    let days = moment(user.licenseExpirationDate).diff(date , 'days')
+    user.days = days
     response.send(user)
   }
 

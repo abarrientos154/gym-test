@@ -33,6 +33,7 @@ const routes = [
       { path: '/gym/:idType', component: () => import('pages/user/Examen.vue') },
       { path: '/tema/test/:idTema', component: () => import('pages/user/TestStar.vue') },
       { path: '/examen/test/:idExamen', component: () => import('pages/user/TestStar.vue') },
+      { path: '/license', component: () => import('pages/user/License.vue') },
       { path: '/gym/test/:idType', component: () => import('pages/user/TestStar.vue') }
       /* { path: '/tienda', component: () => import('pages/user/Tienda.vue') },
       { path: '/carro_de_compra/:compra', component: () => import('pages/user/CarroCompra.vue') } */

@@ -184,7 +184,7 @@ export default {
         {
           icon: 'apps',
           label: 'Noticias',
-          ruta: '/nes_user'
+          ruta: '/news_user'
         },
         {
           icon: 'person',
@@ -192,9 +192,26 @@ export default {
           ruta: '/perfil'
         },
         {
+          icon: 'card_membership',
+          label: 'Membresia',
+          ruta: '/license'
+        },
+        {
           icon: 'book',
           label: 'Cursos',
           ruta: '/courses_client'
+        },
+        {
+          icon: 'logout',
+          label: 'Salir',
+          ruta: ''
+        }
+      ],
+      menuUserExpired: [
+        {
+          icon: 'card_membership',
+          label: 'Membresia',
+          ruta: '/license'
         },
         {
           icon: 'logout',
@@ -210,14 +227,18 @@ export default {
   methods: {
     ...mapMutations('generals', ['logout']),
     getUser () {
-      this.$api.get('user_info').then(v => {
+      this.$api.get('user_info_license').then(v => {
         if (v) {
           this.rol = v.roles[0]
           this.user = v
           if (this.rol === 1) {
             this.menu = this.menuAdmin
           } else if (this.rol === 2) {
-            this.menu = this.menuUser
+            if (this.user.days > 0) {
+              this.menu = this.menuUser
+            } else {
+              this.menu = this.menuUserExpired
+            }
           }
         }
       })

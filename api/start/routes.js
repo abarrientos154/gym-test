@@ -51,6 +51,7 @@ addPrefixToGroup(
   Route.group(() => {
     // Insertar rutas con protección de autenticación aquí
     Route.get("user_info", "UserController.userInfo")
+    Route.get("user_info_license", "UserController.userInfoLicense")
     Route.get("all_user", "UserController.index")
     Route.put('updateUser/:id', 'UserController.update')
     Route.put('update_user_info/:id', 'UserController.updateUserInfo')
@@ -208,6 +209,8 @@ addPrefixToGroup(
     Route.put('updateAudio/:id', 'AudioController.update')
     Route.delete('deleteAudio/:id', 'AudioController.destroy')
     Route.delete('deleteAllAudios', 'AudioController.destroyAll')
+
+    Route.get('getLicenses', 'LicenseController.index')
     
   }).middleware("auth")
   );
