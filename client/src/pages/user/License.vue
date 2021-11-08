@@ -21,10 +21,29 @@
           <div class="text-grey-7 text-h6">{{item.months === 1 ? 'Mes' : 'Meses'}}</div>
         </div>
         <div class="text-primary text-h6 col-12 text-weight-bolder">{{item.name}}</div>
-        <div class="text-primary text-h6 col-12 text-weight-bolder">{{item.monthPrice}}€</div>
-        <q-btn color="primary" outline label="Comprar" rounded />
+        <div class="text-primary text-h6 col-12 text-weight-bolder">{{item.monthPrice}}€ / Mes</div>
+        <q-btn color="primary" outline label="Comprar" rounded @click="show = true, license = item "/>
       </q-card>
     </div>
+    <q-dialog v-model="show">
+      <q-card style="border-radius: 20px;">
+        <q-card-section>
+          <div class="text-h6 text-primary">Comprar Membresia</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none column justify-center items-center">
+          <div class="row items-center">
+            <div class="text-primary text-h3 q-mr-xs text-weight-bolder">{{license.months}}</div>
+            <div class="text-grey-7 text-h6">{{license.months === 1 ? 'Mes' : 'Meses'}}</div>
+          </div>
+            <div class="text-grey-7 text-h6">Total a pagar</div>
+          <div class="text-primary text-h6 col-12 text-weight-bolder">{{license.total}}€</div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat label="Cancelar" color="primary" v-close-popup no-caps/>
+          <q-btn flat label="Pagar" color="primary" v-close-popup @click="setBuy()" no-caps/>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -33,7 +52,9 @@ export default {
   data () {
     return {
       user: {},
-      licenses: []
+      licenses: [],
+      license: {},
+      show: false
     }
   },
   mounted () {
@@ -41,25 +62,36 @@ export default {
     this.getLicenses()
   },
   methods: {
-    getUser () {
+    async getUser () {
       this.$q.loading.show({
         message: 'Cargando Datos...'
       })
-      this.$api.get('user_info_license').then(res => {
+      await this.$api.get('user_info_license').then(res => {
         if (res) {
           this.user = { ...res }
           this.$q.loading.hide()
         }
       })
     },
-    getLicenses () {
+    async getLicenses () {
       this.$q.loading.show({
         message: 'Cargando Datos...'
       })
-      this.$api.get('getLicenses').then(res => {
+      await this.$api.get('getLicenses').then(res => {
         if (res) {
           this.licenses = res
           this.$q.loading.hide()
+        }
+      })
+    },
+    async setBuy () {
+      this.$q.loading.show({
+        message: 'Procesando pago...'
+      })
+      await this.$api.put('setBuy/' + this.license._id).then(res => {
+        if (res) {
+          this.$q.loading.hide()
+          this.$router.go()
         }
       })
     }

@@ -211,6 +211,7 @@ addPrefixToGroup(
     Route.delete('deleteAllAudios', 'AudioController.destroyAll')
 
     Route.get('getLicenses', 'LicenseController.index')
+    Route.put('setBuy/:id', 'UserController.setBuy')
     
   }).middleware("auth")
   );

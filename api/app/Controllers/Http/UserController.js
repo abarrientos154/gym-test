@@ -84,7 +84,7 @@ class UserController {
     }
   }
 
-  async userInfo({ request, response, auth }) {
+  async userInfo({ response, auth }) {
     const user = (await auth.getUser()).toJSON()
     response.send(user)
   }
@@ -95,6 +95,24 @@ class UserController {
     let days = moment(user.licenseExpirationDate).diff(date , 'days')
     user.days = days
     response.send(user)
+  }
+
+  async setBuy({ response, auth, params }) {
+    const user = (await auth.getUser()).toJSON()
+    let license = (await License.query().find(params.id)).toJSON()
+    let date = moment().format('YYYY-MM-DD')
+    let days = moment(user.licenseExpirationDate).diff(date , 'days')
+    if (days <= 0) {
+      days = 0
+    }
+    const update = {
+      licenseExpirationDate: moment(date).add(days, 'days').add(license.months, 'months').format('YYYY-MM-DD'),
+      license_id: new ObjectId(params.id)
+    }
+    const updateUser = await User.query().where('_id', user._id).update(update)
+    console.log('update :>> ', update);
+
+    response.send(updateUser)
   }
 
   async update ({ params, request, response }) {
