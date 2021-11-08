@@ -28,15 +28,28 @@
     <q-dialog v-model="show">
       <q-card style="border-radius: 20px;">
         <q-card-section>
-          <div class="text-h6 text-primary">Comprar Membresia</div>
         </q-card-section>
         <q-card-section class="q-pt-none column justify-center items-center">
-          <div class="row items-center">
-            <div class="text-primary text-h3 q-mr-xs text-weight-bolder">{{license.months}}</div>
-            <div class="text-grey-7 text-h6">{{license.months === 1 ? 'Mes' : 'Meses'}}</div>
-          </div>
-            <div class="text-grey-7 text-h6">Total a pagar</div>
-          <div class="text-primary text-h6 col-12 text-weight-bolder">{{license.total}}€</div>
+          <q-card class="q-pa-md" style="width:100%; border-radius:15px">
+            <div class="text-h6 text-primary">Adquirir Membresia</div>
+            <div class="row items-start q-mt-md q-py-md">
+              <!-- <div>
+                <q-img src="app movil 33.png" style="width:100px; height: 100px; border-radius: 15px" />
+              </div> -->
+              <div class="col q-pl-md">
+                <div class="text-grey-8 text-h5">Membresia</div>
+                <div class="row items-center">
+                  <div class="text-primary text-h3 q-mr-xs text-weight-bolder">{{license.months}}</div>
+                  <div class="text-grey-7 text-h6">{{license.months === 1 ? 'Mes' : 'Meses'}}</div>
+                </div>
+                <div class="text-grey-8 text-caption">{{license.name}}</div>
+                <div class="text-grey-8 text-h6"><b>Costo </b>{{license.total}}€</div>
+              </div>
+            </div>
+            <div class="row justify-center q-pt-xl">
+              <paypal @pagoProcesado="comprarMembresia" :total="license.total" :descripcion="`Membresia ${license.months} ${license.months === 1 ? 'Mes' : 'Meses'}`" style="width:100%" />
+            </div>
+          </q-card>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup no-caps/>
@@ -48,7 +61,9 @@
 </template>
 
 <script>
+import Paypal from '../../components/Paypal.vue'
 export default {
+  components: { Paypal },
   data () {
     return {
       user: {},
