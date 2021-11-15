@@ -132,8 +132,10 @@ class TopicController {
       for (let i = 0; i < questions.length; i++) {
         if (questions[i].exam !== '' && questions[i].exam !== null) {
           const id = Number(questions[i].exam)
-          const exam = (await Examen.query().where({ id: id }).first()).toJSON()
-          questions[i].examData = exam
+          const exam = await Examen.query().where({ id: id }).first()
+          if (exam !== null) {
+            questions[i].examData = exam
+          }
         }
         if (questions[i].answers[0].order === null || questions[i].answers[0].order === '') {
           questions[i].answers = questions[i].answers.sort(() => Math.random() - 0.5)

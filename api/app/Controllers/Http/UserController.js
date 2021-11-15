@@ -90,10 +90,12 @@ class UserController {
   }
   async userInfoLicense({ request, response, auth }) {
     const user = (await auth.getUser()).toJSON()
-    let license = (await License.query().find(user.license_id)).toJSON()
-    let date = moment().format('YYYY-MM-DD')
-    let days = moment(user.licenseExpirationDate).diff(date , 'days')
-    user.days = days
+    if (user.roles[0] === 2) {
+      let license = (await License.query().find(user.license_id)).toJSON()
+      let date = moment().format('YYYY-MM-DD')
+      let days = moment(user.licenseExpirationDate).diff(date , 'days')
+      user.days = days
+    }
     response.send(user)
   }
 
