@@ -163,6 +163,13 @@ export default {
           ruta: '/audio'
         },
         {
+          src: '',
+          src2: '',
+          label: 'Usuarios',
+          icon: 'group',
+          ruta: '/users'
+        },
+        {
           src: 'salir 2.png',
           src2: '',
           label: 'Salir',
@@ -235,7 +242,11 @@ export default {
             this.menu = this.menuAdmin
           } else if (this.rol === 2) {
             if (this.user.days > 0) {
-              this.menu = this.menuUser
+              if (this.user.disabled !== true) {
+                this.menu = this.menuUser
+              } else {
+                this.menu = this.menuUserExpired
+              }
             } else {
               this.menu = this.menuUserExpired
             }

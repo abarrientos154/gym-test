@@ -45,14 +45,15 @@ addPrefixToGroup(
     Route.get('audios/:file', 'UploadController.getFileByDirectoryAudios')
 
   })
-);
-
-addPrefixToGroup(
+  );
+  
+  addPrefixToGroup(
   Route.group(() => {
     // Insertar rutas con protección de autenticación aquí
     Route.get("user_info", "UserController.userInfo")
     Route.get("user_info_license", "UserController.userInfoLicense")
     Route.get("all_user", "UserController.index")
+    Route.get("getUsers", "UserController.indexListable")
     Route.put('updateUser/:id', 'UserController.update')
     Route.put('update_user_info/:id', 'UserController.updateUserInfo')
     Route.put('update_perfilImg', 'UserController.updatePerfilImg')
@@ -60,7 +61,11 @@ addPrefixToGroup(
     Route.get('asignatura_by_id/:id', 'AsignaturaController.getAsignaturaById')
     Route.get('getCourseWithTest/:id', 'AsignaturaController.getCourseWithTest')
     Route.put('updateAsignatura/:id', 'AsignaturaController.update')
-
+    Route.put('updateUser/:id', 'UserController.update')
+    Route.put('toDisable/:id', 'UserController.toDisable')
+    Route.delete('deleteAllUsers', 'UserController.destroyAll')
+    Route.get('getUserById/:id', 'UserController.show')
+    
     Route.get('getTopics', 'TopicController.index')
     Route.get('getTopicsByCourse/:id', 'TopicController.indexByCourse')
     Route.get('topic_by_id/:id', 'TopicController.getTopicById')

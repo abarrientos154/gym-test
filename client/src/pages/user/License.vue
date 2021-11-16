@@ -7,7 +7,7 @@
         <div class="text-white">Puedes modificar tu licencia</div>
       </div>
     </q-img>
-    <div class="q-mx-md q-px-md q-pt-lg q-pb-xl bg-white q-mb-xl" style="position:relative; top: -30px; border-top-left-radius: 20px; border-top-right-radius: 20px">
+    <div v-if="user.disabled !== true" class="q-mx-md q-px-md q-pt-lg q-pb-xl bg-white q-mb-xl" style="position:relative; top: -30px; border-top-left-radius: 20px; border-top-right-radius: 20px">
       <div class="text-center text-subtitle2 text-grey-7">Tiempo restante:</div>
       <div class="column justify-center items-center">
         <div class="text-primary text-h1 col-12 text-weight-bolder">{{user.days > 0 ? user.days : '00'}}</div>
@@ -24,6 +24,9 @@
         <div class="text-primary text-h6 col-12 text-weight-bolder">{{item.monthPrice}}€ / Mes</div>
         <q-btn color="primary" outline label="Comprar" rounded @click="show = true, license = item "/>
       </q-card>
+    </div>
+    <div v-else class="q-mx-md q-px-md q-pt-lg q-pb-xl bg-white q-mb-xl" style="position:relative; top: -30px; border-top-left-radius: 20px; border-top-right-radius: 20px">
+      <div class="text-grey-7 text-h6 text-center">Tu licencia fue suspendida debes comunicarte con el admin</div>
     </div>
     <q-dialog v-model="show">
       <q-card style="border-radius: 20px;">
@@ -109,6 +112,9 @@ export default {
           this.$router.go()
         }
       })
+    },
+    comprarMembresia (res) {
+      console.log('res :>> ', res)
     }
   }
 }

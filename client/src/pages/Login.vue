@@ -92,7 +92,11 @@ export default {
               this.$api.get('user_info_license').then(res => {
                 if (res) {
                   if (res.days > 0) {
-                    this.$router.push('/courses_client')
+                    if (this.user.disabled !== true) {
+                      this.$router.push('/courses_client')
+                    } else {
+                      this.$router.push('/license')
+                    }
                   } else {
                     this.$router.push('/license')
                   }

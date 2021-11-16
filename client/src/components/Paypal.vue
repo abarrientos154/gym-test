@@ -47,7 +47,7 @@ export default {
           },
           onApprove: async (data, actions) => {
             const order = await actions.order.capture()
-            this.$emit('pagoProcesado')
+            this.$emit('pagoProcesado', order)
             console.log(order, 'orden aprobada')
           },
           onError: err => {

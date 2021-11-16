@@ -4,6 +4,8 @@ const Helpers = use('Helpers')
 const mkdirp = use('mkdirp')
 // const fs = require('fs')
 const User = use("App/Models/User")
+const Community = use("App/Models/Community")
+const Place = use("App/Models/Place")
 const License = use("App/Models/License")
 const Role = use("App/Models/Role")
 const moment = require('moment')
@@ -34,6 +36,38 @@ class UserController {
     response.send(users);
   }
 
+  async indexListable ({ response }) {
+    let data = (await User.query().where({ roles: { $eq: [2] }}).fetch()).toJSON()
+    if (data !== []) {
+      for (const i in data) {
+        data[i].actions = [
+          {
+            color: "primary",
+            icon: "edit",
+            url: "",
+            action: "",
+            title: "Editar",
+          },
+          {
+            color: data[i].disabled === true ? "green" : "red",
+            icon: data[i].disabled === true ? "toggle_on" : "toggle_off",
+            url: "",
+            action: "",
+            title: data[i].disabled === true ? "Habilitar" : "Deshabilitar",
+          }
+        ]
+        data[i].communityName = (await Community.query().find(data[i].community)).name
+        data[i].placeName = (await Place.query().find(data[i].place)).name
+      }
+    }
+    response.send(data)
+  }
+
+  async show ({ params, response }) {
+    let data = (await User.find(params.id)).toJSON()
+    response.send(data)
+  }
+
   async login({ auth, request }) {
     const { email, password } = request.all();
     let token = await auth.attempt(email, password)
@@ -60,6 +94,7 @@ class UserController {
     token.full_name = user.full_name ? user.full_name : null
     token.last_name = user.last_name
     token._id = user._id
+    token.disabled = user.disabled
     let data = {}
     data.SESSION_INFO = token
     return data
@@ -170,6 +205,27 @@ class UserController {
         response.send(user)
       }
     }
+  }
+  async update ({ params, request, response }) {
+    const body = request.all()
+    const update = await User.where('_id', params.id).update(body)
+    response.send(update)
+  }
+
+  async toDisable ({ params, response, request }) {
+    const { action } = request.all()
+    if (action === 1) {
+      const update = await User.where('_id', params.id).update({ disabled: true })
+      response.send(true)
+    } else if (action === 0) {
+      const update = await User.where('_id', params.id).update({ disabled: false })
+      response.send(false)
+    }
+  }
+
+  async destroyAll ({ response }) {
+    const data = await User.where({}).delete()
+    response.send(data)
   }
 }
 
