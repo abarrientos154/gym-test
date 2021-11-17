@@ -38,12 +38,10 @@
       </q-card>
     </q-dialog>
     <q-dialog v-model="show2" @hide="decartarCamb()">
-      <div style="max-width: 800px; width: 90%;">
-        <q-media-player
-          type="audio"
-          :sources="audio.sources"
-        >
-        </q-media-player>
+      <div style="max-width: 800px; width: 90%;" class="bg-transparent">
+        <audio controls style="width: 100%;">
+          <source :src="audio" type="audio/mpeg">
+        </audio>
       </div>
     </q-dialog>
   </div>
@@ -69,14 +67,7 @@ export default {
       topic: { required },
       baseu: '',
       id: '',
-      audio: {
-        sources: [
-          {
-            src: '',
-            type: 'audio/mp3'
-          }
-        ]
-      }
+      audio: ''
 
     }
   },
@@ -225,9 +216,7 @@ export default {
         this.show = true
       } else if (emit.title === 'Reproducir') {
         this.id = emit.id
-        this.audio.sources[0].src = this.baseu + this.id
-        console.log('this.audio :>> ', this.audio)
-        console.log('this.id >> ', this.id)
+        this.audio = this.baseu + this.id
         this.show2 = true
       }
     },
@@ -245,4 +234,8 @@ export default {
     }
   }
 }
+/* this.infoo = new Audio(require('../../public/musicafondo.mp3'))
+    // a.loop = true
+    // console.log('pre')
+    this.infoo.play() */
 </script>

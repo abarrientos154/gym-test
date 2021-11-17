@@ -118,14 +118,9 @@
             <div class="text-subtitle2">
               <q-btn @click="playAudio(item._id)" no-caps outline color="primary" class="q-my-xs" style="width: 100%;">{{item.title}}</q-btn>
               <div style="max-width: 800px; width: 100%;">
-                <q-media-player
-                  v-if="item.isActive === true"
-                  type="audio"
-                  :sources="audio.sources"
-                  background-color="primary"
-                  dense
-                >
-                </q-media-player>
+                <audio v-if="item.isActive === true" controls style="width: 100%;">
+                  <source :src="audio" type="audio/mpeg">
+                </audio>
               </div>
             </div>
           </q-card>
@@ -173,14 +168,7 @@ export default {
       blogs: [1, 2, 3],
       news: [],
       audios: [],
-      audio: {
-        sources: [
-          {
-            src: '',
-            type: 'audio/mp3'
-          }
-        ]
-      },
+      audio: '',
       baseu: ''
     }
   },
@@ -252,7 +240,7 @@ export default {
       })
     },
     playAudio (id) {
-      this.audio.sources[0].src = this.baseu + id
+      this.audio = this.baseu + id
       for (const i in this.audios) {
         this.audios[i].isActive = false
         if (this.audios[i]._id === id) {

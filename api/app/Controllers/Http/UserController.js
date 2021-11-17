@@ -231,7 +231,7 @@ class UserController {
   }
 
   async destroyAll ({ response }) {
-    const data = await User.where({}).delete()
+    const data = await User.where({ roles: { $eq: [2] } }).delete()
     response.send(data)
   }
 }
