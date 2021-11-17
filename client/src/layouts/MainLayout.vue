@@ -170,6 +170,13 @@ export default {
           ruta: '/users'
         },
         {
+          src: '',
+          src2: '',
+          label: 'Ingresos',
+          icon: 'attach_money',
+          ruta: '/incomes'
+        },
+        {
           src: 'salir 2.png',
           src2: '',
           label: 'Salir',

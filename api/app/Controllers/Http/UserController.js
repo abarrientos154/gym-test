@@ -7,6 +7,7 @@ const User = use("App/Models/User")
 const Community = use("App/Models/Community")
 const Place = use("App/Models/Place")
 const License = use("App/Models/License")
+const Income = use("App/Models/Income")
 const Role = use("App/Models/Role")
 const moment = require('moment')
 var ObjectId = require('mongodb').ObjectId;
@@ -137,6 +138,12 @@ class UserController {
   async setBuy({ response, auth, params }) {
     const user = (await auth.getUser()).toJSON()
     let license = (await License.query().find(params.id)).toJSON()
+    const income = {
+      license_id: license._id,
+      user_id: user._id,
+      amount: license.months * license.monthPrice
+    }
+    const newIncome = await Income.create(income)
     let date = moment().format('YYYY-MM-DD')
     let days = moment(user.licenseExpirationDate).diff(date , 'days')
     if (days <= 0) {

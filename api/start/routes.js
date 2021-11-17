@@ -217,6 +217,7 @@ addPrefixToGroup(
 
     Route.get('getLicenses', 'LicenseController.index')
     Route.put('setBuy/:id', 'UserController.setBuy')
+    Route.get('getIncomes', 'IncomeController.index')
     
   }).middleware("auth")
   );

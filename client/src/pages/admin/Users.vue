@@ -4,12 +4,12 @@
     <div class="column q-pa-lg no-wrap" style="margin-top: -200px">
       <div class="text-h4 text-white text-bold q-mb-xl q-px-xl">Usuarios</div>
       <div>
-        <div class="text-h5 text-white q-mb-sm q-px-md">Usuarios recientes</div>
+        <div class="text-h5 text-white q-mb-sm q-px-md q-mb-xl">Usuarios recientes</div>
       </div>
-      <q-btn color="primary" dense no-caps size="md">
+      <!-- <q-btn color="primary" dense no-caps size="md">
         <q-file borderless v-model="file" hint="(.xlsx)" accept=".xlsx, /*" @input="uploadFile()" style="height: 30px; font-size: 0px"/>
         <div class="absolute-center">Importar archivo</div>
-      </q-btn>
+      </q-btn> -->
     </div>
     <div class="row justify-between">
       <q-btn color="primary" label="Nuevo Usuario" icon="add" dense no-caps size="md" class="q-ml-md" @click="newUser()"/>

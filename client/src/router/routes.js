@@ -19,6 +19,7 @@ const routes = [
       { path: '/faults', component: () => import('pages/admin/Faults.vue') },
       { path: '/audio', component: () => import('pages/admin/Audio.vue') },
       { path: '/users', component: () => import('pages/admin/Users.vue') },
+      { path: '/incomes', component: () => import('pages/admin/Incomes.vue') },
       /* onent: () => import('pages/admin/Examenes.vue') },
       { path: '/tests_exam/:id', component: () => import('pages/admin/TestsExam.vue') },
       { path: '/exam/:id', component: () => import('pages/admin/Exam.vue') },
