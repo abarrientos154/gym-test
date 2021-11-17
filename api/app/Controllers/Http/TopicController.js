@@ -150,7 +150,8 @@ class TopicController {
 
         questions[i].articuloInfo = (await Articulos.query().where({article_name: questions[i].article, law: questions[i].law_id}).first())
         if (questions[i].articuloInfo) {
-          questions[i].parrafoInfo = (await Parrafos.query().where({article_id: String(questions[i].articuloInfo._id)}).fetch()).toJSON()
+          console.log('question[i].articuloInfo :>> ', questions[i].articuloInfo);
+          questions[i].parrafoInfo = (await Parrafos.query().where({article_id: Number(questions[i].articuloInfo.id)}).fetch()).toJSON()
         } else {
           questions[i].parrafoInfo = []
         }
