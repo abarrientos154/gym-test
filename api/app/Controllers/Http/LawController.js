@@ -82,6 +82,7 @@ class LawController {
   async store ({ request, response, auth }) {
     let data = request.body
     data.course_id = new ObjectId(data.course_id)
+    data.id = await Law.query().where({}).count()
     let save = await Law.create(data)
     response.send(save)
   }

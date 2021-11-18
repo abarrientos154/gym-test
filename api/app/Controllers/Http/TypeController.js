@@ -7,6 +7,8 @@ const Articulos = use("App/Models/Article")
 const Parrafos = use("App/Models/Paragraph")
 const moment = require('moment')
 var ObjectId = require('mongodb').ObjectId;
+const Helpers = use('Helpers')
+const mkdirp = use('mkdirp')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -84,16 +86,51 @@ class TypeController {
   }
 
   async store ({ request, response, auth }) {
-    let data = request.body
-    data.course_id = new ObjectId(data.course_id)
-    let save = await Type.create(data)
-    response.send(save)
+    let body = request.only(['data'])
+    body = JSON.parse(body.data)
+    const image = request.file('image', {
+      types: ['image'],
+      size: '20mb'
+    })
+    body.id = await Type.query().where({}).count()
+    body.course_id = new ObjectId(body.course_id)
+    let type = await Type.create(body)
+    const id = ObjectId(type._id).toString()
+    if (Helpers.appRoot('storage/uploads/types')) {
+      await image.move(Helpers.appRoot('storage/uploads/types'), {
+        name: id,
+        overwrite: true
+      })
+    } else {
+      mkdirp.sync(`${__dirname}/storage/Excel`)
+    }
+    let updateType = await Type.query().where({ _id: id }).update({ image: image.fileName })
+    response.send(type)
   }
 
   async update ({ params, request, response }) {
-    const body = request.all()
+    let body = request.only(['data'])
+    body = JSON.parse(body.data)
+    const image = request.file('image', {
+      types: ['image'],
+      size: '20mb'
+    })
+    if (image !== null) {
+      if (Helpers.appRoot('storage/uploads/types')) {
+        await image.move(Helpers.appRoot('storage/uploads/types'), {
+          name: params.id,
+          overwrite: true
+        })
+      } else {
+        mkdirp.sync(`${__dirname}/storage/Excel`)
+      }
+      const fileName = image.fileName
+      body.image = fileName
+    }
     body.course_id = new ObjectId(body.course_id)
-    const update = await Type.where('_id', params.id).update(body)
+    const id = new ObjectId(params.id)
+    console.log('params :>> ', params);
+    const update = await Type.where('_id', id).update(body)
     response.send(update)
   }
 

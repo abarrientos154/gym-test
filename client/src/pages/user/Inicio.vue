@@ -109,10 +109,7 @@
         </q-scroll-area>
         <div v-else class="text-center text-bold text-grey-9 q-py-lg">Sin examenes actualmente</div>
 
-        <div class="text-h6 text-bold text-primary q-mt-sm">Nuestros Audios</div>
-        <div class="row justify-between">
-          <div class="col text-caption text-grey-8">Escucha nuestros audios para potenciar tu aprendizaje</div>
-        </div>
+        <div class="text-h6 text-bold text-primary q-mt-sm">Audios</div>
         <div v-if="audios.length > 0">
           <q-card v-for="(item, index) in audios" :key="index" class="bg-grey-2 q-pa-sm q-mb-xs">
             <div class="text-subtitle2">
@@ -129,10 +126,7 @@
           <div class="row justify-center text-grey-8">Aun no hay nuevos Audios</div>
         </q-card>
 
-        <div class="text-h6 text-bold text-primary q-mt-sm">Nuestras Noticias</div>
-        <div class="row justify-between">
-          <div class="col text-caption text-grey-8">Lee nuestras noticias para potenciar tu aprendizaje</div>
-        </div>
+        <div class="text-h6 text-bold text-primary q-mt-sm">Noticias</div>
         <q-card class="bg-grey-2 q-pa-sm" v-if="news.length > 0">
           <div v-for="(item, index) in news" :key="index" class="text-subtitle2 q-ml-sm">
             <li @click="$router.push('/publicidad/' + item._id)">{{item.title}}</li>

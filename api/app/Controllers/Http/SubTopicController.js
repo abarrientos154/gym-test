@@ -80,6 +80,7 @@ class SubTopicController {
   async store ({ request, response, auth }) {
     let data = request.body
     data.course_id = new ObjectId(data.course_id)
+    data.id = await SubTopic.query().where({}).count()
     let save = await SubTopic.create(data)
     response.send(save)
   }

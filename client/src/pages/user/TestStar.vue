@@ -19,8 +19,8 @@
                               </template>
                             </q-field>
                           </div>
-                          <div style="width: 50%; border-radius: 20px" class="bg-green text-h6 row q-py-xs q-px-sm">
-                            <div v-if="item.examData !== null && item.examData !== undefined" class="ellipsis">{{item.examData.name ? item.examData.name : ''}}</div>
+                          <div v-if="item.examData !== null && item.examData !== undefined" style="width: 50%; border-radius: 20px" class="bg-green text-h6 row q-py-xs q-px-sm">
+                            <div class="ellipsis">{{item.examData.name ? item.examData.name : ''}}</div>
                           </div>
                           <q-btn v-if="!esExamen" :loading="loading" rounded no-caps color="primary" label="Terminar test" class="q-px-sm" @click="terminado = true, !listo ? responder(true, item) : ''">
                             <template v-slot:loading>

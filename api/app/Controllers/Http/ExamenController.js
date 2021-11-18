@@ -7,6 +7,8 @@ const Articulos = use("App/Models/Article")
 const Parrafos = use("App/Models/Paragraph")
 const moment = require('moment')
 var ObjectId = require('mongodb').ObjectId;
+const Helpers = use('Helpers')
+const mkdirp = use('mkdirp')
 
 // const { validate } = use("Validator")
 // const Helpers = use('Helpers')
@@ -217,22 +219,52 @@ class ExamenController {
   }
 
   async store ({ request, response, auth }) {
-    let data = request.body
-    data.course_id = new ObjectId(data.course_id)
-    let guardar = await Examen.create(data)
-    response.send(guardar)
+    let body = request.only(['data'])
+    body = JSON.parse(body.data)
+    const image = request.file('image', {
+      types: ['image'],
+      size: '20mb'
+    })
+    body.course_id = new ObjectId(body.course_id)
+    body.id = await Examen.query().where({}).count()
+    let exam = await Examen.create(body)
+    const id = ObjectId(exam._id).toString()
+    if (Helpers.appRoot('storage/uploads/exams')) {
+      await image.move(Helpers.appRoot('storage/uploads/exams'), {
+        name: id,
+        overwrite: true
+      })
+    } else {
+      mkdirp.sync(`${__dirname}/storage/Excel`)
+    }
+    let updateExame = await Examen.query().where({ _id: id }).update({ image: image.fileName })
+    response.send(exam)
   }
 
   async update ({ params, request, response }) {
-    var dat = request.body
-    // const validation = await validate(dat, Examen.fieldValidationRules())
-    // if (validation.fails()) {
-    //   response.unprocessableEntity(validation.messages())
-    // } else {
-    // }
-    dat.course_id = new ObjectId(dat.course_id)
-    let modificar = await Examen.query().where('_id', params.id).update(dat)
-    response.send(modificar)
+    let body = request.only(['data'])
+    body = JSON.parse(body.data)
+    const image = request.file('image', {
+      types: ['image'],
+      size: '20mb'
+    })
+    if (image !== null) {
+      if (Helpers.appRoot('storage/uploads/exams')) {
+        await image.move(Helpers.appRoot('storage/uploads/exams'), {
+          name: params.id,
+          overwrite: true
+        })
+      } else {
+        mkdirp.sync(`${__dirname}/storage/Excel`)
+      }
+      const fileName = image.fileName
+      body.image = fileName
+    }
+    body.course_id = new ObjectId(body.course_id)
+    const id = new ObjectId(params.id)
+    console.log('params :>> ', params);
+    const update = await Examen.where('_id', id).update(body)
+    response.send(update)
   }
 
   async destroy ({ params, response }) {

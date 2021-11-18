@@ -522,6 +522,14 @@ class UploadController {
     const dir = params.file
     response.download(Helpers.appRoot('storage/uploads/topics') + `/${dir}`)
   }
+  async getFileByDirectoryExams ({ params, request, response }) {
+    const dir = params.file
+    response.download(Helpers.appRoot('storage/uploads/exams') + `/${dir}`)
+  }
+  async getFileByDirectoryTypes ({ params, request, response }) {
+    const dir = params.file
+    response.download(Helpers.appRoot('storage/uploads/types') + `/${dir}`)
+  }
   async getFileByDirectoryAudios ({ params, request, response }) {
     const dir = params.file
     response.download(Helpers.appRoot('storage/uploads/audios') + `/${dir}`)

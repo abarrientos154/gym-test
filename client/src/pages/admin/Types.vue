@@ -24,6 +24,14 @@
           <div class="text-h6">{{editType ? 'Editar Tipo' : 'Crear Tipo'}}</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
+          <q-avatar square size="200px" style="width: 100%" class="bg-grey row justify-center">
+            <q-img :src="file2 !== null ? imgFile : editType ? typeof form.image === 'string' ? baseu + form.image : 'noimg.png' : ''" style="height: 100%">
+              <q-file borderless v-model="file2" @input="test()" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px" :error="$v.file2.$error" @blur="$v.file2.$touch()">
+                <q-icon name="image" size="50px" color="white" />
+              </q-file>
+            </q-img>
+          </q-avatar>
+          <div :class="$v.file2.$error ? 'text-negative' : ''" class="q-my-sm">Sube la portada del Tipo</div>
           <q-input dense outlined type="text" v-model="form.type_name" label="Nuevo Tipo" :error="$v.form.type_name.$error" error-message="Este campo es requerido"  @blur="$v.form.type_name.$touch()">
           </q-input>
         </q-card-section>
@@ -37,6 +45,7 @@
 </template>
 
 <script>
+import env from '../../env'
 import Listable from '../../components/Listable.vue'
 import { required } from 'vuelidate/lib/validators'
 export default {
@@ -53,16 +62,21 @@ export default {
         { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }
       ],
       show: false,
-      topic: { required }
+      courseId: '',
+      imgFile: '',
+      baseu: '',
+      file2: null
     }
   },
   validations: {
     form: {
       type_name: { required }
-    }
+    },
+    file2: { required }
   },
   mounted () {
     this.courseId = localStorage.getItem('course_id')
+    this.baseu = env.apiUrl + 'types_img/'
     this.getTypes()
   },
   methods: {
@@ -72,7 +86,14 @@ export default {
         this.$q.loading.show({
           message: 'Actualizando Tipo, Por Favor Espere...'
         })
-        this.$api.put('updateType/' + this.form._id, this.form).then((res) => {
+        const formData = new FormData()
+        formData.append('image', this.file2)
+        formData.append('data', JSON.stringify(this.form))
+        this.$api.put('updateType/' + this.form._id, formData, {
+          headers: {
+            'Content-Type': undefined
+          }
+        }).then((res) => {
           if (res) {
             this.$q.loading.hide()
             this.$q.notify({
@@ -87,6 +108,9 @@ export default {
     decartarCamb () {
       this.form = {}
       this.edit = false
+      this.file2 = null
+      this.show = false
+      this.$v.$reset()
     },
     setType () {
       this.$v.$touch()
@@ -95,7 +119,14 @@ export default {
           message: 'Subiendo tipo, Por Favor Espere...'
         })
         this.form.course_id = this.courseId
-        this.$api.post('setType', this.form).then((res) => {
+        const formData = new FormData()
+        formData.append('image', this.file2)
+        formData.append('data', JSON.stringify(this.form))
+        this.$api.post('setType', formData, {
+          headers: {
+            'Content-Type': undefined
+          }
+        }).then((res) => {
           if (res) {
             this.$q.loading.hide()
             this.$q.notify({
@@ -204,6 +235,9 @@ export default {
       this.editType = false
       this.form = {}
       this.show = true
+    },
+    test () {
+      if (this.file2) { this.imgFile = URL.createObjectURL(this.file2) }
     }
   }
 }

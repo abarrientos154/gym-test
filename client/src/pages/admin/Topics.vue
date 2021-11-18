@@ -49,7 +49,7 @@
         </q-card-section>
         <q-card-section class="q-pt-none">
           <q-avatar square size="200px" style="width: 100%" class="bg-grey row justify-center">
-            <q-img :src="file2 !== null ? imgFile : editTopic ? baseu + form._id : 'noimg.png'" style="height: 100%">
+            <q-img :src="file2 !== null ? imgFile : editTopic ? typeof form.image === 'string' ? baseu + form.image : 'noimg.png' : ''" style="height: 100%">
               <q-file borderless v-model="file2" @input="test()" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px" :error="$v.file2.$error" @blur="$v.file2.$touch()">
                 <q-icon name="image" size="50px" color="white" />
               </q-file>
@@ -118,7 +118,6 @@ export default {
         this.$q.loading.show({
           message: 'Actualizando Tema, Por Favor Espere...'
         })
-        this.form.text = this.textEdit
         const formData = new FormData()
         formData.append('image', this.file2)
         formData.append('data', JSON.stringify(this.form))

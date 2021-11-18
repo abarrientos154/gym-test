@@ -294,6 +294,7 @@ class TopicController {
       types: ['image'],
       size: '20mb'
     })
+    body.id = await Topic.query().where({}).count()
     body.course_id = new ObjectId(body.course_id)
     let topic = await Topic.create(body)
     const id = ObjectId(topic._id).toString()

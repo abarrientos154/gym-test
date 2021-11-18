@@ -73,6 +73,7 @@ class ParagraphController {
   async store ({ request, response, auth }) {
     let data = request.body
     data.course_id = new ObjectId(data.course_id)
+    data.id = await Paragraph.query().where({}).count()
     let save = await Paragraph.create(data)
     response.send(save)
   }

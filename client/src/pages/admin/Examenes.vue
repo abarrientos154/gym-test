@@ -64,6 +64,14 @@
           <div class="text-h6">{{editExam ? 'Editar examen' : 'Crear examen'}}</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
+          <q-avatar square size="200px" style="width: 100%" class="bg-grey row justify-center">
+            <q-img :src="file2 !== null ? imgFile : editExam ? typeof form.image === 'string' ? baseu + form.image : 'noimg.png' : ''" style="height: 100%">
+              <q-file borderless v-model="file2" @input="test()" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px" :error="$v.file2.$error" @blur="$v.file2.$touch()">
+                <q-icon name="image" size="50px" color="white" />
+              </q-file>
+            </q-img>
+          </q-avatar>
+          <div :class="$v.file2.$error ? 'text-negative' : ''" class="q-my-sm">Sube la portada del Examen</div>
           <q-input dense outlined type="text" v-model="form.name" label="Nuevo examen" :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()">
           </q-input>
           <!-- <q-date
@@ -83,6 +91,7 @@
 <script>
 import Listable from '../../components/Listable.vue'
 import { required } from 'vuelidate/lib/validators'
+import env from '../../env'
 export default {
   components: { Listable },
   data () {
@@ -101,17 +110,22 @@ export default {
       ],
       show: false,
       editExam: false,
-      courseId: ''
+      courseId: '',
+      imgFile: '',
+      baseu: '',
+      file2: null
     }
   },
   validations: {
     form: {
       name: { required }
-    }
+    },
+    file2: { required }
   },
   mounted () {
     this.courseId = localStorage.getItem('course_id')
     this.getExam()
+    this.baseu = env.apiUrl + 'exams_img/'
   },
   methods: {
     updateExam () {
@@ -120,7 +134,14 @@ export default {
         this.$q.loading.show({
           message: 'Actualizando Examen, Por Favor Espere...'
         })
-        this.$api.put('examen/' + this.form._id, this.form).then((res) => {
+        const formData = new FormData()
+        formData.append('image', this.file2)
+        formData.append('data', JSON.stringify(this.form))
+        this.$api.put('examen/' + this.form._id, formData, {
+          headers: {
+            'Content-Type': undefined
+          }
+        }).then((res) => {
           if (res) {
             this.$q.loading.hide()
             this.$q.notify({
@@ -135,6 +156,9 @@ export default {
     decartarCamb () {
       this.form = {}
       this.edit = false
+      this.file2 = null
+      this.show = false
+      this.$v.$reset()
     },
     /* editExam (itm) {
       if (itm) {
@@ -148,12 +172,19 @@ export default {
     }, */
     setExam () {
       this.$v.$touch()
-      if (!this.$v.form.$error) {
+      if (!this.$v.form.$error && !this.$v.file2.$error) {
         this.$q.loading.show({
           message: 'Subiendo Examen, Por Favor Espere...'
         })
         this.form.course_id = this.courseId
-        this.$api.post('examen', this.form).then((res) => {
+        const formData = new FormData()
+        formData.append('image', this.file2)
+        formData.append('data', JSON.stringify(this.form))
+        this.$api.post('examen', formData, {
+          headers: {
+            'Content-Type': undefined
+          }
+        }).then((res) => {
           if (res) {
             this.$q.loading.hide()
             this.$q.notify({
@@ -258,9 +289,12 @@ export default {
       })
     },
     newExam () {
-      this.editQuestion = false
+      this.editExam = false
       this.form = {}
       this.show = true
+    },
+    test () {
+      if (this.file2) { this.imgFile = URL.createObjectURL(this.file2) }
     }
   }
 }

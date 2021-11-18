@@ -149,6 +149,7 @@ class QuestionController {
   async store ({ request, response }) {
     let body = request.body
     body.course_id = new ObjectId(body.course_id)
+    body.id = await Question.query().where({}).count()
     const save = await Question.create(body)
     response.send(save)
   }
