@@ -30,6 +30,7 @@
               <q-icon name="edit" color="primary"/>
             </template>
           </q-input>
+          <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.topic" label="Escoga un tema" dense :options="topics" :error="$v.form.topic.$error" error-message="Este campo es requerido"  @blur="$v.form.topic.$touch()" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="topic" clearable></q-select>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
@@ -60,6 +61,7 @@ export default {
       file: null,
       columns: [
         { name: 'title', label: 'Título', align: 'left', field: 'title' },
+        { name: 'topic', align: 'left', label: 'Tema', field: 'topic' },
         { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }
       ],
       show: false,
@@ -67,13 +69,15 @@ export default {
       topic: { required },
       baseu: '',
       id: '',
-      audio: ''
+      audio: '',
+      topics: []
 
     }
   },
   validations: {
     form: {
-      title: { required }
+      title: { required },
+      topic: { required }
     },
     file: { required }
   },
@@ -81,8 +85,16 @@ export default {
     this.baseu = env.apiUrl + 'audios/'
     this.courseId = localStorage.getItem('course_id')
     this.getAudios()
+    this.getTopics()
   },
   methods: {
+    async getTopics () {
+      await this.$api.get('getTopics').then(res => {
+        if (res) {
+          this.topics = res
+        }
+      })
+    },
     updateAudio () {
       this.$v.form.$touch()
       if (!this.$v.form.$error) {
