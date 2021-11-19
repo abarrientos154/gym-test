@@ -88,11 +88,25 @@ class ExamenController {
           }
         ]
       }
+      let arr = []
+      for (const i in data) {
+        let num = data[i].name.split('-')
+        arr.push(num)
+      }
+      arr = arr.sort()
+      for (const j in data) {
+        arr[j] = arr[j].join(' ')
+        data[j].name = arr[j]
+      }
+      var send = []
+      for (let x = data.length -1; x >= 0; x--) {
+        send.push(data[x])
+      }
     }
-    data = data.sort(function (a, b) {
-      return a.id - b.id
-    })
-    response.send(data)
+    /* data = data.sort(function (a, b) {
+      return a.name - b.name
+    }) */
+    response.send(send)
   }
 
   async show ({ params, response }) {

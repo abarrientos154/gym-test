@@ -1,7 +1,17 @@
 <template>
   <div>
     <q-btn class="absolute-top" round flat color="white" icon="arrow_back" @click="$router.go(-1)" />
-    <q-img :src="tema.image ? baseu + tema.image : 'noimg.png'" style="height: 330px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
+    <q-img v-if="esTema" :src="tema.image ? baseu + tema.image : 'noimg.png'" style="height: 330px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
+        <div class="row no-wrap items-center q-mb-xl absolute-bottom bg-transparent">
+          <div class="text-h5 text-bold q-pl-sm">{{esGym ? tema.type_name : tema.name}}</div>
+        </div>
+    </q-img>
+    <q-img v-if="esGym" :src="tema.image ? baseuTy + tema.image : 'noimg.png'" style="height: 330px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
+        <div class="row no-wrap items-center q-mb-xl absolute-bottom bg-transparent">
+          <div class="text-h5 text-bold q-pl-sm">{{esGym ? tema.type_name : tema.name}}</div>
+        </div>
+    </q-img>
+    <q-img v-if="esExamen" :src="tema.image ? baseuEx + tema.image : 'noimg.png'" style="height: 330px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
         <div class="row no-wrap items-center q-mb-xl absolute-bottom bg-transparent">
           <div class="text-h5 text-bold q-pl-sm">{{esGym ? tema.type_name : tema.name}}</div>
         </div>
@@ -97,11 +107,15 @@ export default {
       subTemas: [],
       selectedSubTemas: [],
       preguntas: [],
-      baseu: ''
+      baseu: '',
+      baseuTy: '',
+      baseuEx: ''
     }
   },
   mounted () {
     this.baseu = env.apiUrl + 'topics_img/'
+    this.baseuTy = env.apiUrl + 'types_img/'
+    this.baseuEx = env.apiUrl + 'exams_img/'
     this.getUser()
     if (this.$route.params.idTema) {
       this.esTema = true
