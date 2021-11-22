@@ -56,6 +56,15 @@ class AudioController {
     }
     response.send(data)
   }
+  async audiosByTopic ({ response, params }) {
+    let data = (await Audio.query().where({ topic: params.id }).fetch()).toJSON()
+    if (data !== []) {
+      for (const i in data) {
+        data[i].isActive = false
+      }
+    }
+    response.send(data)
+  }
 
   /**
    * Render a form to be used for creating a new audio.

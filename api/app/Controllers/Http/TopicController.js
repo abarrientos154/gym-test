@@ -113,6 +113,19 @@ class TopicController {
     response.send(tema)
   }
 
+  async getTopicWithAudio ({ response, params }) {
+    const id = new ObjectId(params.id)
+    let topics = (await Topic.query().where({ course_id: id }).with('audios').fetch()).toJSON()
+    console.log('topics :>> ', topics);
+    let send = []
+    for (const i in topics) {
+      if (topics[i].audios.length > 0) {
+        send.push(topics[i])
+      }
+    }
+    response.send(send)
+  }
+
   async getTestById ({ request, response, params }) {
     try {
       let tema = (await TopicTest.query().where({_id: params.id}).first()).toJSON()
@@ -284,6 +297,11 @@ class TopicController {
   
   async show ({ params, response }) {
     let data = (await Topic.find(params.id)).toJSON()
+    response.send(data)
+  }
+
+  async getTopicByNum ({ params, response }) {
+    let data = (await Topic.where({topic: params.id}).first()).toJSON()
     response.send(data)
   }
   

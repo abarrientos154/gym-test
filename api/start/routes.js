@@ -81,6 +81,8 @@ addPrefixToGroup(
     Route.put('updateTopic/:id', 'TopicController.update')
     Route.delete('deleteTopic/:id', 'TopicController.destroy')
     Route.delete('deleteAllTopics', 'TopicController.destroyAll')
+    Route.get('getTopicWithAudio/:id', 'TopicController.getTopicWithAudio')
+    Route.get('getTopicByNum/:id', 'TopicController.getTopicByNum')
     
     Route.post('excel_law', 'UploadController.excelLaw')
     Route.get('getLaws', 'LawController.index')
@@ -216,6 +218,7 @@ addPrefixToGroup(
     Route.put('updateAudio/:id', 'AudioController.update')
     Route.delete('deleteAudio/:id', 'AudioController.destroy')
     Route.delete('deleteAllAudios', 'AudioController.destroyAll')
+    Route.get('audiosByTopic/:id', 'AudioController.audiosByTopic')
 
     Route.get('getLicenses', 'LicenseController.index')
     Route.put('setBuy/:id', 'UserController.setBuy')

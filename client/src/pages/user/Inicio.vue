@@ -107,24 +107,20 @@
             </q-card>
           </div>
         </q-scroll-area>
-        <div v-else class="text-center text-bold text-grey-9 q-py-lg">Sin examenes actualmente</div>
-
         <div class="text-h6 text-bold text-primary q-mt-sm">Audios</div>
-        <div v-if="audios.length > 0">
-          <q-card v-for="(item, index) in audios" :key="index" class="bg-grey-2 q-pa-sm q-mb-xs">
-            <div class="text-subtitle2">
-              <q-btn @click="playAudio(item._id)" no-caps outline color="primary" class="q-my-xs" style="width: 100%;">{{item.title}}</q-btn>
-              <div style="max-width: 800px; width: 100%;">
-                <audio v-if="item.isActive === true" controls style="width: 100%;">
-                  <source :src="audio" type="audio/mpeg">
-                </audio>
-              </div>
-            </div>
-          </q-card>
-        </div>
-        <q-card class="bg-grey-2 q-pa-sm" v-else>
-          <div class="row justify-center text-grey-8">Aun no hay nuevos Audios</div>
-        </q-card>
+        <q-scroll-area v-if="topicsWithAudios.length" horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 140px; width: 100%;">
+          <div class="row no-wrap q-gutter-md">
+            <q-card flat style="width: 130px; height: 130px" clickable v-ripple v-for="(item, index) in topicsWithAudios" :key="index"
+            @click="$router.push('/audios/' + item.topic)">
+              <q-img src="materia1 1.png" style="height: 100%; width: 100%; border-radius: 10px">
+                <div class="absolute-full row items-end">
+                  <div class="text-subtitle2 ellipsis-2-lines">{{item.name}}</div>
+                </div>
+              </q-img>
+            </q-card>
+          </div>
+        </q-scroll-area>
+        <div v-else class="text-center text-bold text-grey-9 q-py-lg">Sin audios actualmente</div>
 
         <div class="text-h6 text-bold text-primary q-mt-sm">Noticias</div>
         <q-card class="bg-grey-2 q-pa-sm" v-if="news.length > 0">
@@ -161,22 +157,19 @@ export default {
       examenes: [],
       blogs: [1, 2, 3],
       news: [],
-      audios: [],
-      audio: '',
-      baseu: ''
+      topicsWithAudios: []
     }
   },
   mounted () {
     this.courseId = localStorage.getItem('course_id')
     this.baseuPerfil = env.apiUrl + 'perfil_img/'
-    this.baseu = env.apiUrl + 'audios/'
     this.getUser()
     this.getRutinas()
     this.getTemas()
     this.getGym()
     this.getExamenes()
     this.getNews()
-    this.getAudios()
+    this.getTopicsWithAudio()
   },
   methods: {
     getUser () {
@@ -226,10 +219,10 @@ export default {
         }
       })
     },
-    getAudios () {
-      this.$api.get('audiosByCourse/' + this.courseId).then(res => {
+    getTopicsWithAudio () {
+      this.$api.get('getTopicWithAudio/' + this.courseId).then(res => {
         if (res) {
-          this.audios = res
+          this.topicsWithAudios = res
         }
       })
     },

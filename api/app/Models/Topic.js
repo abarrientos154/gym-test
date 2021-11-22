@@ -7,6 +7,9 @@ class Topic extends Model {
     subTemas () {
         return this.hasMany('App/Models/SubTopic', 'topic', 'topic_id')
     }
+    audios () {
+        return this.hasMany('App/Models/Audio', 'topic', 'topic')
+    }
 }
 
 module.exports = Topic
