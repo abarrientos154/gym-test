@@ -113,7 +113,7 @@ class UserController {
       body.license_id = new ObjectId('6187fd1aff8458493d558f4c')
       let date = moment().format('YYYY-MM-DD')
       console.log('date :>> ', date);
-      body.licenseExpirationDate = moment(date).add(1, 'months').format('YYYY-MM-DD')
+      body.licenseExpirationDate = moment(date).add(7, 'days').format('YYYY-MM-DD')
       body.roles = [rol]
       const user = await User.create(body)
       response.send(user)
