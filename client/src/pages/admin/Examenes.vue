@@ -74,6 +74,17 @@
           <div :class="$v.file2.$error ? 'text-negative' : ''" class="q-my-sm">Sube la portada del Examen</div>
           <q-input dense outlined type="text" v-model="form.name" label="Nuevo examen" :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()">
           </q-input>
+          <q-input dense filled readonly v-model="form.date" placeholder="Fecha de examen" error-message="Este campo es requerido" :error="$v.form.date.$error" @blur="$v.form.date.$touch()" @click="$refs.qDateProxy.show()">
+            <template v-slot:prepend>
+              <q-icon name="event" class="cursor-pointer">
+                <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                  <q-date v-model="form.date" mask="DD/MM/YYYY"/>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
+          <q-input dense outlined type="number" v-model="form.convocatoria" label="Año de convocatoria" :error="$v.form.convocatoria.$error" error-message="Este campo es requerido"  @blur="$v.form.convocatoria.$touch()">
+          </q-input>
           <!-- <q-date
             v-model="date"
             default-view="Years"
@@ -118,7 +129,9 @@ export default {
   },
   validations: {
     form: {
-      name: { required }
+      name: { required },
+      date: { required },
+      convocatoria: { required }
     },
     file2: { required }
   },
