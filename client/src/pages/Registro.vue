@@ -25,8 +25,7 @@
         </div>
       </div>
     </q-img>
-<q-avatar size="80px" icon="add_a_photo" @click="captureImage" v-if="images.length < 5" text-color="white" class="bg-primary">
-          </q-avatar>
+
     <div class="q-mx-md q-px-md q-pt-lg bg-white" :style="register ? 'top: -90px' : 'top: -70px'" style="position:relative; border-top-left-radius: 20px; border-top-right-radius: 20px">
       <div v-if="register">
         <q-input dense filled v-model="form.name" placeholder="Nombre o Usuario" :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()">
@@ -119,9 +118,7 @@ export default {
       form: {},
       form2: {},
       comunidades: [],
-      location: [],
-      imagesSubir: [],
-      images: []
+      location: []
     }
   },
   validations: {
@@ -142,34 +139,6 @@ export default {
   },
   methods: {
     ...mapMutations('generals', ['login']),
-    async convertir (dataUri, name) {
-      const file = await this.dataURLtoFile(dataUri, name)
-      this.images.push(file)
-      this.imagesSubir.push(URL.createObjectURL(file))
-    },
-    async dataURLtoFile (dataurl, filename) {
-      var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n)
-      while (n--) {
-        u8arr[n] = bstr.charCodeAt(n)
-      }
-      return new File([u8arr], filename, { type: mime })
-    },
-    async captureImage () {
-      navigator.camera.getPicture(
-        data => { // on success
-          const nameFile = randomize('Aa0', 5)
-          const dataUri = `data:image/jpeg;base64,${data}`
-          // const file = await this.dataURLtoFile(dataUri, `${nameFile}.jpeg`)
-          this.convertir(dataUri, `${nameFile}.jpeg`)
-        },
-        () => { // on fail
-        },
-        {
-          destinationType: 0
-        }
-      )
-      console.log(this.images, 'images', this.imagesSubir, 'images subir')
-    },
     getComunidades () {
       this.$api.get('communities').then(res => {
         if (res) {
