@@ -13,21 +13,10 @@
   </div>
 </template>
 <script>
-import { required } from 'vuelidate/lib/validators'
 export default {
   data () {
     return {
-      courses: [],
-      form: {
-        isEnabled: false
-      },
-      editCourse: false,
-      show: false
-    }
-  },
-  validations: {
-    form: {
-      name: { required }
+      courses: []
     }
   },
   mounted () {
@@ -35,7 +24,7 @@ export default {
   },
   methods: {
     getCourses () {
-      this.$api.get('getCourses').then(res => {
+      this.$api.get('getCoursesClient').then(res => {
         if (res) {
           this.courses = res
         }

@@ -1,9 +1,8 @@
 <template>
   <div>
     <q-btn class="absolute-top" round flat color="white" icon="arrow_back" @click="$router.go(-1)" />
-    <q-img src="blog_user.png" style="height: 280px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
+    <q-img src="news.jpg" style="height: 280px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
         <div class="row items-center absolute-bottom bg-transparent" style="padding-bottom: 100px">
-          <img src="balance 3.png" style="width: 50px" >
           <div class="text-h4 text-bold q-pl-sm">Noticias</div>
         </div>
     </q-img>

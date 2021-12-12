@@ -23,6 +23,11 @@ class CourseController {
     response.send(data)
   }
 
+  async indexClient ({ response }) {
+    const data = (await Course.query().where({isEnabled: true}).fetch()).toJSON()
+    response.send(data)
+  }
+
   /**
    * Render a form to be used for creating a new course.
    * GET courses/create

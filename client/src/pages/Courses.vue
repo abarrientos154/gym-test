@@ -9,7 +9,7 @@
         <q-btn class="q-ml-xs" icon="arrow_forward" flat color="primary" @click="selectCourse(item._id)"/>
       </q-card>
     </q-card>
-    <q-dialog v-model="show" @hide="discardChanges()">
+    <q-dialog v-model="show">
       <q-card style="border-radius: 20px;">
         <q-card-section>
           <div class="text-h6">{{editCourse ? 'Editar Curso' : 'Crear Curso'}}</div>
@@ -20,7 +20,7 @@
           <q-checkbox v-model="form.isEnabled" keep-color color="primary" label="Activo"/>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn flat label="Cancelar" color="primary" v-close-popup @click="discardChanges()" no-caps/>
+          <q-btn flat label="Cancelar" color="primary" v-close-popup @click="show = false" no-caps/>
           <q-btn flat :label="editCourse ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="editCourse ? updateCourse() : setCourse()" no-caps/>
         </q-card-actions>
       </q-card>
@@ -95,11 +95,11 @@ export default {
     },
     newCourse () {
       this.editCourse = false
-      this.form = {}
+      this.form = {
+        isEnabled: false
+      }
+      this.$v.form.$reset()
       this.show = true
-    },
-    discardChanges () {
-      this.form = {}
     },
     selectCourse (id) {
       localStorage.setItem('course_id', id)
@@ -108,6 +108,7 @@ export default {
     setUpdate (item) {
       this.editCourse = true
       this.form = { ...item }
+      this.$v.form.$reset()
       this.show = true
     }
   }

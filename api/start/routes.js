@@ -196,6 +196,7 @@ addPrefixToGroup(
     Route.put('desafio_value/:id', 'AnswerController.editDesafio')
     
     Route.get('getCourses', 'CourseController.index')
+    Route.get('getCoursesClient', 'CourseController.indexClient')
     Route.post('setCourse', 'CourseController.store')
     Route.put('updateCourse/:id', 'CourseController.update')
     
