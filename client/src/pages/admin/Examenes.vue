@@ -289,18 +289,20 @@ export default {
       if (emit.title === 'Eliminar') {
         this.deleteExam(emit.id)
       } else if (emit.title === 'Editar') {
-        this.getExamById(emit.id)
+        /* this.getExamById(emit.id) */
+        this.form = JSON.parse(JSON.stringify(emit.element))
         this.editExam = true
         this.show = true
       }
     },
-    async getExamById (id) {
+    /* async getExamById (id) {
       await this.$api.get('getExamById/' + id).then(res => {
         if (res) {
           this.form = res
+          this.show = true
         }
       })
-    },
+    }, */
     newExam () {
       this.editExam = false
       this.form = {}

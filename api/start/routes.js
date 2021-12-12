@@ -63,7 +63,6 @@ addPrefixToGroup(
     Route.get('asignatura_by_id/:id', 'AsignaturaController.getAsignaturaById')
     Route.get('getCourseWithTest/:id', 'AsignaturaController.getCourseWithTest')
     Route.put('updateAsignatura/:id', 'AsignaturaController.update')
-    Route.put('updateUser/:id', 'UserController.update')
     Route.put('toDisable/:id', 'UserController.toDisable')
     Route.delete('deleteAllUsers', 'UserController.destroyAll')
     Route.get('getUserById/:id', 'UserController.show')

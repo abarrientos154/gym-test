@@ -29,7 +29,6 @@ class AnswerController {
     var data = []
     let filter = request.all()
     if (filter.question) {
-      console.log('filter.question :>> ', filter.question);
       data = (await Answer.query().where({ id_question: filter.question, course_id: id }).fetch()).toJSON()
     }
     if (data !== []) {
@@ -76,10 +75,8 @@ class AnswerController {
   async updateN ({ params, request, response }) {
     const body = request.all()
     body.course_id = new ObjectId(body.course_id)
-    console.log('body :>> ', body);
     if (body.isCorrect === true) {
       let answers = (await Answer.query().where({ id_question: body.id_question }).fetch()).toJSON()
-      console.log('answers :>> ', answers);
       for (const i in answers) {
         const answerUp = await Answer.query().where({ _id: answers[i]._id }).update({ isCorrect: false })
       }

@@ -50,52 +50,35 @@
         </q-input>
       </div>
       <div v-else>
-        <q-input dense filled readonly v-model="form2.birthday" placeholder="Fecha de Nacimiento" error-message="Este campo es requerido" :error="$v.form2.birthday.$error" @blur="$v.form2.birthday.$touch()" @click="$refs.qDateProxy.show()">
+        <q-input dense filled readonly v-model="form.birthday" placeholder="Fecha de Nacimiento" error-message="Este campo es requerido" :error="$v.form.birthday.$error" @blur="$v.form.birthday.$touch()" @click="$refs.qDateProxy.show()">
           <template v-slot:prepend>
             <q-icon name="event" class="cursor-pointer">
               <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                <q-date v-model="form2.birthday" mask="DD/MM/YYYY"/>
+                <q-date v-model="form.birthday" mask="DD/MM/YYYY"/>
               </q-popup-proxy>
             </q-icon>
           </template>
         </q-input>
         <div class="text-h6 text-primary">¿Donde vives?</div>
         <div class="text-grey-8 q-pb-md">Selecciona tu lugar de residencia</div>
-        <q-select dense filled label="Selecciona la comunidad autónoma" v-model="form2.community" :options="comunidades" option-label="name" option-value="_id" emit-value map-options @input="location = comunidades.filter(v => v._id === form2.community)[0].communities" error-message="Este campo es requerido" :error="$v.form2.community.$error" @blur="$v.form2.community.$touch()">
+        <q-select dense filled label="Selecciona la comunidad autónoma" v-model="form.community" :options="comunidades" option-label="name" option-value="_id" emit-value map-options @input="location = comunidades.filter(v => v._id === form.community)[0].communities" error-message="Este campo es requerido" :error="$v.form.community.$error" @blur="$v.form.community.$touch()">
           <template v-slot:prepend>
             <q-icon name="place" />
           </template>
         </q-select>
-        <q-select dense filled label="Selecciona la comunidad" v-model="form2.place" :options="location" option-label="name" option-value="_id" emit-value map-options error-message="Este campo es requerido" :error="$v.form2.place.$error" @blur="$v.form2.place.$touch()">
+        <q-select dense filled label="Selecciona la comunidad" v-model="form.place" :options="location" option-label="name" option-value="_id" emit-value map-options error-message="Este campo es requerido" :error="$v.form.place.$error" @blur="$v.form.place.$touch()">
           <template v-slot:prepend>
             <q-icon name="place" />
           </template>
         </q-select>
       </div>
-      <q-btn color="primary" text-color="white" :label="register ? 'Crear cuenta' : 'Guardar'" :loading="loading" @click="register ? registrarse() : profile()" no-caps class="full-width q-py-xs">
+      <q-btn color="primary" text-color="white" :label="register ? 'Siguiente' : 'Crear cuenta'" :loading="loading" @click="register ? siguiente() : registrarse()" no-caps class="full-width q-py-xs">
         <template v-slot:loading>
           <q-spinner-hourglass class="on-center" />
           Registrando...
         </template>
       </q-btn>
-      <!-- <div v-if="register">
-        <div class="row justify-center items-center q-pt-lg q-mb-lg">
-          <q-separator color="grey" class="col"/>
-          <div class="text-grey q-px-sm">O conectate usando</div>
-          <q-separator color="grey" class="col"/>
-        </div>
-        <div class="row justify-center">
-          <q-avatar rounded class="q-mx-md" size="50px" style="border-radius: 15px;">
-            <q-img src="fa 1.png" class="full-height"/>
-          </q-avatar>
-          <q-avatar rounded class="q-mx-md" size="50px" style="border-radius: 15px;">
-            <q-img src="email 1.png" class="full-height"/>
-          </q-avatar>
-          <q-avatar rounded class="q-mx-md" size="50px" style="border-radius: 15px;">
-            <q-img src="twte 1.png" class="full-height"/>
-          </q-avatar>
-        </div>
-      </div> -->
+      <q-btn color="primary" flat :label="register ? 'Volver' : 'Atrás'" @click="register ? $router.go(-1) : register = true" no-caps class="full-width q-my-xs"/>
     </div>
   </div>
 </template>
@@ -113,10 +96,7 @@ export default {
       repeatPassword: '',
       password: '',
       imgPerfil: '',
-      slide: 1,
-      user: {},
       form: {},
-      form2: {},
       comunidades: [],
       location: []
     }
@@ -124,9 +104,7 @@ export default {
   validations: {
     form: {
       name: { required },
-      email: { required, email }
-    },
-    form2: {
+      email: { required, email },
       birthday: { required },
       community: { required },
       place: { required }
@@ -143,21 +121,44 @@ export default {
       this.$api.get('communities').then(res => {
         if (res) {
           this.comunidades = res
-          // console.log(this.comunidades)
         }
       })
     },
-    async registrarse () {
-      this.$v.form.$touch()
+    siguiente () {
+      this.$v.form.name.$touch()
+      this.$v.form.email.$touch()
       this.$v.password.$touch()
       this.$v.repeatPassword.$touch()
-      if (!this.$v.form.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error) {
+      if (!this.$v.form.name.$error && !this.$v.form.email.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error) {
+        this.register = false
+      } else {
+        this.$q.notify({
+          message: 'Debe ingresar todos los datos correspondientes',
+          color: 'negative'
+        })
+      }
+    },
+    async registrarse () {
+      this.$v.form.$touch()
+      if (!this.$v.form.$error) {
         this.$q.loading.show({
           message: 'Registrando Datos...'
         })
         this.form.roles = 2
         this.form.password = this.password
-        await this.$api.post('register', this.form).then(res => {
+        if (this.perfile) {
+          this.form.perfile = true
+        } else {
+          this.form.perfile = false
+        }
+        const formData = new FormData()
+        formData.append('files', this.perfile)
+        formData.append('dat', JSON.stringify(this.form))
+        await this.$api.post('register', formData, {
+          headers: {
+            'Content-Type': undefined
+          }
+        }).then(res => {
           if (res) {
             this.$q.notify({
               message: 'Ya formas parte de GymTest, Bienvenido',
@@ -179,49 +180,14 @@ export default {
         if (res) {
           const usuario = res.SESSION_INFO.roles.find(value => value === 2)
           if (usuario) {
-            this.register = false
             this.login(res)
-            this.$api.get('user_info').then(user => {
-              if (user) {
-                this.user = user
-              }
-            })
+            this.$router.push('/inicio')
           }
         } else {
           console.log('error de ususario')
           // this.loading = false
         }
       })
-    },
-    async profile () {
-      this.$v.form2.$touch()
-      if (!this.$v.form2.$error) {
-        this.$q.loading.show({
-          message: 'Guardando Datos...'
-        })
-        const formData = new FormData()
-        formData.append('files', this.perfile)
-        formData.append('dat', JSON.stringify(this.form2))
-        await this.$api.put('updateUser/' + this.user._id, formData, {
-          headers: {
-            'Content-Type': undefined
-          }
-        }).then(res => {
-          if (res) {
-            this.$q.notify({
-              message: 'Perfil guardado, Bienvenido',
-              color: 'positive'
-            })
-            this.$router.push('/inicio')
-          }
-          this.$q.loading.hide()
-        })
-      } else {
-        this.$q.notify({
-          message: 'Debe ingresar todos los datos correspondientes',
-          color: 'negative'
-        })
-      }
     },
     changeProfile () {
       if (this.perfile) {

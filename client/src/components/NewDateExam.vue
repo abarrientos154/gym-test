@@ -86,7 +86,6 @@ export default {
         this.$q.loading.show({
           message: 'Cargando Datos...'
         })
-        console.log('this.id :>> ', this.id)
         this.edit = true
         await this.$api.get('dateExamById/' + this.id).then(res => {
           if (res) {

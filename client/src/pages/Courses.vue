@@ -53,7 +53,6 @@ export default {
       this.$api.get('getCourses').then(res => {
         if (res) {
           this.courses = res
-          console.log('this.courses :>> ', this.courses)
         }
       })
     },

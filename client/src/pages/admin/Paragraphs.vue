@@ -96,7 +96,6 @@ export default {
   mounted () {
     this.courseId = localStorage.getItem('course_id')
     this.getLaws()
-    console.log('idCourse :>> ', this.courseId)
   },
   methods: {
     async getLaws () {
@@ -106,7 +105,6 @@ export default {
       await this.$api.get('getLawsByCourse/' + this.courseId).then(res => {
         if (res) {
           this.laws = res
-          // console.log(this.laws)
           this.$q.loading.hide()
         }
       })
@@ -213,7 +211,6 @@ export default {
       await this.$api.post('getParagraphsByFilter/' + this.courseId, this.filter).then(res => {
         if (res) {
           this.paragraphs = res
-          // console.log(this.answers)
           this.$q.loading.hide()
         }
       })

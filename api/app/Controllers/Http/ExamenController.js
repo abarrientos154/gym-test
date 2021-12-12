@@ -276,7 +276,6 @@ class ExamenController {
     }
     body.course_id = new ObjectId(body.course_id)
     const id = new ObjectId(params.id)
-    console.log('params :>> ', params);
     const update = await Examen.where('_id', id).update(body)
     response.send(update)
   }

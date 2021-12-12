@@ -129,7 +129,6 @@ class TypeController {
     }
     body.course_id = new ObjectId(body.course_id)
     const id = new ObjectId(params.id)
-    console.log('params :>> ', params);
     const update = await Type.where('_id', id).update(body)
     response.send(update)
   }

@@ -185,7 +185,6 @@ export default {
       await this.$api.get('getTypesByCourse/' + this.courseId).then(res => {
         if (res) {
           this.types = res
-          // console.log(this.types)
           this.$q.loading.hide()
         }
       })

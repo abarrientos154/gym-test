@@ -286,11 +286,9 @@ export default {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      console.log('this.filter :>> ', this.filter)
       await this.$api.post('getAnswersByFilter/' + this.courseId, this.filter).then(res => {
         if (res) {
           this.answers = res
-          console.log(this.answers)
           this.$q.loading.hide()
         }
       })

@@ -89,7 +89,6 @@ class UserController {
       })
     })
 
-    // console.log(permissions, 'permissions')
     token.email = user.email
     token.estatus = user.estatus
     token.full_name = user.full_name ? user.full_name : null
@@ -102,7 +101,8 @@ class UserController {
   }
 
   async register({ request, response }) {
-    var dat = request.all()
+    var dat = request.only(['dat'])
+    dat = JSON.parse(dat.dat)
     if (((await User.where({email: dat.email}).fetch()).toJSON()).length) {
       response.unprocessableEntity([{
         message: 'Correo ya registrado en el sistema!'
@@ -112,10 +112,23 @@ class UserController {
       const rol = body.roles
       body.license_id = new ObjectId('6187fd1aff8458493d558f4c')
       let date = moment().format('YYYY-MM-DD')
-      console.log('date :>> ', date);
       body.licenseExpirationDate = moment(date).add(7, 'days').format('YYYY-MM-DD')
       body.roles = [rol]
       const user = await User.create(body)
+
+      if (request.file('files', { types: ['image'] })) {
+        const profilePic = request.file('files', {
+          types: ['image']
+        })
+        if (Helpers.appRoot('storage/uploads/perfil')) {
+          await profilePic.move(Helpers.appRoot('storage/uploads/perfil'), {
+            name: String(user._id),
+            overwrite: true
+          })
+        } else {
+          mkdirp.sync(`${__dirname}/storage/Excel`)
+        }
+      }
       response.send(user)
     }
   }
@@ -154,7 +167,6 @@ class UserController {
       license_id: new ObjectId(params.id)
     }
     const updateUser = await User.query().where('_id', user._id).update(update)
-    console.log('update :>> ', update);
 
     response.send(updateUser)
   }
@@ -175,11 +187,6 @@ class UserController {
         mkdirp.sync(`${__dirname}/storage/Excel`)
       }
     }
-    // const validation = await validate(dat, Asignatura.fieldValidationRules())
-    // if (validation.fails()) {
-    //   response.unprocessableEntity(validation.messages())
-    // } else {
-    // }
     let modificar = await User.query().where('_id', params.id).update(dat)
     response.send(modificar)
   }

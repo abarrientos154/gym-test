@@ -214,7 +214,6 @@ export default {
       await this.$api.get('audiosByCourse/' + this.courseId).then(res => {
         if (res) {
           this.audios = res
-          // console.log(this.audios)
           this.$q.loading.hide()
         }
       })

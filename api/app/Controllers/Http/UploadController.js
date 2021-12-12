@@ -229,7 +229,6 @@ class UploadController {
           exam.convocatoria = convocatoria
           exam.name = name
           exam.course_id = courseId
-          console.log('exam', exam);
           if (rowNumber >= end) {
             end = rowNumber
           }

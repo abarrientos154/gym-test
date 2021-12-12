@@ -259,7 +259,6 @@ export default {
       await this.$api.get('getTopicById/' + id).then(res => {
         if (res) {
           this.form = { ...res }
-          console.log('res :>> ', this.form._id)
         }
       })
     },
