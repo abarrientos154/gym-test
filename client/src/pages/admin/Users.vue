@@ -156,8 +156,15 @@ export default {
           message: 'Subiendo Usuario, Por Favor Espere...'
         })
         this.form.roles = 2
+        this.form.perfile = false
         this.form.password = this.password
-        this.$api.post('register', this.form).then((res) => {
+        const formData = new FormData()
+        formData.append('dat', JSON.stringify(this.form))
+        this.$api.post('register', formData, {
+          headers: {
+            'Content-Type': undefined
+          }
+        }).then((res) => {
           if (res) {
             this.$q.loading.hide()
             this.$q.notify({
