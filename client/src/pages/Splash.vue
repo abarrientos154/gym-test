@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     ejecutar () {
-      this.$router.push('/login')
+      this.$router.push('/pagina-principal')
     }
   },
   beforeDestroy () {

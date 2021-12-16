@@ -35,6 +35,11 @@ addPrefixToGroup(
     Route.post("login", "UserController.login");
     Route.post("register", "UserController.register")
 
+    Route.get('news', 'NewsController.index')
+    Route.get('newsById/:id', 'NewsController.show')
+
+    Route.get('getLicenses', 'LicenseController.index')
+
     Route.get('communities', 'CommunityController.index')
 
     Route.get('perfil_img/:file', 'UploadController.getFileByDirectoryPerfil')
@@ -201,9 +206,7 @@ addPrefixToGroup(
     Route.put('updateCourse/:id', 'CourseController.update')
     
     
-    Route.get('news', 'NewsController.index')
     Route.get('newsByCourse/:id', 'NewsController.indexByCourse')
-    Route.get('newsById/:id', 'NewsController.show')
     Route.post('setNews', 'NewsController.store')
     Route.put('updateNews/:id', 'NewsController.update')
     Route.delete('deleteNews/:id', 'NewsController.destroy')
@@ -220,7 +223,6 @@ addPrefixToGroup(
     Route.delete('deleteAllAudios', 'AudioController.destroyAll')
     Route.get('audiosByTopic/:id', 'AudioController.audiosByTopic')
 
-    Route.get('getLicenses', 'LicenseController.index')
     Route.put('setBuy/:id', 'UserController.setBuy')
     Route.get('getIncomes', 'IncomeController.index')
     
