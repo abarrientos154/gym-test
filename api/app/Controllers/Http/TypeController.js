@@ -129,7 +129,6 @@ class TypeController {
     }
     body.course_id = new ObjectId(body.course_id)
     const id = new ObjectId(params.id)
-    console.log('params :>> ', params);
     const update = await Type.where('_id', id).update(body)
     response.send(update)
   }
@@ -144,11 +143,13 @@ class TypeController {
     response.send(data)
   }
 
-  async misRutinas ({ request, response, auth }) {
+  async misRutinas ({ params, response, auth }) {
+    let courseId = params.courseId
     const user = (await auth.getUser()).toJSON()
-    let allData = (await TypeTest.query().where({user_id: user._id}).fetch()).toJSON()
+    let allData = (await TypeTest.query().where({user_id: user._id}).with('typeInfo').fetch()).toJSON()
     let data = []
     if (allData.length) {
+      allData = allData.filter(v => v.typeInfo.course_id === courseId)
       data = allData.reverse().slice(0, 4)
       data = data.map(v => {
         return {

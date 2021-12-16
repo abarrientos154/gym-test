@@ -192,7 +192,6 @@ export default {
       await this.$api.get('getLawsByCourse/' + this.courseId).then(res => {
         if (res) {
           this.laws = res
-          // console.log(this.laws)
           this.$q.loading.hide()
         }
       })

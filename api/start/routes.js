@@ -35,6 +35,11 @@ addPrefixToGroup(
     Route.post("login", "UserController.login");
     Route.post("register", "UserController.register")
 
+    Route.get('news', 'NewsController.index')
+    Route.get('newsById/:id', 'NewsController.show')
+
+    Route.get('getLicenses', 'LicenseController.index')
+
     Route.get('communities', 'CommunityController.index')
 
     Route.get('perfil_img/:file', 'UploadController.getFileByDirectoryPerfil')
@@ -63,7 +68,6 @@ addPrefixToGroup(
     Route.get('asignatura_by_id/:id', 'AsignaturaController.getAsignaturaById')
     Route.get('getCourseWithTest/:id', 'AsignaturaController.getCourseWithTest')
     Route.put('updateAsignatura/:id', 'AsignaturaController.update')
-    Route.put('updateUser/:id', 'UserController.update')
     Route.put('toDisable/:id', 'UserController.toDisable')
     Route.delete('deleteAllUsers', 'UserController.destroyAll')
     Route.get('getUserById/:id', 'UserController.show')
@@ -114,7 +118,7 @@ addPrefixToGroup(
     Route.post('excel_type', 'UploadController.excelType')
     Route.get('types', 'TypeController.index')
     Route.get('getTypesByCourse/:id', 'TypeController.indexByCourse')
-    Route.get('mis_rutinas', 'TypeController.misRutinas')
+    Route.get('mis_rutinas/:courseId', 'TypeController.misRutinas')
     Route.post('type_test', 'TypeController.testCreate')
     Route.put('type_test/:id', 'TypeController.testUpdate')
     Route.get('type_by_id/:id', 'TypeController.getTypeById')
@@ -148,7 +152,7 @@ addPrefixToGroup(
     
     Route.get('examen', 'ExamenController.index')
     Route.get('getExamByCourse/:id', 'ExamenController.indexByCourse')
-    Route.get('mis_examenes', 'ExamenController.misExamenes')
+    Route.get('mis_examenes/:courseId', 'ExamenController.misExamenes')
     Route.get('ExamById/:id', 'ExamenController.examById')
     Route.post('examen_test', 'ExamenController.testCreate')
     Route.put('examen_test/:id', 'ExamenController.testUpdate')
@@ -197,13 +201,12 @@ addPrefixToGroup(
     Route.put('desafio_value/:id', 'AnswerController.editDesafio')
     
     Route.get('getCourses', 'CourseController.index')
+    Route.get('getCoursesClient', 'CourseController.indexClient')
     Route.post('setCourse', 'CourseController.store')
     Route.put('updateCourse/:id', 'CourseController.update')
     
     
-    Route.get('news', 'NewsController.index')
     Route.get('newsByCourse/:id', 'NewsController.indexByCourse')
-    Route.get('newsById/:id', 'NewsController.show')
     Route.post('setNews', 'NewsController.store')
     Route.put('updateNews/:id', 'NewsController.update')
     Route.delete('deleteNews/:id', 'NewsController.destroy')
@@ -220,7 +223,6 @@ addPrefixToGroup(
     Route.delete('deleteAllAudios', 'AudioController.destroyAll')
     Route.get('audiosByTopic/:id', 'AudioController.audiosByTopic')
 
-    Route.get('getLicenses', 'LicenseController.index')
     Route.put('setBuy/:id', 'UserController.setBuy')
     Route.get('getIncomes', 'IncomeController.index')
     

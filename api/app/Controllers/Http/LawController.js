@@ -95,9 +95,7 @@ class LawController {
   }
 
   async destroy ({ params, response }) {
-    console.log('params.id :>> ', params.id);
     const id = (await Law.query().find(params.id)).id
-    console.log('id :>> ', id);
     const data = await Law.where('_id', params.id).delete()
     const articles = (await Article.query().where('law', id).fetch()).toJSON()
     for (const i in articles) {

@@ -205,7 +205,6 @@ export default {
       await this.$api.post('getArticlesByFilter/' + this.courseId, this.filter).then(res => {
         if (res) {
           this.articles = res
-          // console.log(this.articles)
           this.$q.loading.hide()
         }
       })

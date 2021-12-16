@@ -50,7 +50,6 @@ export default {
     },
     playAudio (id) {
       this.audio = this.baseu + id
-      console.log('this.audio :>> ', this.audio)
       for (const i in this.audios) {
         this.audios[i].isActive = false
         if (this.audios[i]._id === id) {

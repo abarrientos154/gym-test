@@ -236,7 +236,10 @@ export default {
     }
   },
   mounted () {
-    this.getUser()
+    const value = localStorage.getItem('SESSION_INFO')
+    if (value) {
+      this.getUser()
+    }
   },
   methods: {
     ...mapMutations('generals', ['logout']),

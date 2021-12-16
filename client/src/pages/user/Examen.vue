@@ -44,9 +44,6 @@
 
         <q-separator v-if="!esGym" color="primary" class="q-my-md" />
 
-        <div class="text-bold text-primary">Detalles del examen</div>
-        <div class="text-caption text-grey-8">Indicaciones al realizar el examen</div>
-
         <div class="row item-start q-my-md">
             <div class="col-6">
                 <div class="text-caption text-bold text-primary">Preguntas</div>

@@ -116,7 +116,6 @@ class TopicController {
   async getTopicWithAudio ({ response, params }) {
     const id = new ObjectId(params.id)
     let topics = (await Topic.query().where({ course_id: id }).with('audios').fetch()).toJSON()
-    console.log('topics :>> ', topics);
     let send = []
     for (const i in topics) {
       if (topics[i].audios.length > 0) {
@@ -163,7 +162,6 @@ class TopicController {
 
         questions[i].articuloInfo = (await Articulos.query().where({article_name: questions[i].article, law: questions[i].law_id}).first())
         if (questions[i].articuloInfo) {
-          console.log('question[i].articuloInfo :>> ', questions[i].articuloInfo);
           questions[i].parrafoInfo = (await Parrafos.query().where({article_id: Number(questions[i].articuloInfo.id)}).fetch()).toJSON()
         } else {
           questions[i].parrafoInfo = []
@@ -349,7 +347,6 @@ class TopicController {
     }
     body.course_id = new ObjectId(body.course_id)
     const id = new ObjectId(params.id)
-    console.log('params :>> ', params);  
     const update = await Topic.where('_id', id).update(body)
     response.send(update)
   }

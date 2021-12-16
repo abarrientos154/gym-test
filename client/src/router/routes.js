@@ -44,6 +44,7 @@ const routes = [
   },
 
   { path: '/splash', component: () => import('pages/Splash.vue') },
+  { path: '/pagina-principal', component: () => import('pages/Home.vue') },
   { path: '/courses', component: () => import('pages/Courses.vue') },
   { path: '/courses_client', component: () => import('pages/CoursesClient.vue') },
   { path: '/login', component: () => import('pages/Login.vue') },

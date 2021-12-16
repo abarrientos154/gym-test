@@ -142,7 +142,6 @@ export default {
       this.$api.get('communities').then(res => {
         if (res) {
           this.comunidades = res
-          // console.log(this.comunidades)
         }
       })
     },
@@ -157,8 +156,15 @@ export default {
           message: 'Subiendo Usuario, Por Favor Espere...'
         })
         this.form.roles = 2
+        this.form.perfile = false
         this.form.password = this.password
-        this.$api.post('register', this.form).then((res) => {
+        const formData = new FormData()
+        formData.append('dat', JSON.stringify(this.form))
+        this.$api.post('register', formData, {
+          headers: {
+            'Content-Type': undefined
+          }
+        }).then((res) => {
           if (res) {
             this.$q.loading.hide()
             this.$q.notify({
@@ -227,7 +233,8 @@ export default {
       await this.$api.get('getUsers').then(res => {
         if (res) {
           this.users = res
-          // console.log(this.users)
+          this.$q.loading.hide()
+        } else {
           this.$q.loading.hide()
         }
       })

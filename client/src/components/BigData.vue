@@ -69,7 +69,6 @@ export default {
       }
       if (this.answersFile !== null) {
         formData.append('answersFile', this.answersFile)
-        console.log('this.answersFile :>> ', this.answersFile)
       }
       await this.$api.post('bigData', formData, {
         headers: {

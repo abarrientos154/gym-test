@@ -47,7 +47,6 @@ class ArticleController {
 
   async getArticlesByFilter ({ request, response, params }) {
     const id = new ObjectId(params.id)
-    console.log('id :>> ', id);
     var data = []
     let filter = request.all()
     if (filter.law) {

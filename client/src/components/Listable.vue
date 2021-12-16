@@ -107,9 +107,9 @@ export default {
     },
     execute (id, title, element) {
       const emit = {
-        id,
-        title,
-        element
+        id: id,
+        title: title,
+        element: element
       }
       this.$emit('function', emit)
     },

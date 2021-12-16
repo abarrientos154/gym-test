@@ -42,7 +42,6 @@ export default {
         })
         const dataId = {}
         dataId.test_id = this.test_id
-        console.log('dataId.test_id :>> ', dataId.test_id)
         const formData = new FormData()
         formData.append('fileExcel', this.file)
         formData.append('data', JSON.stringify(dataId))

@@ -71,7 +71,6 @@ export default {
   },
   mounted () {
     this.getCourses()
-    console.log('this.id >> ', this.id, this._id)
   },
   methods: {
     async getCourses () {
@@ -82,7 +81,6 @@ export default {
         if (res) {
           this.$q.loading.hide()
           this.courses = res
-          console.log('this.courses >> ', this.courses)
         }
       })
     },
@@ -94,7 +92,6 @@ export default {
         if (res) {
           this.$q.loading.hide()
           this.tests = res
-          console.log('this.tests >> ', this.tests)
         }
       })
     },
@@ -106,7 +103,6 @@ export default {
         if (res) {
           this.$q.loading.hide()
           this.questions = res
-          console.log('this.questions >> ', this.questions)
         }
       })
     },
@@ -114,7 +110,6 @@ export default {
       if (quest.isActive === true) {
         this.send.push(quest)
       }
-      console.log('quest, ind :>> ', quest, this.send)
     },
     save () {
       this.$q.loading.show({
@@ -125,7 +120,6 @@ export default {
           this.send.splice(i, 1)
         }
       }
-      console.log('this.send >> ', this.send)
       this.$q.loading.hide()
       this.$api.put('multiplesQuestions', {
         multiple: this.send,

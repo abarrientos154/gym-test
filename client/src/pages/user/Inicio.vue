@@ -101,7 +101,7 @@
             @click="$router.push('/examen/' + item._id)">
               <q-img src="materia1 1.png" style="height: 100%; width: 100%; border-radius: 10px">
                 <div class="absolute-full row items-end">
-                  <div class="text-subtitle2 ellipsis-2-lines">{{item.name}}</div>
+                  <div class="text-subtitle2 ellipsis-3-lines">{{item.name}}</div>
                 </div>
               </q-img>
             </q-card>
@@ -112,7 +112,7 @@
           <div class="row no-wrap q-gutter-md">
             <q-card flat style="width: 130px; height: 130px" clickable v-ripple v-for="(item, index) in topicsWithAudios" :key="index"
             @click="$router.push('/audios/' + item.topic)">
-              <q-img src="materia1 1.png" style="height: 100%; width: 100%; border-radius: 10px">
+              <q-img src="audio.jpg" style="height: 100%; width: 100%; border-radius: 10px">
                 <div class="absolute-full row items-end">
                   <div class="text-subtitle2 ellipsis-2-lines">{{item.name}}</div>
                 </div>
@@ -180,12 +180,12 @@ export default {
       })
     },
     getRutinas () {
-      this.$api.get('mis_examenes').then(v => {
+      this.$api.get('mis_examenes/' + this.courseId).then(v => {
         if (v) {
           this.rutinaExamen = v
         }
       })
-      this.$api.get('mis_rutinas').then(v => {
+      this.$api.get('mis_rutinas/' + this.courseId).then(v => {
         if (v) {
           this.rutinaGym = v
         }

@@ -188,7 +188,6 @@ export default {
       await this.$api.get('newsByCourse/' + this.courseId).then(res => {
         if (res) {
           this.news = res
-          // console.log(this.News)
           this.$q.loading.hide()
         }
       })

@@ -64,7 +64,8 @@ class ExamenController {
   async indexByCourse ({ response, params }) {
     const id = new ObjectId(params.id)
     let data = (await Examen.query().where({ course_id: id }).fetch()).toJSON()
-    if (data !== []) {
+    let send = []
+    if (data.length) {
       for (const i in data) {
         if (data[i].date === null) {
           data[i].date = ''
@@ -88,24 +89,16 @@ class ExamenController {
           }
         ]
       }
-      let arr = []
-      for (const i in data) {
-        let num = data[i].name.split('-')
-        arr.push(num)
-      }
-      arr = arr.sort()
-      for (const j in data) {
-        arr[j] = arr[j].join(' ')
-        data[j].name = arr[j]
-      }
-      var send = []
-      for (let x = data.length -1; x >= 0; x--) {
-        send.push(data[x])
-      }
+      send = data.sort(function (a, b) {
+        if (a.name > b.name) {
+          return 1
+        }
+        if (a.name < b.name) {
+          return -1
+        }
+        return 0
+      })
     }
-    /* data = data.sort(function (a, b) {
-      return a.name - b.name
-    }) */
     response.send(send)
   }
 
@@ -114,11 +107,13 @@ class ExamenController {
     response.send(data)
   }
 
-  async misExamenes ({ request, response, auth }) {
+  async misExamenes ({ params, response, auth }) {
+    let courseId = params.courseId
     const user = (await auth.getUser()).toJSON()
-    let allData = (await ExamenTest.query().where({user_id: user._id}).fetch()).toJSON()
+    let allData = (await ExamenTest.query().where({user_id: user._id}).with('examenInfo').fetch()).toJSON()
     let data = []
     if (allData.length) {
+      allData = allData.filter(v => v.examenInfo.course_id === courseId)
       data = allData.reverse().slice(0, 4)
       data = data.map(v => {
         return {
@@ -276,7 +271,6 @@ class ExamenController {
     }
     body.course_id = new ObjectId(body.course_id)
     const id = new ObjectId(params.id)
-    console.log('params :>> ', params);
     const update = await Examen.where('_id', id).update(body)
     response.send(update)
   }

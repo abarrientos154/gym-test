@@ -23,12 +23,14 @@ class NewsController {
    */
   async index ({ response }) {
     let data = (await News.query().where({}).fetch()).toJSON()
+    data = data.sort((a, b) => a.created_at < b.created_at)
     response.send(data)
   }
 
   async indexByCourse ({ response, params }) {
     const id = new ObjectId(params.id)
     let data = (await News.query().where({ course_id: id }).fetch()).toJSON()
+    data = data.sort((a, b) => a.created_at < b.created_at)
     response.send(data)
   }
 

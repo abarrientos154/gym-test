@@ -25,18 +25,18 @@ const licenseData = [
   {
     _id: new ObjectId('6187fd1aff8458493d558f4e'),
     id: 2,
-    name: 'Ahorra un 30%',
+    name: 'Ahorra un 25%',
     months: 6,
-    monthPrice: 6.99,
-    total: 41.94
+    monthPrice: 7.49,
+    total: 44.94
   },
   {
     _id: new ObjectId('6187fd1aff8458493d558f50'),
     id: 3,
-    name: 'Ahorra un 70%',
+    name: 'Ahorra un 50%',
     months: 12,
-    monthPrice: 3.99,
-    total: 47.88
+    monthPrice: 4.99,
+    total: 59.88
   },
 ]
 
