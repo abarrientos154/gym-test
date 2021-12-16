@@ -35,17 +35,17 @@
         <splash density="port-xxxhdpi" src="res/screen/android/splash-port-xxxhdpi.png" />
     </platform>
     <platform name="ios">
-        <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
-            <string>need camera access to take pictures</string>
+       <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
+            <string>Se requiere el uso de la camara del dispositivo para poder capturar una foto la cual sera usada como foto de perfil del usuario en la aplicacion</string>
         </edit-config>
         <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryUsageDescription">
-            <string>need photo library access to get pictures from there</string>
+            <string>Se requiere el acceso a los archivos de imagenes del dispositivo para que el usuario pueda seleccionar una imagen de su libreria para ser usada como foto de perfil del usuario en la aplicacion en caso de que decida no tomarla directamente de la camara</string>
         </edit-config>
         <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
-            <string>need location access to find things nearby</string>
+            <string>Se requiere el uso de la ubicacion dada por la camara para almacenar el archivo a ser usado como foto de perfil del usuario en la aplicacion</string>
         </edit-config>
         <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryAddUsageDescription">
-            <string>need photo library access to save pictures there</string>
+            <string>Se requiere el acceso para almacenar los archivos de imagenes del dispositivo para que el usuario pueda seleccionar una imagen de su libreria para ser usada como foto de perfil del usuario en la aplicacion en caso de que decida no tomarla directamente de la camara</string>
         </edit-config>
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
