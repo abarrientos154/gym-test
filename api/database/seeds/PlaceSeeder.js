@@ -16,206 +16,271 @@ const Factory = use('Factory')
 const Place = use("App/Models/Place")
 const placeData = [
   {
-    id: 1,
-    community_id: new ObjectId('60912d97556b217e7c8a0d62'),
-    name: 'Málaga'
-  },
-  {
-    id: 2,
-    community_id: new ObjectId('60912d97556b217e7c8a0d62'),
-    name: 'Cádiz'
-  },
-  {
-    id: 3,
-    community_id: new ObjectId('60912d97556b217e7c8a0d62'),
-    name: 'Sevilla'
-  },
-  {
-    id: 4,
-    community_id: new ObjectId('60912d97556b217e7c8a0d62'),
-    name: 'Almería'
-  },
-  {
-    id: 5,
-    community_id: new ObjectId('60912d97556b217e7c8a0d62'),
-    name: 'Huelva'
-  },
-  {
-    id: 6,
-    community_id: new ObjectId('60912d98556b217e7c8a0d64'),
-    name: 'Zaragoza'
-  },
-  {
-    id: 7,
-    community_id: new ObjectId('60912d98556b217e7c8a0d66'),
-    name: 'Fuerteventura'
-  },
-  {
-    id: 8,
-    community_id: new ObjectId('60912d98556b217e7c8a0d66'),
-    name: 'La Palma'
-  },
-  {
-    id: 9,
-    community_id: new ObjectId('60912d98556b217e7c8a0d66'),
-    name: 'Gran Canaria'
-  },
-  {
-    id: 10,
-    community_id: new ObjectId('60912d98556b217e7c8a0d66'),
-    name: 'Tenerife'
-  },
-  {
-    id: 11,
-    community_id: new ObjectId('60912d98556b217e7c8a0d66'),
-    name: 'Lanzarote'
-  },
-  {
-    id: 12,
-    community_id: new ObjectId('60912d98556b217e7c8a0d66'),
-    name: 'La Gomera'
-  },
-  {
-    id: 13,
-    community_id: new ObjectId('60912d98556b217e7c8a0d66'),
-    name: 'El Hierro'
-  },
-  {
-    id: 14,
-    community_id: new ObjectId('60912d98556b217e7c8a0d7c'),
-    name: 'Santander'
-  },
-  {
-    id: 15,
-    community_id: new ObjectId('60912d98556b217e7c8a0d68'),
-    name: 'Barcelona'
-  },
-  {
-    id: 16,
-    community_id: new ObjectId('60912d98556b217e7c8a0d68'),
-    name: 'Empuriabrava'
-  },
-  {
-    id: 17,
-    community_id: new ObjectId('60912d98556b217e7c8a0d68'),
-    name: 'Girona'
-  },
-  {
-    id: 18,
-    community_id: new ObjectId('60912d98556b217e7c8a0d68'),
-    name: 'Tarragona'
-  },
-  {
-    id: 19,
-    community_id: new ObjectId('60912d98556b217e7c8a0d68'),
-    name: "l'Ametlla de Mar"
-  },
-  {
-    id: 20,
-    community_id: new ObjectId('60912d98556b217e7c8a0d6a'),
-    name: 'Ceuta'
-  },
-  {
-    id: 21,
-    community_id: new ObjectId('60912d98556b217e7c8a0d6c'),
-    name: 'Madrid'
-  },
-  {
-    id: 22,
-    community_id: new ObjectId('60912d98556b217e7c8a0d6e'),
-    name: 'Valencia'
-  },
-  {
-    id: 23,
-    community_id: new ObjectId('60912d98556b217e7c8a0d6e'),
-    name: 'Alicante'
-  },
-  {
-    id: 24,
-    community_id: new ObjectId('60912d98556b217e7c8a0d6e'),
-    name: 'Castellón'
-  },
-  {
-    id: 25,
-    community_id: new ObjectId('60912d98556b217e7c8a0d70'),
-    name: 'Alava'
-  },
-  {
-    id: 26,
-    community_id: new ObjectId('60912d98556b217e7c8a0d70'),
-    name: 'Guipuzcoa'
-  },
-  {
-    id: 27,
-    community_id: new ObjectId('60912d98556b217e7c8a0d70'),
-    name: 'Vizcaya'
-  },
-  {
-    id: 28,
-    community_id: new ObjectId('60912d98556b217e7c8a0d70'),
-    name: 'Portugalete'
-  },
-  {
-    id: 29,
-    community_id: new ObjectId('60912d98556b217e7c8a0d70'),
-    name: 'Pasai San Pedro'
-  },
-  {
-    id: 30,
-    community_id: new ObjectId('60912d98556b217e7c8a0d72'),
-    name: 'Ferrol'
-  },
-  {
-    id: 31,
-    community_id: new ObjectId('60912d98556b217e7c8a0d72'),
-    name: 'Ribeira'
-  },
-  {
-    id: 32,
-    community_id: new ObjectId('60912d98556b217e7c8a0d72'),
-    name: 'Vigo'
-  },
-  {
-    id: 33,
-    community_id: new ObjectId('60912d98556b217e7c8a0d74'),
-    name: 'Palma'
-  },
-  {
-    id: 34,
-    community_id: new ObjectId('60912d98556b217e7c8a0d74'),
-    name: 'Ibiza'
-  },
-  {
-    id: 35,
-    community_id: new ObjectId('60912d98556b217e7c8a0d74'),
-    name: 'Menorca'
-  },
-  {
-    id: 36,
-    community_id: new ObjectId('60912d98556b217e7c8a0d76'),
-    name: 'Melilla'
-  },
-  {
-    id: 37,
-    community_id: new ObjectId('60912d98556b217e7c8a0d78'),
-    name: 'Gijón'
-  },
-  {
-    id: 38,
-    community_id: new ObjectId('60912d98556b217e7c8a0d7a'),
-    name: 'Murcia'
-  },
-  {
-    id: 39,
-    community_id: new ObjectId('60912d98556b217e7c8a0d7a'),
-    name: 'Cartagena'
-  }
+      "ID": 1,
+      "community_id": 1,
+      "name": "Almeria"
+    },
+    {
+      "ID": 2,
+      "community_id": 1,
+      "name": "Cádiz"
+    },
+    {
+      "ID": 3,
+      "community_id": 1,
+      "name": "Córdoba"
+    },
+    {
+      "ID": 4,
+      "community_id": 1,
+      "name": "Granada"
+    },
+    {
+      "ID": 5,
+      "community_id": 1,
+      "name": "Huelva"
+    },
+    {
+      "ID": 6,
+      "community_id": 1,
+      "name": "Jaén"
+    },
+    {
+      "ID": 7,
+      "community_id": 1,
+      "name": "Málaga"
+    },
+    {
+      "ID": 8,
+      "community_id": 1,
+      "name": "Sevilla"
+    },
+    {
+      "ID": 9,
+      "community_id": 2,
+      "name": "Huesca"
+    },
+    {
+      "ID": 10,
+      "community_id": 2,
+      "name": "Teruel"
+    },
+    {
+      "ID": 11,
+      "community_id": 2,
+      "name": "Zaragoza"
+    },
+    {
+      "ID": 12,
+      "community_id": 3,
+      "name": "Asturias"
+    },
+    {
+      "ID": 13,
+      "community_id": 4,
+      "name": "Balears, Illes"
+    },
+    {
+      "ID": 14,
+      "community_id": 5,
+      "name": "Palmas, Las"
+    },
+    {
+      "ID": 15,
+      "community_id": 5,
+      "name": "Santa Cruz de Tenerife"
+    },
+    {
+      "ID": 16,
+      "community_id": 6,
+      "name": "Cantabria"
+    },
+    {
+      "ID": 17,
+      "community_id": 7,
+      "name": "Ávila"
+    },
+    {
+      "ID": 18,
+      "community_id": 7,
+      "name": "Burgos"
+    },
+    {
+      "ID": 19,
+      "community_id": 7,
+      "name": "León"
+    },
+    {
+      "ID": 20,
+      "community_id": 7,
+      "name": "Palencia"
+    },
+    {
+      "ID": 21,
+      "community_id": 7,
+      "name": "Salamanca"
+    },
+    {
+      "ID": 22,
+      "community_id": 7,
+      "name": "Segovia"
+    },
+    {
+      "ID": 23,
+      "community_id": 7,
+      "name": "Soria"
+    },
+    {
+      "ID": 24,
+      "community_id": 7,
+      "name": "Valladolid"
+    },
+    {
+      "ID": 25,
+      "community_id": 7,
+      "name": "Zamora"
+    },
+    {
+      "ID": 26,
+      "community_id": 8,
+      "name": "Albacete"
+    },
+    {
+      "ID": 27,
+      "community_id": 8,
+      "name": "Ciudad Real"
+    },
+    {
+      "ID": 28,
+      "community_id": 8,
+      "name": "Cuenca"
+    },
+    {
+      "ID": 29,
+      "community_id": 8,
+      "name": "Guadalajara"
+    },
+    {
+      "ID": 30,
+      "community_id": 8,
+      "name": "Toledo"
+    },
+    {
+      "ID": 31,
+      "community_id": 9,
+      "name": "Barcelona"
+    },
+    {
+      "ID": 32,
+      "community_id": 9,
+      "name": "Girona"
+    },
+    {
+      "ID": 33,
+      "community_id": 9,
+      "name": "Lleida"
+    },
+    {
+      "ID": 34,
+      "community_id": 9,
+      "name": "Tarragona"
+    },
+    {
+      "ID": 35,
+      "community_id": 10,
+      "name": "Alicante/Alacant"
+    },
+    {
+      "ID": 36,
+      "community_id": 10,
+      "name": "Castellón/Castelló"
+    },
+    {
+      "ID": 37,
+      "community_id": 10,
+      "name": "Valencia/València"
+    },
+    {
+      "ID": 38,
+      "community_id": 11,
+      "name": "Badajoz"
+    },
+    {
+      "ID": 39,
+      "community_id": 11,
+      "name": "Cáceres"
+    },
+    {
+      "ID": 40,
+      "community_id": 12,
+      "name": "Coruña, A"
+    },
+    {
+      "ID": 41,
+      "community_id": 12,
+      "name": "Lugo"
+    },
+    {
+      "ID": 42,
+      "community_id": 12,
+      "name": "Ourense"
+    },
+    {
+      "ID": 43,
+      "community_id": 12,
+      "name": "Pontevedra"
+    },
+    {
+      "ID": 44,
+      "community_id": 13,
+      "name": "Madrid"
+    },
+    {
+      "ID": 45,
+      "community_id": 14,
+      "name": "Murcia"
+    },
+    {
+      "ID": 46,
+      "community_id": 15,
+      "name": "Navarra"
+    },
+    {
+      "ID": 47,
+      "community_id": 16,
+      "name": "Araba/Álava"
+    },
+    {
+      "ID": 48,
+      "community_id": 16,
+      "name": "Bizkaia"
+    },
+    {
+      "ID": 49,
+      "community_id": 16,
+      "name": "Gipuzkoa"
+    },
+    {
+      "ID": 50,
+      "community_id": 17,
+      "name": "Rioja, La"
+    },
+    {
+      "ID": 51,
+      "community_id": 18,
+      "name": "Ceuta"
+    },
+    {
+      "ID": 52,
+      "community_id": 19,
+      "name": "Melilla"
+    }
 ]
 
 class PlaceSeeder {
   async run () {
     for (let i in placeData) {
-      let place = await Place.findBy('_id', placeData[i]._id)
+      let place = await Place.findBy('ID', placeData[i].ID)
       if (!place) {
         await Place.create(placeData[i])
       }
