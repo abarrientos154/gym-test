@@ -61,12 +61,12 @@
         </q-input>
         <div class="text-h6 text-primary">¿Donde vives?</div>
         <div class="text-grey-8 q-pb-md">Selecciona tu lugar de residencia</div>
-        <q-select dense filled label="Selecciona la comunidad autónoma" v-model="form.community" :options="comunidades" option-label="name" option-value="_id" emit-value map-options @input="form.place = '';location = comunidades.filter(v => v._id === form.community)[0].communities" error-message="Este campo es requerido" :error="$v.form.community.$error" @blur="$v.form.community.$touch()">
+        <q-select dense filled label="Selecciona la comunidad autónoma" v-model="form.community" :options="comunidades" option-label="name" option-value="_id" emit-value map-options @input="valor = '';form.place = '';location = comunidades.filter(v => v._id === form.community)[0].communities" error-message="Este campo es requerido" :error="$v.form.community.$error" @blur="$v.form.community.$touch()">
           <template v-slot:prepend>
             <q-icon name="place" />
           </template>
         </q-select>
-        <q-select dense filled label="Selecciona la comunidad" v-model="form.place" :options="location" option-label="name" option-value="_id" emit-value map-options error-message="Este campo es requerido" :error="$v.form.place.$error" @blur="$v.form.place.$touch()">
+        <q-select dense filled label="Selecciona la comunidad" v-model="valor" @input="form.place = valor" :options="location" option-label="name" option-value="_id" emit-value map-options error-message="Este campo es requerido" :error="$v.form.place.$error" @blur="$v.form.place.$touch()">
           <template v-slot:prepend>
             <q-icon name="place" />
           </template>
@@ -98,7 +98,8 @@ export default {
       imgPerfil: '',
       form: {},
       comunidades: [],
-      location: []
+      location: [],
+      valor: ''
     }
   },
   validations: {
