@@ -32,20 +32,9 @@
         </q-scroll-area>
         <div v-else class="text-center text-bold text-grey-9 q-py-lg">Aún no hay nuevas Noticias</div>
 
-        <div class="text-h6 text-bold text-primary q-mt-sm">Planes disponibles</div>
-        <div class="text-grey-8 text-caption">Disfruta de 7 días gratuitos con tan solo registrarte. Luego estos son nuestros planes.</div>
-        <div v-if="planes.length">
-            <q-card class="column bordes justify-center items-center q-my-md q-pa-sm" v-for="(item, index) in planes" :key="index"
-            clickable v-ripple style="border-radius: 20px">
-                <div class="row items-center">
-                <div class="text-primary text-h3 q-mr-xs text-weight-bolder">{{item.months}}</div>
-                <div class="text-grey-7 text-h6">{{item.months === 1 ? 'Mes' : 'Meses'}}</div>
-                </div>
-                <div class="text-primary text-h6 col-12 text-weight-bolder">{{item.name}}</div>
-                <div class="text-primary text-h6 col-12 text-weight-bolder">{{item.monthPrice}}€ / Mes</div>
-            </q-card>
+        <div class="row justify-center q-px-md">
+          <q-img src="gymtest 1.png" style="width: 100%; margin-top: 100px" />
         </div>
-        <div v-else class="text-center text-bold text-grey-9 q-py-lg">Aún no hay planes disponibles</div>
 
         <q-page-sticky position="bottom-right" :offset="[18, 18]">
             <q-btn no-caps rounded label="¡Regístrate ahora!" color="primary" @click="$router.push('/registro')" />
@@ -76,26 +65,12 @@ export default {
   mounted () {
     this.baseuNews = env.apiUrl + 'news_img/'
     this.getNews()
-    this.getLicenses()
   },
   methods: {
     getNews () {
       this.$api.get('news').then(res => {
         if (res) {
           this.news = res
-        }
-      })
-    },
-    async getLicenses () {
-      this.$q.loading.show({
-        message: 'Cargando Datos...'
-      })
-      await this.$api.get('getLicenses').then(res => {
-        if (res) {
-          this.planes = res
-          this.$q.loading.hide()
-        } else {
-          this.$q.loading.hide()
         }
       })
     }
