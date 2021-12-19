@@ -35,7 +35,7 @@
         <splash density="port-xxxhdpi" src="res/screen/android/splash-port-xxxhdpi.png" />
     </platform>
     <platform name="ios">
-       <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
+        <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
             <string>Se requiere el uso de la camara del dispositivo para poder capturar una foto la cual sera usada como foto de perfil del usuario en la aplicacion</string>
         </edit-config>
         <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryUsageDescription">
