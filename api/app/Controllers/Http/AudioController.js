@@ -58,12 +58,23 @@ class AudioController {
   }
   async audiosByTopic ({ response, params }) {
     let data = (await Audio.query().where({ topic: params.id }).fetch()).toJSON()
+    let send = []
     if (data !== []) {
       for (const i in data) {
         data[i].isActive = false
       }
+
+      send = data.sort(function (a, b) {
+        if (a.title < b.title) {
+          return 1
+        }
+        if (a.title > b.title) {
+          return -1
+        }
+        return 0
+      })
     }
-    response.send(data)
+    response.send(send)
   }
 
   /**
