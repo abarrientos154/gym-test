@@ -57,7 +57,7 @@ export default {
           color: 'negative'
         })
       })
-    },
+    }
   }
 }
 </script>

@@ -102,7 +102,7 @@ export default {
   mounted () {
     if (this.$route.params.est) {
       // this.modal = true
-      if (this.$route.params.est  < 2) {
+      if (this.$route.params.est < 2) {
         this.setBuy(this.$route.params.lic)
       } else {
         this.da = 'Error al procesar tu compra'
@@ -158,6 +158,7 @@ export default {
           // this.$router.go()
         }
       }).catch(err => {
+        console.log(err)
         this.$q.loading.hide()
       })
     },
