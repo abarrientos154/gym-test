@@ -49,9 +49,6 @@
                 <div class="text-grey-8 text-h6"><b>Costo </b>{{license.total}}€</div>
               </div>
             </div>
-            <!-- <div class="row justify-center q-pt-xl">
-              <paypal @pagoProcesado="comprarMembresia" :total="license.total" :descripcion="`Membresia ${license.months} ${license.months === 1 ? 'Mes' : 'Meses'}`" style="width:100%" />
-            </div> -->
           </q-card>
         </q-card-section>
         <q-card-actions align="right">
