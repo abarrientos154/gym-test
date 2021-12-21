@@ -49,14 +49,37 @@
                 <div class="text-grey-8 text-h6"><b>Costo </b>{{license.total}}€</div>
               </div>
             </div>
-            <div class="row justify-center q-pt-xl">
+            <!-- <div class="row justify-center q-pt-xl">
               <paypal @pagoProcesado="comprarMembresia" :total="license.total" :descripcion="`Membresia ${license.months} ${license.months === 1 ? 'Mes' : 'Meses'}`" style="width:100%" />
-            </div>
+            </div> -->
           </q-card>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup no-caps/>
-          <q-btn flat label="Pagar" color="primary" v-close-popup @click="setBuy()" no-caps/>
+          <q-btn flat label="Pagar" color="primary" v-close-popup @click="Buy()" no-caps/>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    <q-dialog v-model="modal">
+      <q-card style="border-radius: 20px;">
+        <q-card-section>
+        </q-card-section>
+        <q-card-section class="q-pt-none column justify-center items-center">
+          <q-card class="q-pa-md" style="width:100%; border-radius:15px">
+            <div class="text-h6 text-primary">Adquirir Membresia</div>
+            <div class="row items-start q-mt-md q-py-md">
+              <!-- <div>
+                <q-img src="app movil 33.png" style="width:100px; height: 100px; border-radius: 15px" />
+              </div> -->
+              <div class="col q-pl-md">
+                <div class="text-grey-8 text-h5">{{da}}</div>
+              </div>
+            </div>
+          </q-card>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat label="Aceptar" color="primary" v-close-popup no-caps/>
+         <!--  <q-btn flat label="Pagar" color="primary" v-close-popup @click="setBuy()" no-caps/> -->
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -64,18 +87,31 @@
 </template>
 
 <script>
-import Paypal from '../../components/Paypal.vue'
+import env from '../../env'
+import { openURL } from 'quasar'
 export default {
-  components: { Paypal },
   data () {
     return {
       user: {},
       licenses: [],
       license: {},
-      show: false
+      show: false,
+      modal: false,
+      da: '',
+      baseu: '',
+      ref: 'refencias'
     }
   },
   mounted () {
+    if (this.$route.params.est) {
+      // this.modal = true
+      if (this.$route.params.est  < 2) {
+        this.setBuy(this.$route.params.lic)
+      } else {
+        this.da = 'Error al procesar tu compra'
+        this.modal = true
+      }
+    }
     this.getUser()
     this.getLicenses()
   },
@@ -87,9 +123,20 @@ export default {
       await this.$api.get('user_info_license').then(res => {
         if (res) {
           this.user = { ...res }
+          this.baseu = env.apiUrl + 'pagar?user_id=' + this.user._id
           this.$q.loading.hide()
         }
       })
+    },
+    async Buy () {
+      console.log(this.license)
+      const ruta = `${this.baseu}&montoTotal=${this.license.total}&ref=${this.license._id}`
+      /* this.modal = true
+      this.$q.loading.show({
+        message: ruta
+      }) */
+      await openURL(ruta)
+      navigator.app.exitApp()
     },
     async getLicenses () {
       this.$q.loading.show({
@@ -102,15 +149,19 @@ export default {
         }
       })
     },
-    async setBuy () {
+    async setBuy (param) {
       this.$q.loading.show({
         message: 'Procesando pago...'
       })
-      await this.$api.put('setBuy/' + this.license._id).then(res => {
+      this.$api.put('setBuy/' + param).then(res => {
         if (res) {
+          this.da = 'Membresia Adquirida con exito'
+          this.modal = true
           this.$q.loading.hide()
-          this.$router.go()
+          // this.$router.go()
         }
+      }).catch(err => {
+        this.$q.loading.hide()
       })
     },
     comprarMembresia (res) {

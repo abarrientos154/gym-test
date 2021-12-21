@@ -35,18 +35,6 @@
         <splash density="port-xxxhdpi" src="res/screen/android/splash-port-xxxhdpi.png" />
     </platform>
     <platform name="ios">
-        <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
-            <string>Se requiere el uso de la camara del dispositivo para poder capturar una foto la cual sera usada como foto de perfil del usuario en la aplicacion</string>
-        </edit-config>
-        <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryUsageDescription">
-            <string>Se requiere el acceso a los archivos de imagenes del dispositivo para que el usuario pueda seleccionar una imagen de su libreria para ser usada como foto de perfil del usuario en la aplicacion en caso de que decida no tomarla directamente de la camara</string>
-        </edit-config>
-        <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
-            <string>Se requiere el uso de la ubicacion dada por la camara para almacenar el archivo a ser usado como foto de perfil del usuario en la aplicacion</string>
-        </edit-config>
-        <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryAddUsageDescription">
-            <string>Se requiere el acceso para almacenar los archivos de imagenes del dispositivo para que el usuario pueda seleccionar una imagen de su libreria para ser usada como foto de perfil del usuario en la aplicacion en caso de que decida no tomarla directamente de la camara</string>
-        </edit-config>
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <icon height="57" src="res/ios/icon.png" width="57" />
@@ -83,6 +71,11 @@
         <splash src="res/screen/ios/Default@2x~ipad~anyany.png" />
         <splash src="res/screen/ios/Default@2x~ipad~comany.png" />
     </platform>
+    <universal-links>
+        <host event="ul_event_link" name="eiche.gymtest.app" scheme="https">
+            <path url="*" />
+        </host>
+    </universal-links>
     <allow-navigation href="about:*" />
     <preference name="SplashMaintainAspectRatio" value="true" />
 </widget>

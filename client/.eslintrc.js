@@ -44,7 +44,8 @@ module.exports = {
     __statics: 'readonly',
     process: 'readonly',
     Capacitor: 'readonly',
-    chrome: 'readonly'
+    chrome: 'readonly',
+    universalLinks: true
   },
 
   // add your custom rules here

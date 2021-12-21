@@ -18,7 +18,8 @@ const courseData = [
     _id: new ObjectId('613b6d93606f11371987e2cc'),
     id: 1,
     name: 'Derecho',
-    icon: 'gavel'
+    icon: 'gavel',
+    isEnabled: true
   },
 ]
 

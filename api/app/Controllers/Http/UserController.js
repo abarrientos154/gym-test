@@ -147,15 +147,45 @@ class UserController {
     }
     response.send(user)
   }
+  async logueoSinContrasena ({ auth, response, params, request }) {
+    let body = request.only(['user_id'])
+    let user = await User.find(body.user_id)
+    let tokeng = await auth.generate(user)
 
+    let token = { ...tokeng, ...user }
+    let isUser = false
+    token.roles = user.roles.map(roleMap => {
+      if (roleMap === 3) {
+        isUser = true
+      }
+      return roleMap
+    })
+    let userRoles = await Role.whereIn('id', token.roles).fetch()
+    let permissions = userRoles.toJSON()
+    token.permissions = []
+    permissions.forEach(element => {
+      element.permissions.forEach(element2 => {
+        token.permissions.push(element2)
+      })
+    })
+    token._id = user._id
+    token.email = user.email
+    let data = {}
+    data.SESSION_INFO = token
+    return data
+
+  }
   async setBuy({ response, auth, params }) {
     const user = (await auth.getUser()).toJSON()
+    // console.log(user, params)
     let license = (await License.query().find(params.id)).toJSON()
+    // console.log('**/*/', license)
     const income = {
       license_id: license._id,
       user_id: user._id,
       amount: license.months * license.monthPrice
     }
+    // console.log(income)
     const newIncome = await Income.create(income)
     let date = moment().format('YYYY-MM-DD')
     let days = moment(user.licenseExpirationDate).diff(date , 'days')

@@ -32,6 +32,7 @@ const addPrefixToGroup = group => {
 addPrefixToGroup(
   Route.group(() => {
     // Insertar rutas sin protección de autenticación aquí
+    Route.post('login_by_mail', 'UserController.logueoSinContrasena')
     Route.post("login", "UserController.login");
     Route.post("register", "UserController.register")
 
@@ -51,6 +52,10 @@ addPrefixToGroup(
     Route.get('types_img/:file', 'UploadController.getFileByDirectoryTypes')
     Route.get('audios/:file', 'UploadController.getFileByDirectoryAudios')
 
+
+    Route.get("pagar", "LicenseController.create")
+    Route.post("procesador_pagos/:user_id/:montoTotal/:ref", "LicenseController.procesarPago");
+    // Route.get("buy", "LicenseController.create")
   })
   );
   

@@ -35,7 +35,6 @@
         <div class="row justify-center q-px-md">
           <q-img src="gymtest 1.png" style="width: 100%; margin-top: 100px" />
         </div>
-
         <q-page-sticky position="bottom-right" :offset="[18, 18]">
             <q-btn no-caps rounded label="¡Regístrate ahora!" color="primary" @click="$router.push('/registro')" />
           </q-page-sticky>
@@ -59,7 +58,9 @@ export default {
         opacity: 0
       },
       news: [],
-      planes: []
+      planes: [],
+      modal: false,
+      da: {}
     }
   },
   mounted () {
