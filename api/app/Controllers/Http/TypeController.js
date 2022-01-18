@@ -150,7 +150,11 @@ class TypeController {
     let data = []
     console.log('allData :>> ', allData);
     if (allData.length) {
-      allData = allData.filter(v => v.typeInfo.course_id === courseId)
+      allData = allData.filter(v => {
+        if (v.typeInfo !== null) {
+          return v.typeInfo.course_id === courseId
+        }
+      })
       data = allData.reverse().slice(0, 4)
       data = data.map(v => {
         return {
