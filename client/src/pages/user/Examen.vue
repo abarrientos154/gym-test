@@ -61,7 +61,7 @@
         </div>
         <div class="row justify-center">
           <q-btn no-caps color="primary" label="Iniciar test" style="width:80%"
-          @click="esTema ? iniciarTema() : esGym ? iniciarGym() : verifyExam()" />
+          @click="getTestById()" />
         </div>
     </div>
 
@@ -106,7 +106,9 @@ export default {
       preguntas: [],
       baseu: '',
       baseuTy: '',
-      baseuEx: ''
+      baseuEx: '',
+      id: '',
+      root: ''
     }
   },
   mounted () {
@@ -115,17 +117,39 @@ export default {
     this.baseuEx = env.apiUrl + 'exams_img/'
     this.getUser()
     if (this.$route.params.idTema) {
+      this.id = this.$route.params.idTema
+      this.root = 'topic_test_by_id/'
       this.esTema = true
       this.getTema()
     } else if (this.$route.params.idExamen) {
       this.esExamen = true
       this.getExamen()
+      this.id = this.$route.params.idExamen
+      this.root = 'examen_test_by_id//'
     } else if (this.$route.params.idType) {
       this.esGym = true
       this.getType()
+      this.id = this.$route.params.idType
+      this.root = 'type_test_by_id/'
     }
   },
   methods: {
+    async getTestById () {
+      this.$q.loading.show({
+        message: 'Cargando Datos...'
+      })
+      await this.$api.get(this.root + this.id).then(res => {
+        if (res) {
+          this.esTema ? this.iniciarTema() : this.esGym ? this.iniciarGym() : this.verifyExam()
+        } else {
+          this.$q.loading.hide()
+          this.$q.notify({
+            color: 'negative',
+            message: 'Aún faltan algunos datos en este test, por favor intente luego.'
+          })
+        }
+      })
+    },
     async getUser () {
       await this.$api.get('user_info').then(res => {
         if (res) {
