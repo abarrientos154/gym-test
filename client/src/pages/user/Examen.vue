@@ -61,7 +61,7 @@
         </div>
         <div class="row justify-center">
           <q-btn no-caps color="primary" label="Iniciar test" style="width:80%"
-          @click="getTestById()" />
+          @click="esTema ? iniciarTema() : esGym ? iniciarGym() : verifyExam()" />
         </div>
     </div>
 
@@ -125,7 +125,7 @@ export default {
       this.esExamen = true
       this.getExamen()
       this.id = this.$route.params.idExamen
-      this.root = 'examen_test_by_id//'
+      this.root = 'examen_test_by_id/'
     } else if (this.$route.params.idType) {
       this.esGym = true
       this.getType()
@@ -134,13 +134,13 @@ export default {
     }
   },
   methods: {
-    async getTestById () {
+    async getTestById (id) {
       this.$q.loading.show({
-        message: 'Cargando Datos...'
+        message: 'Preparando Datos...'
       })
-      await this.$api.get(this.root + this.id).then(res => {
+      await this.$api.get(this.root + id).then(res => {
         if (res) {
-          this.esTema ? this.iniciarTema() : this.esGym ? this.iniciarGym() : this.verifyExam()
+          this.esTema ? this.$router.push('/tema/test/' + id) : this.esGym ? this.$router.push('/gym/test/' + id) : this.$router.push('/examen/test/' + id)
         } else {
           this.$q.loading.hide()
           this.$q.notify({
@@ -227,47 +227,53 @@ export default {
         this.preguntas = this.tema.questions
       }
     },
-    iniciarTema () {
+    async iniciarTema () {
+      this.$q.loading.show({
+        message: 'Preparando Datos...'
+      })
       if (this.preguntas.length) {
-        this.$q.loading.show()
         const data = {
           user_id: this.user._id,
           tema_id: this.tema.topic,
           tema_name: this.tema.name,
           subTemas: this.selectedSubTemas
         }
-        this.$api.post('topic_test', data).then(res => {
+        await this.$api.post('topic_test', data).then(async res => {
           if (res) {
-            this.$router.push('/tema/test/' + res._id)
+            await this.getTestById(res._id)
             this.$q.loading.hide()
           } else {
             this.$q.loading.hide()
           }
         })
       } else {
+        this.$q.loading.hide()
         this.$q.notify({
           message: 'No hay preguntas para iniciar el test',
           color: 'black'
         })
       }
     },
-    iniciarGym () {
+    async iniciarGym () {
+      this.$q.loading.show({
+        message: 'Preparando Datos...'
+      })
       if (this.preguntas.length) {
-        this.$q.loading.show()
         const data = {
           user_id: this.user._id,
           type_id: this.tema.id,
           type_name: this.tema.type_name
         }
-        this.$api.post('type_test', data).then(res => {
+        await this.$api.post('type_test', data).then(async res => {
           if (res) {
-            this.$router.push('/gym/test/' + res._id)
+            await this.getTestById(res._id)
             this.$q.loading.hide()
           } else {
             this.$q.loading.hide()
           }
         })
       } else {
+        this.$q.loading.hide()
         this.$q.notify({
           message: 'No hay preguntas para iniciar el test',
           color: 'black'
@@ -300,8 +306,10 @@ export default {
         this.iniciarExamen()
       }
     },
-    iniciarExamen () {
-      this.$q.loading.show()
+    async iniciarExamen () {
+      this.$q.loading.show({
+        message: 'Preparando Datos...'
+      })
       const data = {
         user_id: this.user._id,
         examen_id: this.tema.id,
@@ -310,9 +318,9 @@ export default {
         tiempo: this.tiempo,
         timeTest: this.timeTest
       }
-      this.$api.post('examen_test', data).then(res => {
+      await this.$api.post('examen_test', data).then(async res => {
         if (res) {
-          this.$router.push('/examen/test/' + res._id)
+          await this.getTestById(res._id)
           this.$q.loading.hide()
         } else {
           this.$q.loading.hide()
