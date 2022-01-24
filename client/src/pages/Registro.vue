@@ -182,7 +182,7 @@ export default {
           const usuario = res.SESSION_INFO.roles.find(value => value === 2)
           if (usuario) {
             this.login(res)
-            this.$router.push('/inicio')
+            this.$router.push('/courses_client')
           }
         } else {
           console.log('error de ususario')
