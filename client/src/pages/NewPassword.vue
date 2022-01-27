@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { required, email } from 'vuelidate/lib/validators'
+import { required, sameAs } from 'vuelidate/lib/validators'
 export default {
   data () {
     return {

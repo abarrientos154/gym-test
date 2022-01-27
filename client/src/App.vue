@@ -32,10 +32,10 @@ export default {
           // vm.$router.push('/license')
         })
         universalLinks.subscribe('ul_recuperar', function (eventData) {
-        if (eventData.params.codigo) {
-          vm.$router.push('/recuperar_clave/' + eventData.params.codigo)
-        }
-      })
+          if (eventData.params.codigo) {
+            vm.$router.push('/recuperar_clave/' + eventData.params.codigo)
+          }
+        })
       }
     },
     logeo_ok (data) {
