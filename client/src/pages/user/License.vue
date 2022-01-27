@@ -75,7 +75,7 @@
           </q-card>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn flat label="Aceptar" color="primary" v-close-popup no-caps/>
+          <q-btn flat label="Aceptar" color="primary" v-close-popup no-caps @click="verify()"/>
          <!--  <q-btn flat label="Pagar" color="primary" v-close-popup @click="setBuy()" no-caps/> -->
         </q-card-actions>
       </q-card>
@@ -96,7 +96,8 @@ export default {
       modal: false,
       da: '',
       baseu: '',
-      ref: 'refencias'
+      ref: 'refencias',
+      ex: false
     }
   },
   mounted () {
@@ -113,6 +114,12 @@ export default {
     this.getLicenses()
   },
   methods: {
+    verify () {
+      if (this.ex) {
+        this.ex = false
+        this.$router.push('/courses_client')
+      }
+    },
     async getUser () {
       this.$q.loading.show({
         message: 'Cargando Datos...'
@@ -154,6 +161,8 @@ export default {
         if (res) {
           this.da = 'Membresia Adquirida con exito'
           this.modal = true
+          this.ex = true
+          this.getUser()
           this.$q.loading.hide()
           // this.$router.go()
         }

@@ -66,9 +66,9 @@ class LicenseController {
       line_items: [
         {
           price_data: {
-            currency: 'usd',
+            currency: 'eur',
             product_data: {
-              name: 'Productos',
+              name: 'Membresia',
             },
             unit_amount: totalPagar,
           },
