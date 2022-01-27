@@ -87,6 +87,9 @@
         <host event="ul_event_link" name="eiche.gymtest.app" scheme="https">
             <path url="*" />
         </host>
+        <host event="ul_recuperar" name="app.gymrecuperacion.com" scheme="https">
+            <path url="/recuperacion" />
+        </host>
     </universal-links>
     <allow-navigation href="about:*" />
     <preference name="SplashMaintainAspectRatio" value="true" />

@@ -8,8 +8,10 @@ const Community = use("App/Models/Community")
 const Place = use("App/Models/Place")
 const License = use("App/Models/License")
 const Income = use("App/Models/Income")
+const Email = use("App/Functions/Email")
 const Role = use("App/Models/Role")
 const moment = require('moment')
+var randomize = require('randomatic');
 var ObjectId = require('mongodb').ObjectId;
 // const { validate } = use("Validator")
 
@@ -255,7 +257,39 @@ class UserController {
     const update = await User.where('_id', params.id).update(body)
     response.send(update)
   }
+  async recuperacionapp ({ request, response, params }) {
+    if (((await User.where({email: params.email}).fetch()).toJSON()).length) {
+      let codigo = randomize('Aa0', 30)
+      await User.query().where({email: params.email}).update({codigoRecuperacion: codigo})
+      let mail = await Email.sendMail(params.email, 'Recuperación de Correo', `
+          <center>
+            <img src="https://gymtest.eichechile.com/old/logo.png" alt="logo" />
+          </center>
+          <h2 style="text-align:center">
+            Haz solicitado restablecer tu contraseña
+          </h2>
+          <div style="text-align:center">
+            Ingrese al link https://app.gymrecuperacion.com/recuperacion?codigo=${codigo} para restablecer su contraseña
+          </div>
+          `)
+        console.log(mail)
+        response.send(mail)
+    } else {
+      response.unprocessableEntity([{
+        message: 'Correo no registrado en el sistema!',
+        error: true
+      }])
+    }
+  }
 
+  async actualizarPass({ request, response, params }) {
+    let user = await User.findBy('codigoRecuperacion', params.code)
+    let data = request.only(['password'])
+    user.password = data.password
+    user.codigoRecuperacion = null
+    await user.save()
+    response.send(user)
+  }
   async toDisable ({ params, response, request }) {
     const { action } = request.all()
     if (action === 1) {

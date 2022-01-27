@@ -28,7 +28,7 @@
         </q-btn>
         <div class="row justify-center text-h6 q-mb-lg">
           <div class="text-grey q-mr-xs">Olvide</div>
-          <div class="text-bold text-primary cursor-pointer" @click="$router.push('/recuperar_clave')">mi contraseña</div>
+          <div class="text-bold text-primary cursor-pointer" @click="modal = true">mi contraseña</div>
         </div>
         <!-- <div class="row justify-center items-center q-mb-lg">
           <q-separator color="grey" class="col"/>
@@ -51,6 +51,38 @@
           <div class="text-bold text-primary cursor-pointer" @click="$router.push('/registro')">Crear una cuenta</div>
         </div>
       </div>
+       <q-dialog v-model="modal">
+      <q-card class="column items-center justify-center" style="width: 350px; height:350px;">
+        <q-card-section>
+          <div class="text-h6">¿Olvidaste tu contraseña?</div>
+        </q-card-section>
+        <q-card-section>
+          <q-input rounded outlined v-model="email" label="Introduce tu correo aquí" autofocus>
+            <template v-slot:prepend>
+              <q-icon color="primary" name="mail" />
+            </template>
+          </q-input>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn
+            :loading="loading2"
+            rounded
+            no-caps
+            icon-right="arrow_right"
+            color="primary"
+            @click="recuperar()"
+          >Recuperar contraseña
+          <template v-slot:loading>
+            <q-spinner-hourglass class="on-center" />
+            Cargando...
+          </template>
+          </q-btn>
+        </q-card-actions>
+        <q-card-actions class="absolute-top-right">
+          <q-btn icon="close" flat round dense v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -62,8 +94,11 @@ export default {
     return {
       loading: false,
       isPwd: true,
+      modal: false,
       form: {},
-      user: {}
+      user: {},
+      email: '',
+      loading2: false
     }
   },
   validations: {
@@ -73,8 +108,34 @@ export default {
     }
   },
   methods: {
+    // $router.push('/recuperar_clave')
     ...mapMutations('generals', ['login']),
     ...mapActions('generals', ['saveUser']),
+    async recuperar () {
+      if (this.email) {
+        // this.simulateProgress()
+        this.loading2 = true
+        this.$q.loading.show()
+        await this.$api.get('email_send_app/' + this.email).then(res => {
+          this.$q.loading.hide()
+          if (res) {
+            this.$q.notify({
+              message: 'Se envió un correo para recuperar tu contraseña',
+              color: 'positive'
+            })
+            this.loading2 = false
+            this.cambio = false
+          } else {
+            this.loading2 = false
+          }
+        })
+      } else {
+        this.$q.notify({
+          message: 'Campo Vacio',
+          color: 'negative'
+        })
+      }
+    },
     loguear () {
       this.$v.$touch()
       if (!this.$v.form.$error) {

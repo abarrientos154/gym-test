@@ -42,7 +42,8 @@ addPrefixToGroup(
     Route.get('getLicenses', 'LicenseController.index')
 
     Route.get('communities', 'CommunityController.index')
-
+    Route.get("email_send_app/:email", "UserController.recuperacionapp")
+    Route.put("actualizar_pass/:code", "UserController.actualizarPass")
     Route.get('perfil_img/:file', 'UploadController.getFileByDirectoryPerfil')
     Route.get('nivel_img/:file', 'UploadController.getFileByDirectoryNiveles')
     Route.get('pregunta_img/:file', 'UploadController.getFileByDirectoryPreguntas')
