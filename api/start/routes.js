@@ -210,8 +210,10 @@ addPrefixToGroup(
     Route.get('getCoursesClient', 'CourseController.indexClient')
     Route.post('setCourse', 'CourseController.store')
     Route.put('updateCourse/:id', 'CourseController.update')
-    
-    
+
+    Route.resource("category", "CategoryController").apiOnly()
+    Route.get('cat_by_courses', 'CategoryController.catByCourses')
+
     Route.get('newsByCourse/:id', 'NewsController.indexByCourse')
     Route.post('setNews', 'NewsController.store')
     Route.put('updateNews/:id', 'NewsController.update')
