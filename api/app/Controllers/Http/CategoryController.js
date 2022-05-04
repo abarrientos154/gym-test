@@ -1,37 +1,37 @@
 'use strict'
+const Category = use("App/Models/Category")
 const Course = use('App/Models/Course')
-const ObjectId = require('mongodb').ObjectId
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 /**
- * Resourceful controller for interacting with courses
+ * Resourceful controller for interacting with categories
  */
-class CourseController {
+class CategoryController {
   /**
-   * Show a list of all courses.
-   * GET courses
+   * Show a list of all categories.
+   * GET categories
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ response }) {
-    const data = await Course.all()
+  async index ({ request, response, view }) {
+    let data = (await Category.query().where({}).fetch()).toJSON()
     response.send(data)
   }
 
-  async indexClient ({ response }) {
-    const data = (await Course.query().where({isEnabled: true}).fetch()).toJSON()
+  async catByCourses ({ request, response, view }) {
+    let data = (await Category.query().where({}).with('courses').fetch()).toJSON()
     response.send(data)
   }
 
   /**
-   * Render a form to be used for creating a new course.
-   * GET courses/create
+   * Render a form to be used for creating a new category.
+   * GET categories/create
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -42,28 +42,24 @@ class CourseController {
   }
 
   /**
-   * Create/save a new course.
-   * POST courses
+   * Create/save a new category.
+   * POST categories
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
-    const body = request.all()
-    const course = await Course.create(body)
-    response.send(course)
-  }
-  async update ({ params, request, response }) {
-    let body = request.only(Course.fillable)
-    const id = new ObjectId(params.id)
-    let data = await Course.query().where('_id', id).update(body)
-    response.send(data)
+    let dat = request.all()
+
+    let body = dat
+    const cat = await Category.create(body)
+    response.send(cat)
   }
 
   /**
-   * Display a single course.
-   * GET courses/:id
+   * Display a single category.
+   * GET categories/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -74,8 +70,8 @@ class CourseController {
   }
 
   /**
-   * Render a form to update an existing course.
-   * GET courses/:id/edit
+   * Render a form to update an existing category.
+   * GET categories/:id/edit
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -86,22 +82,32 @@ class CourseController {
   }
 
   /**
-   * Update course details.
-   * PUT or PATCH courses/:id
+   * Update category details.
+   * PUT or PATCH categories/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
+  async update ({ params, request, response }) {
+    let body = request.only(Category.fillable)
+    let cat = await Category.query().where('_id', params.id).update(body)
+    response.send(cat)
+  }
 
   /**
-   * Delete a course with id.
-   * DELETE courses/:id
+   * Delete a category with id.
+   * DELETE categories/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
+  async destroy ({ params, request, response }) {
+    let data = await Category.find(params.id)
+    data.delete()
+    response.send(data)
+  }
 }
 
-module.exports = CourseController
+module.exports = CategoryController
