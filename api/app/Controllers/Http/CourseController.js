@@ -1,5 +1,6 @@
 'use strict'
 const Course = use('App/Models/Course')
+const ObjectId = require('mongodb').ObjectId
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -54,9 +55,10 @@ class CourseController {
     response.send(course)
   }
   async update ({ params, request, response }) {
-    const body = request.all()
-    const update = await Course.where('_id', params.id).update(body)
-    response.send(update)
+    let body = request.only(Course.fillable)
+    const id = new ObjectId(params.id)
+    let data = await Course.query().where('_id', id).update(body)
+    response.send(data)
   }
 
   /**

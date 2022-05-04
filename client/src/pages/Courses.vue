@@ -1,32 +1,42 @@
 <template>
     <q-layout view="lHh Lpr lFf">
       <q-drawer v-model="drawer" style="width: 175px;">
-        <div class="column items-center justify-center" style="background: linear-gradient(to right, #002938, #004e6d); height: 200px; width: 100%;">
-          <div class="column items-center q-pt-xl q-pb-xs">
-            <q-img src="gymtest 1.png" style="width: 200px"/>
+        <div class="fit bg-primary">
+          <div class="column items-center justify-center" style="background: linear-gradient(to right, #002938, #004e6d); height: 200px; width: 100%;">
+            <div class="column items-center q-pt-xl q-pb-xs">
+              <q-img src="gymtest 1.png" style="width: 200px"/>
+            </div>
+            <div class="text-center text-bold text-h5 text-white">Admin</div>
           </div>
-          <div class="text-center text-bold text-h5 text-white">Admin</div>
+          <q-list class="q-mt-lg q-pa-sm">
+            <q-btn icon="add" color="white" outline rounded style="width: 100%" label="Nueva categoría" class="q-mb-md" no-caps @click="newCategorie()"/>
+            <q-btn icon="add" color="white" outline rounded style="width: 100%" label="Nuevo Curso" no-caps @click="newCourse()"/>
+          </q-list>
         </div>
-        <q-list class="q-mt-lg q-pa-sm">
-          <q-btn icon="add" color="primary" outline rounded style="width: 100%" label="Nueva categoría" class="q-mb-md" no-caps @click="newCategorie()"/>
-          <q-btn icon="add" color="primary" outline rounded style="width: 100%" label="Nuevo Curso" no-caps @click="newCourse()"/>
-        </q-list>
       </q-drawer>
 
       <q-page-container>
-        <q-card class="bg-primary no-border-radius q-pa-xl" style="height: 100vh">
+        <div class="q-pa-xl">
           <div v-for="(item, index) in courses" :key="index">
-            <div class="text-h3 text-center text-white text-weight-medium">{{item.name}}</div>
+            <div class="row items-center justify-center">
+              <q-btn icon="edit" size="lg" flat round color="primary" @click="catUpdate(item)"/>
+              <div class="text-h3 text-primary text-weight-medium">{{item.name}}</div>
+            </div>
             <div v-if="item.courses && item.courses.length">
-              <q-card class="bg-white row items-center justify-center q-mt-sm" style="border-radius: 16px" v-for="(item2, index2) in item.courses" :key="index2">
-                <q-btn class="q-ml-xs" icon="edit" flat color="primary" @click="setUpdate(item2)"/>
-                <div class="text-h6 text-bold">{{item2.name}}</div>
-                <q-btn class="q-ml-xs" icon="arrow_forward" flat color="primary" @click="selectCourse(item2._id)"/>
+              <q-card class="q-mt-sm" style="border-radius: 16px" v-for="(item2, index2) in item.courses" :key="index2">
+                <div class="row items-center justify-between bg-primary q-pa-xs">
+                  <div class="row items-center">
+                    <q-btn class="q-ml-xs" icon="edit" flat round color="white" @click="setUpdate(item2)"/>
+                    <div class="text-h6 text-bold text-white">{{item2.name}}</div>
+                  </div>
+                  <q-btn class="q-ml-xs" icon="arrow_forward" flat round color="white" @click="selectCourse(item2._id)"/>
+                </div>
+                <div class="q-pa-md">{{item2.description}}</div>
               </q-card>
             </div>
-            <div v-else class="text-white text-center text-italic q-py-lg">No tiene cursos asignados</div>
+            <div v-else class="text-primary text-center text-italic q-py-lg">No tiene cursos asignados</div>
           </div>
-        </q-card>
+        </div>
 
         <q-dialog v-model="show">
           <q-card style="width:100%;border-radius: 20px;">
@@ -48,7 +58,15 @@
                   </q-item>
                 </template>
               </q-select>
-              <q-checkbox v-model="form.isEnabled" keep-color color="primary" label="Activo"/>
+              <q-input dense outlined v-model="form.description" label="Breve descripción" type="textarea"
+                :error="$v.form.description.$error" error-message="Este campo es requerido"  @blur="$v.form.description.$touch()">
+              </q-input>
+              <div class="row items-start">
+                <q-input dense outlined type="number" v-model="form.price" label="Costo del curso"
+                  :error="$v.form.price.$error" error-message="Este campo es requerido"  @blur="$v.form.price.$touch()">
+                </q-input>
+                <q-checkbox v-model="form.isEnabled" keep-color color="primary" label="Activo" class="q-ml-lg"/>
+              </div>
             </q-card-section>
             <q-card-actions align="right">
               <q-btn flat label="Cancelar" color="primary" v-close-popup @click="show = false" no-caps/>
@@ -96,7 +114,9 @@ export default {
   validations: {
     form: {
       name: { required },
-      category_id: { required }
+      price: { required },
+      category_id: { required },
+      description: { required }
     },
     formCat: {
       name: { required }
@@ -216,6 +236,12 @@ export default {
       this.form = { ...item }
       this.$v.form.$reset()
       this.show = true
+    },
+    catUpdate (item) {
+      this.editCat = true
+      this.formCat = { ...item }
+      this.$v.formCat.$reset()
+      this.showCat = true
     }
   }
 }
