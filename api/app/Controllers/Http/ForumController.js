@@ -1,5 +1,7 @@
 'use strict'
 
+const ObjectId = require('mongodb').ObjectId
+const Forum = use('App/Models/Forum')
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -17,7 +19,16 @@ class ForumController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index ({ response }) {
+    let data = (await Forum.query().where({}).fetch()).toJSON()
+    data = data.sort((a, b) => a.created_at < b.created_at)
+    response.send(data)
+  }
+    async indexByCourse ({ response, params }) {
+    const id = new ObjectId(params.id)
+    let data = (await Forum.query().where({ course_id: id }).fetch()).toJSON()
+    data = data.sort((a, b) => a.created_at < b.created_at)
+    response.send(data)
   }
 
   /**
@@ -41,6 +52,10 @@ class ForumController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
+    let body = request.all()
+    body.course_id = new ObjectId(body.course_id)
+    let forum = await Forum.create(body)
+    response.send(forum)
   }
 
   /**
@@ -52,9 +67,10 @@ class ForumController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show ({ params, response }) {
+    let data = (await Forum.find(params.id)).toJSON()
+    response.send(data)
   }
-
   /**
    * Render a form to update an existing forum.
    * GET forums/:id/edit
@@ -75,7 +91,12 @@ class ForumController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+ async update ({ params, request, response }) {
+    let body = request.all()
+    body.course_id = new ObjectId(body.course_id)
+    const id = new ObjectId(params.id)
+    let forum = await Forum.query().where({ _id: id }).update(body)
+    response.send(forum)
   }
 
   /**
@@ -86,7 +107,9 @@ class ForumController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+   async destroy ({ params, response }) {
+    const data = await Forum.where('_id', params.id).delete()
+    response.send(data)
   }
 }
 
