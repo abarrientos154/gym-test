@@ -218,6 +218,11 @@ addPrefixToGroup(
     Route.post('setNews', 'NewsController.store')
     Route.put('updateNews/:id', 'NewsController.update')
     Route.delete('deleteNews/:id', 'NewsController.destroy')
+
+    Route.get('forumByCourse/:id', 'forumController.indexByCourse')
+    Route.post('setforum', 'forumController.store')
+    Route.put('updateforum/:id', 'forumController.update')
+    Route.delete('deleteforum/:id', 'forumController.destroy')
     
     Route.post('setFault', 'FaultController.store')
     Route.get('faultsByCourse/:id', 'FaultController.indexByCourse')

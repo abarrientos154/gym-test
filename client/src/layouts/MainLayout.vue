@@ -117,7 +117,7 @@ export default {
           src: '',
           src2: '',
           label: 'Respuestas',
-          icon: 'question_answer',
+          icon: 'verified',
           ruta: '/answers'
         },
         {
@@ -147,6 +147,13 @@ export default {
           label: 'Noticias',
           icon: 'web',
           ruta: '/news'
+        },
+        {
+          src: 'blog 1.png',
+          src2: 'blog 12.png',
+          label: 'Foro',
+          icon: 'forum',
+          ruta: '/forum'
         },
         {
           src: '',
