@@ -16,6 +16,7 @@ const routes = [
       { path: '/types', component: () => import('pages/admin/Types.vue') },
       { path: '/exams', component: () => import('pages/admin/Examenes.vue') },
       { path: '/news', component: () => import('pages/admin/News.vue') },
+      { path: '/forum', component: () => import('pages/admin/Forum.vue') },
       { path: '/faults', component: () => import('pages/admin/Faults.vue') },
       { path: '/audio', component: () => import('pages/admin/Audio.vue') },
       { path: '/users', component: () => import('pages/admin/Users.vue') },
