@@ -7,48 +7,55 @@
       <div>
         <div class="text-h5 text-white q-mb-sm q-px-md">Listado de Foros creados</div>
       </div>
-      <q-btn color="primary" label="Nuevo Foro" icon="add" dense no-caps size="md" class="q-ml-md" @click="newNews()"/>
+      <q-btn color="primary" label="Nuevo Foro" icon="add" dense no-caps size="md" class="q-ml-md" @click="newForum()"/>
     </div>
-    <q-card class="row q-pa-sm q-ma-sm bg-grey-2" style="width: 90%" v-for="(item, index) in news" :key="index">
+    <q-card class="row q-pa-sm q-ma-sm bg-grey-2" style="width: 90%" v-for="(item, index) in forums" :key="index">
       <q-avatar square size="100px" >
-        <img style="width: 100%" :src="item.image ? baseu + item.image : 'noimg.png'" spinner-color="white">
+        <img style="width: 100%" :src="'noimg.png'" spinner-color="white">
       </q-avatar>
       <div class="q-ml-md q-mt-sm" style="width: 80%">
         <div>{{item.title}}</div>
         <div v-html="item.text" class="ellipsis-3-lines"></div>
       </div>
       <div class="q-mt-sm row absolute-top-right">
-        <q-btn color="primary" flat icon="edit" @click="setEditNews(item)"/>
-        <q-btn color="primary" flat icon="delete" @click="deleteNews(item._id)"/>
+        <q-btn color="primary" flat icon="edit" @click="setEditForum(item)"/>
+        <q-btn color="primary" flat icon="delete" @click="deleteForum(item._id)"/>
       </div>
     </q-card>
     <q-dialog v-model="show" @hide="decartarCamb()">
       <q-card style="border-radius: 20px; width: 80%">
         <q-card-section>
-          <div class="text-h6">{{edit ? 'Editar Noticia' : 'Crear Noticia'}}</div>
+          <div class="text-h6">{{edit ? 'Editar Foro' : 'Crear Foro'}}</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
-          <q-avatar square size="200px" style="width: 100%" class="bg-grey row justify-center">
-            <q-img :src="file !== null ? imgFile : edit ? baseu + form.image : ''" style="height: 100%">
-              <q-file borderless v-model="file" @input="test()" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px" @blur="$v.file.$touch()">
-                <q-icon name="image" size="50px" color="white" />
-              </q-file>
-            </q-img>
-          </q-avatar>
-          <div :class="$v.file.$error ? 'text-negative' : ''" class="q-my-sm">Sube la portada de la noticia</div>
-          <q-input dense outlined type="text" v-model="form.title" label="Titulo de la Noticia" :error="$v.form.title.$error" error-message="Este campo es requerido"  @blur="$v.form.title.$touch()">
+          <q-input dense outlined type="text" v-model="form.title" label="Titulo del Foro" :error="$v.form.title.$error" error-message="Este campo es requerido"  @blur="$v.form.title.$touch()">
             <template v-slot:prepend>
               <q-icon name="edit" color="primary"/>
             </template>
           </q-input>
-          <div :class="isWrittren === false ? 'text-negative' : ''">Debes redactar la Noticia</div>
+          <div :class="isWrittren === false ? 'text-negative' : ''">Debes redactar el Foro</div>
           <div class="">
             <q-editor v-model="textEdit" style="width: 100%" min-height="5rem"/>
           </div>
+           <q-checkbox
+            left-label
+            v-model="form.question"
+            label="Permitir Preguntas"
+            checked-icon="task_alt"
+            unchecked-icon="highlight_off"
+            />
+            <q-checkbox
+            v-if="form.question"
+            left-label
+            v-model="form.response"
+            label="Permitir Respuestas"
+            checked-icon="task_alt"
+            unchecked-icon="highlight_off"
+            />
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
-          <q-btn flat :label="edit ? 'Actualizar' :  'Crear'" color="primary" @click="edit ? updateNews() : setNews()" no-caps/>
+          <q-btn flat :label="edit ? 'Actualizar' :  'Crear'" color="primary" @click="edit ? updateForum() : setForum()" no-caps/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -57,35 +64,29 @@
 
 <script>
 import { required } from 'vuelidate/lib/validators'
-import env from '../../env'
 export default {
   data () {
     return {
       edit: false,
       form: {},
-      news: [],
-      file: null,
+      forums: [],
       show: false,
       textEdit: '',
       courseId: '',
-      imgFile: '',
-      baseu: '',
       isWrittren: null
     }
   },
   validations: {
     form: {
       title: { required }
-    },
-    file: { required }
+    }
   },
   mounted () {
-    this.baseu = env.apiUrl + 'news_img/'
     this.courseId = localStorage.getItem('course_id')
-    this.getNews()
+    this.getForum()
   },
   methods: {
-    updateNews () {
+    updateForum () {
       if (this.textEdit !== '') {
         this.$v.form.$touch()
         if (!this.$v.form.$error) {
@@ -93,24 +94,16 @@ export default {
             message: 'Actualizando Noticia, Por Favor Espere...'
           })
           this.form.text = this.textEdit
-          const formData = new FormData()
-          formData.append('image', this.file)
-          formData.append('data', JSON.stringify(this.form))
-          this.$api.put('updateNews/' + this.form._id, formData, {
-            headers: {
-              'Content-Type': undefined
-            }
-          }).then((res) => {
+          this.$api.put('updateForum/' + this.form._id, this.form).then((res) => {
             if (res) {
               this.$q.loading.hide()
               this.$q.notify({
                 color: 'positive',
-                message: 'Noticia Actualizada Correctamente'
+                message: 'Foro Actualizado Correctamente'
               })
               this.form = {}
-              this.file = null
               this.textEdit = ''
-              this.getNews()
+              this.getForum()
               this.show = false
             }
           })
@@ -121,39 +114,30 @@ export default {
     },
     decartarCamb () {
       this.form = {}
-      this.file = null
       this.textEdit = ''
       this.edit = false
       this.$v.$reset()
     },
-    setNews () {
+    setForum () {
       if (this.textEdit !== '') {
         this.$v.$touch()
-        if (!this.$v.form.$error && !this.$v.file.$error) {
+        if (!this.$v.form.$error) {
           this.$q.loading.show({
-            message: 'Subiendo Noticia, Por Favor Espere...'
+            message: 'Subiendo Foro, Por Favor Espere...'
           })
           this.form.text = this.textEdit
           this.form.course_id = this.courseId
-          const formData = new FormData()
-          formData.append('image', this.file)
-          formData.append('data', JSON.stringify(this.form))
-          this.$api.post('/setNews', formData, {
-            headers: {
-              'Content-Type': undefined
-            }
-          }).then((res) => {
+          this.$api.post('/setForum', this.form).then((res) => {
             if (res) {
               this.$q.loading.hide()
               this.$q.notify({
                 color: 'positive',
-                message: 'Noticia Creada Correctamente'
+                message: 'Foro Creado Correctamente'
               })
               this.form = {}
-              this.file = null
               this.textEdit = ''
               this.show = false
-              this.getNews()
+              this.getForum()
             }
           })
         }
@@ -161,50 +145,56 @@ export default {
         this.isWrittren = false
       }
     },
-    deleteNews (id) {
+    deleteForum (id) {
       this.$q.dialog({
-        title: 'Confirma',
-        message: '¿Seguro deseas eliminar esta noticia?',
+        title: 'Confirmar',
+        message: '¿Seguro deseas eliminar este foro?',
         cancel: true,
         persistent: true
       }).onOk(() => {
-        this.$api.delete('deleteNews/' + id).then(res => {
+        this.$api.delete('deleteForum/' + id).then(res => {
           if (res) {
             this.$q.notify({
               color: 'positive',
               message: 'Eliminado Correctamente'
             })
-            this.getNews()
+            this.getForum()
           }
         })
       }).onCancel(() => {
         // console.log('>>>> Cancel')
       })
     },
-    async getNews () {
+    async getForum () {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      await this.$api.get('newsByCourse/' + this.courseId).then(res => {
+      await this.$api.get('forumByCourse/' + this.courseId).then(res => {
         if (res) {
-          this.news = res
+          this.forums = res
           this.$q.loading.hide()
+        } else {
+          this.$q.loading.hide()
+          this.$q.notify({
+            color: 'negative',
+            message: 'Error al consultar datos'
+          })
         }
       })
     },
-    newNews () {
+    newForum () {
       this.editType = false
-      this.form = {}
+      this.form = {
+        question: false,
+        response: false
+      }
       this.show = true
     },
-    setEditNews (item) {
+    setEditForum (item) {
       this.form = item
       this.textEdit = item.text
       this.edit = true
       this.show = true
-    },
-    test () {
-      if (this.file) { this.imgFile = URL.createObjectURL(this.file) }
     }
   }
 }
