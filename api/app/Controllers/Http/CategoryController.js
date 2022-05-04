@@ -1,6 +1,5 @@
 'use strict'
 const Category = use("App/Models/Category")
-const Course = use('App/Models/Course')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */

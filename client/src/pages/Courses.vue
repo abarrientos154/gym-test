@@ -25,9 +25,12 @@
             <div v-if="item.courses && item.courses.length">
               <q-card class="q-mt-sm" style="border-radius: 16px" v-for="(item2, index2) in item.courses" :key="index2">
                 <div class="row items-center justify-between bg-primary q-pa-xs">
-                  <div class="row items-center">
+                  <div class="row items-start">
                     <q-btn class="q-ml-xs" icon="edit" flat round color="white" @click="setUpdate(item2)"/>
-                    <div class="text-h6 text-bold text-white">{{item2.name}}</div>
+                    <div class="text-white">
+                      <div class="text-h6 text-bold">{{item2.name}}</div>
+                      <div class="text-subtitle2 text-bold">${{item2.price}}</div>
+                    </div>
                   </div>
                   <q-btn class="q-ml-xs" icon="arrow_forward" flat round color="white" @click="selectCourse(item2._id)"/>
                 </div>
@@ -62,7 +65,7 @@
                 :error="$v.form.description.$error" error-message="Este campo es requerido"  @blur="$v.form.description.$touch()">
               </q-input>
               <div class="row items-start">
-                <q-input dense outlined type="number" v-model="form.price" label="Costo del curso"
+                <q-input dense outlined type="number" v-model.number="form.price" label="Costo del curso"
                   :error="$v.form.price.$error" error-message="Este campo es requerido"  @blur="$v.form.price.$touch()">
                 </q-input>
                 <q-checkbox v-model="form.isEnabled" keep-color color="primary" label="Activo" class="q-ml-lg"/>

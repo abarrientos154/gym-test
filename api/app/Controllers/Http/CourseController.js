@@ -1,6 +1,7 @@
 'use strict'
 const Course = use('App/Models/Course')
 const ObjectId = require('mongodb').ObjectId
+const Category = use("App/Models/Category")
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -25,7 +26,18 @@ class CourseController {
   }
 
   async indexClient ({ response }) {
-    const data = (await Course.query().where({isEnabled: true}).fetch()).toJSON()
+    let allData = (await Category.query().where({}).with('courses').fetch()).toJSON()
+    const data = []
+    for (let i = 0; i < allData.length; i++) {
+      let filterCour = allData[i].courses.filter(v => v.isEnabled)
+      if (filterCour.length) {
+        let catFilter = {
+          ...allData[i],
+          courses: allData[i].courses.filter(v => v.isEnabled)
+        }
+        data.push(catFilter)
+      }
+    }
     response.send(data)
   }
 
