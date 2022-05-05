@@ -12,7 +12,7 @@
       <div class="text-h4 text-bold">{{total}}€</div>
     </q-card>
     <div class="row justify-center" style="height: 70%">
-      <listable class="col" :columns="columns" :data="incomes" title="Ingresos" @function="execute"/>
+      <listable class="col" :columns="columns" :data="incomes" title="Ingresos" />
     </div>
   </div>
 </template>
@@ -25,10 +25,9 @@ export default {
     return {
       columns: [
         { name: 'userName', label: 'Usuario', align: 'left', field: 'userName' },
-        { name: 'licenseTitle', label: 'Licencia', align: 'left', field: 'licenseTitle' },
-        { name: 'months', label: 'Meses', align: 'left', field: 'months' },
-        { name: 'amount', label: 'Monto', align: 'left', field: 'amount', format: val => { return val !== undefined ? `${val} $` : '-- $' } },
-        { name: 'licenseExpirationDate', label: 'Expiración de Licencia', align: 'left', field: 'licenseExpirationDate' }
+        { name: 'courseName', label: 'Curso', align: 'left', field: 'courseName' },
+        { name: 'days', label: 'Licencia', align: 'left', field: 'days' },
+        { name: 'amount', label: 'Monto', align: 'left', field: 'amount', format: val => { return val !== undefined ? `${val} €` : '-- €' } }
       ],
       total: null,
       incomes: []

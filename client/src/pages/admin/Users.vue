@@ -6,18 +6,17 @@
       <div>
         <div class="text-h5 text-white q-mb-sm q-px-md q-mb-xl">Usuarios recientes</div>
       </div>
-      <!-- <q-btn color="primary" dense no-caps size="md">
-        <q-file borderless v-model="file" hint="(.xlsx)" accept=".xlsx, /*" @input="uploadFile()" style="height: 30px; font-size: 0px"/>
-        <div class="absolute-center">Importar archivo</div>
-      </q-btn> -->
     </div>
+
     <div class="row justify-between">
       <q-btn color="primary" label="Nuevo Usuario" icon="add" dense no-caps size="md" class="q-ml-md" @click="newUser()"/>
       <q-btn color="red" label="Eliminar Usuarios" icon="delete" dense no-caps size="md" class="q-mr-md" @click="deleteAllUsers()"/>
     </div>
+
     <div class="row justify-center" style="height: 70%">
       <listable class="col" :columns="columns" :data="users" title="Usuarios" @function="execute"/>
     </div>
+
     <q-dialog v-model="show" @hide="decartarCamb()">
       <q-card style="border-radius: 20px; width: 100%">
         <q-card-section>
@@ -94,7 +93,6 @@ export default {
         { name: 'birthday', label: 'Fecha de Nacimiento', align: 'left', field: 'birthday' },
         { name: 'communityName', label: 'Comunidad', align: 'left', field: 'communityName' },
         { name: 'placeName', label: 'Lugar', align: 'left', field: 'placeName' },
-        { name: 'licenseExpirationDate', label: 'Expiración de Licencia', align: 'left', field: 'licenseExpirationDate' },
         { name: 'actions', required: true, align: 'left', field: 'actions', style: 'width: 9%' }
       ],
       show: false,

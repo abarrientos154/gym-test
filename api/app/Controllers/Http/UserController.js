@@ -6,11 +6,8 @@ const mkdirp = use('mkdirp')
 const User = use("App/Models/User")
 const Community = use("App/Models/Community")
 const Place = use("App/Models/Place")
-const License = use("App/Models/License")
-const Income = use("App/Models/Income")
 const Email = use("App/Functions/Email")
 const Role = use("App/Models/Role")
-const moment = require('moment')
 var randomize = require('randomatic');
 var ObjectId = require('mongodb').ObjectId;
 // const { validate } = use("Validator")
@@ -112,9 +109,6 @@ class UserController {
     } else {
       let body = dat
       const rol = body.roles
-      body.license_id = new ObjectId('6187fd1aff8458493d558f4c')
-      let date = moment().format('YYYY-MM-DD')
-      body.licenseExpirationDate = moment(date).add(7, 'days').format('YYYY-MM-DD')
       body.roles = [rol]
       const user = await User.create(body)
 
@@ -139,16 +133,7 @@ class UserController {
     const user = (await auth.getUser()).toJSON()
     response.send(user)
   }
-  async userInfoLicense({ request, response, auth }) {
-    const user = (await auth.getUser()).toJSON()
-    if (user.roles[0] === 2) {
-      let license = (await License.query().find(user.license_id)).toJSON()
-      let date = moment().format('YYYY-MM-DD')
-      let days = moment(user.licenseExpirationDate).diff(date , 'days')
-      user.days = days
-    }
-    response.send(user)
-  }
+
   async logueoSinContrasena ({ auth, response, params, request }) {
     let body = request.only(['user_id'])
     let user = await User.find(body.user_id)
@@ -176,31 +161,6 @@ class UserController {
     data.SESSION_INFO = token
     return data
 
-  }
-  async setBuy({ response, auth, params }) {
-    const user = (await auth.getUser()).toJSON()
-    // console.log(user, params)
-    let license = (await License.query().find(params.id)).toJSON()
-    // console.log('**/*/', license)
-    const income = {
-      license_id: license._id,
-      user_id: user._id,
-      amount: license.months * license.monthPrice
-    }
-    // console.log(income)
-    const newIncome = await Income.create(income)
-    let date = moment().format('YYYY-MM-DD')
-    let days = moment(user.licenseExpirationDate).diff(date , 'days')
-    if (days <= 0) {
-      days = 0
-    }
-    const update = {
-      licenseExpirationDate: moment(date).add(days, 'days').add(license.months, 'months').format('YYYY-MM-DD'),
-      license_id: new ObjectId(params.id)
-    }
-    const updateUser = await User.query().where('_id', user._id).update(update)
-
-    response.send(updateUser)
   }
 
   async update ({ params, request, response }) {
@@ -272,7 +232,6 @@ class UserController {
             Ingrese al link https://app.gymrecuperacion.com/recuperacion?codigo=${codigo} para restablecer su contraseña
           </div>
           `)
-        console.log(mail)
         response.send(mail)
     } else {
       response.unprocessableEntity([{

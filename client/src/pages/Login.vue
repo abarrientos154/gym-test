@@ -7,7 +7,7 @@
           </div>
           <div class="text-h6 text-bold text-white q-pb-xl">INICIO DE SESIÓN</div>
         </div>
-      </q-img>
+    </q-img>
 
       <div class="q-mx-md q-pa-md bg-white" style="position:relative; top: -90px; border-top-left-radius: 20px; border-top-right-radius: 20px">
         <q-input dense filled type="email" v-model="form.email" placeholder="Usuario" :error="$v.form.email.$error" error-message="Este campo es requerido"  @blur="$v.form.email.$touch()">
@@ -30,28 +30,14 @@
           <div class="text-grey q-mr-xs">Olvide</div>
           <div class="text-bold text-primary cursor-pointer" @click="modal = true">mi contraseña</div>
         </div>
-        <!-- <div class="row justify-center items-center q-mb-lg">
-          <q-separator color="grey" class="col"/>
-          <div class="text-grey q-px-sm">O conectate usando</div>
-          <q-separator color="grey" class="col"/>
-        </div>
-        <div class="row justify-center q-mb-xl">
-          <q-avatar rounded class="q-mx-md" size="50px" style="border-radius: 15px;">
-            <q-img src="fa 1.png" class="full-height"/>
-          </q-avatar>
-          <q-avatar rounded class="q-mx-md" size="50px" style="border-radius: 15px;">
-            <q-img src="email 1.png" class="full-height"/>
-          </q-avatar>
-          <q-avatar rounded class="q-mx-md" size="50px" style="border-radius: 15px;">
-            <q-img src="twte 1.png" class="full-height"/>
-          </q-avatar>
-        </div> -->
+
         <div class="row justify-center">
           <div class="text-grey q-mr-xs">¿No tienes cuenta aun?</div>
           <div class="text-bold text-primary cursor-pointer" @click="$router.push('/registro')">Crear una cuenta</div>
         </div>
       </div>
-       <q-dialog v-model="modal">
+
+    <q-dialog v-model="modal">
       <q-card class="column items-center justify-center" style="width: 350px; height:350px;">
         <q-card-section>
           <div class="text-h6">¿Olvidaste tu contraseña?</div>
@@ -150,19 +136,7 @@ export default {
             if (this.user.roles[0] === 1) {
               this.$router.push('/courses')
             } else {
-              this.$api.get('user_info_license').then(res => {
-                if (res) {
-                  if (res.days > 0) {
-                    if (this.user.disabled !== true) {
-                      this.$router.push('/courses_client')
-                    } else {
-                      this.$router.push('/license')
-                    }
-                  } else {
-                    this.$router.push('/license')
-                  }
-                }
-              })
+              this.$router.push('/courses_client')
             }
           } else {
             console.log('error de ususario')

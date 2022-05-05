@@ -17,19 +17,23 @@
 
       <q-page-container>
         <div class="q-pa-xl">
-          <div v-for="(item, index) in courses" :key="index">
+          <div v-for="(item, index) in courses" :key="index" class="q-pb-lg">
             <div class="row items-center justify-center">
               <q-btn icon="edit" size="lg" flat round color="primary" @click="catUpdate(item)"/>
               <div class="text-h3 text-primary text-weight-medium">{{item.name}}</div>
             </div>
             <div v-if="item.courses && item.courses.length">
-              <q-card class="q-mt-sm" style="border-radius: 16px" v-for="(item2, index2) in item.courses" :key="index2">
+              <q-card class="q-mt-sm" style="border-radius: 10px" v-for="(item2, index2) in item.courses" :key="index2">
                 <div class="row items-center justify-between bg-primary q-pa-xs">
                   <div class="row items-start">
                     <q-btn class="q-ml-xs" icon="edit" flat round color="white" @click="setUpdate(item2)"/>
                     <div class="text-white">
                       <div class="text-h6 text-bold">{{item2.name}}</div>
-                      <div class="text-subtitle2 text-bold">${{item2.price}}</div>
+                      <div class="row q-gutter-x-md">
+                        <div class="text-subtitle2">30 días: €{{item2.price30}}</div>
+                        <div class="text-subtitle2">60 días: €{{item2.price60}}</div>
+                        <div class="text-subtitle2">90 días: €{{item2.price90}}</div>
+                      </div>
                     </div>
                   </div>
                   <q-btn class="q-ml-xs" icon="arrow_forward" flat round color="white" @click="selectCourse(item2._id)"/>
@@ -42,15 +46,15 @@
         </div>
 
         <q-dialog v-model="show">
-          <q-card style="width:100%;border-radius: 20px;">
+          <q-card style="width:100%;">
             <q-card-section>
-              <div class="text-h6">{{editCourse ? 'Editar Curso' : 'Crear Curso'}}</div>
+              <div class="text-h6 text-center text-italic text-primary">{{editCourse ? 'Editar Curso' : 'Crear Curso'}}</div>
             </q-card-section>
             <q-card-section class="q-pt-none">
-              <q-input dense outlined type="text" v-model="form.name" label="Nombre del curso"
+              <q-input dense outlined rounded type="text" v-model="form.name" label="Nombre del curso"
                 :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()">
               </q-input>
-              <q-select dense outlined v-model="form.category_id" :options="categories" label="Seleccione una categoría"
+              <q-select dense outlined rounded v-model="form.category_id" :options="categories" label="Seleccione una categoría"
                 map-options emit-value option-label="name" option-value="_id"
                 :error="$v.form.category_id.$error" error-message="Este campo es requerido"  @blur="$v.form.category_id.$touch()">
                 <template v-slot:no-option>
@@ -61,35 +65,41 @@
                   </q-item>
                 </template>
               </q-select>
-              <q-input dense outlined v-model="form.description" label="Breve descripción" type="textarea"
+              <q-input dense outlined rounded v-model="form.description" label="Breve descripción" type="textarea"
                 :error="$v.form.description.$error" error-message="Este campo es requerido"  @blur="$v.form.description.$touch()">
               </q-input>
-              <div class="row items-start">
-                <q-input dense outlined type="number" v-model.number="form.price" label="Costo del curso"
-                  :error="$v.form.price.$error" error-message="Este campo es requerido"  @blur="$v.form.price.$touch()">
+              <div class="row items-start justify-between">
+                <q-input dense outlined rounded type="number" v-model.number="form.price30" label="Costo de 30 días" class="col-5"
+                  :error="$v.form.price30.$error" error-message="Este campo es requerido"  @blur="$v.form.price30.$touch()">
                 </q-input>
-                <q-checkbox v-model="form.isEnabled" keep-color color="primary" label="Activo" class="q-ml-lg"/>
+                <q-input dense outlined rounded type="number" v-model.number="form.price60" label="Costo de 60 días" class="col-5"
+                  :error="$v.form.price60.$error" error-message="Este campo es requerido"  @blur="$v.form.price60.$touch()">
+                </q-input>
+                <q-input dense outlined rounded type="number" v-model.number="form.price90" label="Costo de 90 días" class="col-5"
+                  :error="$v.form.price90.$error" error-message="Este campo es requerido"  @blur="$v.form.price90.$touch()">
+                </q-input>
+                <q-checkbox v-model="form.isEnabled" keep-color color="primary" label="Activo" class="q-ml-lg col-5"/>
               </div>
             </q-card-section>
             <q-card-actions align="right">
               <q-btn flat label="Cancelar" color="primary" v-close-popup @click="show = false" no-caps/>
-              <q-btn flat :label="editCourse ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="editCourse ? updateCourse() : setCourse()" no-caps/>
+              <q-btn :label="editCourse ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="editCourse ? updateCourse() : setCourse()" no-caps/>
             </q-card-actions>
           </q-card>
         </q-dialog>
 
         <q-dialog v-model="showCat">
-          <q-card style="width:100%;border-radius: 20px;">
+          <q-card style="width:100%;">
             <q-card-section>
-              <div class="text-h6">{{editCat ? 'Editar' : 'Crear'}} Categoría</div>
+              <div class="text-h6 text-center text-italic text-primary">{{editCat ? 'Editar' : 'Crear'}} Categoría</div>
             </q-card-section>
             <q-card-section class="q-pt-none">
-              <q-input dense outlined type="text" v-model="formCat.name" label="Nombre de la categoría"
+              <q-input dense outlined rounded type="text" v-model="formCat.name" label="Nombre de la categoría"
               :error="$v.formCat.name.$error" error-message="Este campo es requerido"  @blur="$v.formCat.name.$touch()"/>
             </q-card-section>
             <q-card-actions align="right">
               <q-btn flat label="Cancelar" color="primary" v-close-popup no-caps/>
-              <q-btn flat label="Guardar" color="primary" v-close-popup @click="editCat ? updateCat() : setCat()" no-caps/>
+              <q-btn label="Guardar" color="primary" v-close-popup @click="editCat ? updateCat() : setCat()" no-caps/>
             </q-card-actions>
           </q-card>
         </q-dialog>
@@ -117,7 +127,9 @@ export default {
   validations: {
     form: {
       name: { required },
-      price: { required },
+      price30: { required },
+      price60: { required },
+      price90: { required },
       category_id: { required },
       description: { required }
     },

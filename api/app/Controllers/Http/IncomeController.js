@@ -2,6 +2,8 @@
 const User = use('App/Models/User')
 const Income = use('App/Models/Income')
 const License = use('App/Models/License')
+const Course = use('App/Models/Course')
+const ObjectId = require('mongodb').ObjectId
 
 class IncomeController {
 
@@ -9,13 +11,14 @@ class IncomeController {
     const data = (await Income.query().where({}).fetch()).toJSON()
     let total = 0
     for (const i in data) {
-      const license = await License.query().where('_id', data[i].license_id).first()
-      const user = await User.query().where('_id', data[i].user_id).first()
-      if (license !== null && user !== null) {
-        data[i].licenseTitle = license.name
-        data[i].months = license.months
+      let idCour = new ObjectId(data[i].course_id)
+      let idUser = new ObjectId(data[i].user_id)
+      let course = (await Course.find(idCour))
+      let user = (await User.find(idUser))
+      if (course !== null && user !== null) {
+        data[i].courseName = course.name
         data[i].userName = user.name
-        data[i].licenseExpirationDate = user.licenseExpirationDate
+        data[i].days = data[i].type === 'price30' ? '30 días' : data[i].type === 'price60' ? '60 días' : '90  días'
       }
       total = total + data[i].amount
     }

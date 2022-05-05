@@ -51,7 +51,6 @@ export function login (state, data) {
   state.user = data.user
 }
 export function dataUser (state, data) {
-  console.log(data)
   state.user = data
 }
 export function logout (state) {

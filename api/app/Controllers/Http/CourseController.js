@@ -25,6 +25,12 @@ class CourseController {
     response.send(data)
   }
 
+  async courseById ({ response, params }) {
+    const id = new ObjectId(params.id)
+    let data = (await Course.find(id)).toJSON()
+    response.send(data)
+  }
+
   async indexClient ({ response }) {
     let allData = (await Category.query().where({}).with('courses').fetch()).toJSON()
     const data = []

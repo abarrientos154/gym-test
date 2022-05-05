@@ -38,7 +38,7 @@
       <q-footer elevated v-if="rol === 2" style="border-top-left-radius: 10px; border-top-right-radius: 10px">
         <div class="bg-primary full-width row justify-around q-py-sm" style="border-top-left-radius: 10px; border-top-right-radius: 10px">
           <div class="row items-center" v-for="(item, index) in menu" :key="index">
-            <q-btn :icon="item.icon" color="white" flat stack dense no-caps size="lg" @click="item.label === 'Salir' ? cerrarSesion() : $router.push(item.ruta)">
+            <q-btn :icon="item.icon" color="white" flat stack dense no-caps size="lg" @click="item.label === 'Salir' ? cerrarSesion() : item.label === 'Membresía' ? $router.push(item.ruta + courseId) : $router.push(item.ruta)">
             </q-btn>
           </div>
         </div>
@@ -55,13 +55,14 @@
 import { mapMutations } from 'vuex'
 export default {
   name: 'MainLayout',
-  data () {
+  data (el) {
     return {
       rol: null,
-      user: {},
+      DrawerOpen: true,
       buscar: '',
       selecBtn: '',
-      DrawerOpen: true,
+      courseId: '',
+      user: {},
       menu: [],
       menuAdmin: [
         {
@@ -214,8 +215,8 @@ export default {
         },
         {
           icon: 'card_membership',
-          label: 'Membresia',
-          ruta: '/license'
+          label: 'Membresía',
+          ruta: '/license/'
         },
         {
           icon: 'book',
@@ -227,23 +228,12 @@ export default {
           label: 'Salir',
           ruta: ''
         }
-      ],
-      menuUserExpired: [
-        {
-          icon: 'card_membership',
-          label: 'Membresia',
-          ruta: '/license'
-        },
-        {
-          icon: 'logout',
-          label: 'Salir',
-          ruta: ''
-        }
       ]
     }
   },
   mounted () {
     const value = localStorage.getItem('SESSION_INFO')
+    this.courseId = localStorage.getItem('course_id')
     if (value) {
       this.getUser()
     }
@@ -251,22 +241,14 @@ export default {
   methods: {
     ...mapMutations('generals', ['logout']),
     getUser () {
-      this.$api.get('user_info_license').then(v => {
+      this.$api.get('user_info').then(v => {
         if (v) {
           this.rol = v.roles[0]
           this.user = v
           if (this.rol === 1) {
             this.menu = this.menuAdmin
           } else if (this.rol === 2) {
-            if (this.user.days > 0) {
-              if (this.user.disabled !== true) {
-                this.menu = this.menuUser
-              } else {
-                this.menu = this.menuUserExpired
-              }
-            } else {
-              this.menu = this.menuUserExpired
-            }
+            this.menu = this.menuUser
           }
         }
       })

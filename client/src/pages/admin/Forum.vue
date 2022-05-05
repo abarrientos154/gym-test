@@ -9,33 +9,31 @@
       </div>
       <q-btn color="primary" label="Nuevo Foro" icon="add" dense no-caps size="md" class="q-ml-md" @click="newForum()"/>
     </div>
-    <q-card class="row q-pa-sm q-ma-sm bg-grey-2" style="width: 90%" v-for="(item, index) in forums" :key="index">
-      <q-avatar square size="100px" >
-        <img style="width: 100%" :src="'noimg.png'" spinner-color="white">
-      </q-avatar>
-      <div class="q-ml-md q-mt-sm" style="width: 80%">
-        <div>{{item.title}}</div>
-        <div v-html="item.text" class="ellipsis-3-lines"></div>
-      </div>
-      <div class="q-mt-sm row absolute-top-right">
-        <q-btn color="primary" flat icon="edit" @click="setEditForum(item)"/>
-        <q-btn color="primary" flat icon="delete" @click="deleteForum(item._id)"/>
-      </div>
-    </q-card>
+
+    <div class="row justify-around q-pt-md">
+        <q-card v-for="(item, index) in forums" :key="index" style="width: 47%; border-radius: 10px">
+          <div class="bg-primary text-white text-h6 q-pa-sm row justify-between items-center">
+            <div>{{item.title}}</div>
+            <div class="row">
+              <q-btn color="white" flat round dense icon="edit" @click="setEditForum(item)"/>
+              <q-btn color="white" flat round dense icon="delete" @click="deleteForum(item._id)"/>
+            </div>
+          </div>
+          <div v-html="item.text" class="ellipsis-3-lines q-pa-sm"></div>
+        </q-card>
+    </div>
+
     <q-dialog v-model="show" @hide="decartarCamb()">
-      <q-card style="border-radius: 20px; width: 80%">
+      <q-card style="width: 100%">
         <q-card-section>
-          <div class="text-h6">{{edit ? 'Editar Foro' : 'Crear Foro'}}</div>
+          <div class="text-h6 text-center text-primary text-italic">{{edit ? 'Editar Foro' : 'Crear Foro'}}</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
-          <q-input dense outlined type="text" v-model="form.title" label="Titulo del Foro" :error="$v.form.title.$error" error-message="Este campo es requerido"  @blur="$v.form.title.$touch()">
-            <template v-slot:prepend>
-              <q-icon name="edit" color="primary"/>
-            </template>
-          </q-input>
-          <div :class="isWrittren === false ? 'text-negative' : ''">Debes redactar el Foro</div>
-          <div class="">
-            <q-editor v-model="textEdit" style="width: 100%" min-height="5rem"/>
+          <q-input dense outlined rounded type="text" v-model="form.title" label="Nombre del Foro"
+            :error="$v.form.title.$error" error-message="Este campo es requerido"  @blur="$v.form.title.$touch()"/>
+          <div :class="isWrittren === false ? 'text-negative' : ''">Descripción del foro</div>
+          <div>
+            <q-editor v-model="textEdit" style="width: 100%; border-radius:10px" min-height="5rem"/>
           </div>
            <q-checkbox
             left-label
@@ -55,7 +53,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
-          <q-btn flat :label="edit ? 'Actualizar' :  'Crear'" color="primary" @click="edit ? updateForum() : setForum()" no-caps/>
+          <q-btn :label="edit ? 'Actualizar' :  'Crear'" color="primary" @click="edit ? updateForum() : setForum()" no-caps/>
         </q-card-actions>
       </q-card>
     </q-dialog>

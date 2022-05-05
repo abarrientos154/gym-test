@@ -148,7 +148,6 @@ class TypeController {
     const user = (await auth.getUser()).toJSON()
     let allData = (await TypeTest.query().where({user_id: user._id}).with('typeInfo').fetch()).toJSON()
     let data = []
-    console.log('allData :>> ', allData);
     if (allData.length) {
       allData = allData.filter(v => {
         if (v.typeInfo !== null) {

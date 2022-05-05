@@ -8,7 +8,6 @@ export function logout ({ commit }) {
 export async function saveUser ({ commit }) {
   await this._vm.$api.get('userInfoWithRole').then(v => {
     if (v) {
-      console.log(v)
       commit('dataUser', v[0])
     }
   })

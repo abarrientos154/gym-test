@@ -1,10 +1,13 @@
 'use strict'
 const License = use('App/Models/License')
+const Income = use("App/Models/Income")
+const Course = use('App/Models/Course')
+const ObjectId = require('mongodb').ObjectId
+const moment = require('moment')
 const Env = use('Env')
 const View = use('View')
 const StripeKey = Env.get('STRIPE_KEY')
 const StripeKeyPrivate = Env.get('STRIPE_KEY_PRIVATE')
-console.log(StripeKey, 'stripekey')
 const Stripe = require('stripe')
 const stripe = Stripe(StripeKeyPrivate)
 
@@ -29,8 +32,18 @@ class LicenseController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ response }) {
-    const data = (await License.query().where({}).fetch()).toJSON()
+  async index ({ response, params, auth }) {
+    const user = (await auth.getUser()).toJSON()
+    const data = (await License.query().where({user_id: user._id, course_id: params.id}).first())
+    if (data) {
+      let date = moment().format('YYYY-MM-DD')
+      let days = moment(data.expirationDate).diff(date , 'days')
+      if (days <= 0) {
+        data.disable = true
+        days = 0
+      }
+      data.days = days
+    }
     response.send(data)
   }
 
@@ -45,22 +58,49 @@ class LicenseController {
    */
   async create ({ request, response, view }) {
     let body = request.get()
-    console.log(body, 'soy un body testStripe')
     View.global('ruta', function () {
       return `/api/procesador_pagos/${body.user_id}/${body.montoTotal}/${body.ref}`
     })
     return view.render('paytoshop')
   }
 
+  async setBuy({ response, auth, params }) {
+    const user = (await auth.getUser()).toJSON()
+    const id = new ObjectId(params.id)
+    let course = (await Course.query().find(id)).toJSON()
+    const income = {
+      course_id: course._id,
+      user_id: user._id,
+      type: params.type,
+      amount: course[params.type]
+    }
+    const newIncome = await Income.create(income)
+
+    const data = (await License.query().where({user_id: user._id, course_id: params.id}).first())
+    let date = moment().format('YYYY-MM-DD')
+    let days = params.type === 'price30' ? 30 : params.type === 'price60' ? 60 : 90
+    if (data) {
+      let daysRes = moment(data.expirationDate).diff(date , 'days')
+      if (daysRes > 0) {
+        days = days + daysRes
+      }
+    }
+    income.expirationDate = moment(date).add(days, 'days').format('YYYY-MM-DD')
+    if (data) {
+      let updata = await License.query().where({user_id: user._id, course_id: params.id}).update(income)
+    } else {
+      const newLicense = await License.create(income)
+    }
+
+    response.send(true)
+  }
+
   async procesarPago ({ request, params, view, response }) {
     let body = params
-    console.log(body, 'soy un body')
     let totalPagar = body.montoTotal * 100
-    console.log(totalPagar, 'total')
     var url1, url2
     url1 = 'https://eiche.gymtest.app/pago_apro'
     url2 = 'https://eiche.gymtest.app/pago_cance'
-    console.log(url1, url2)
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [

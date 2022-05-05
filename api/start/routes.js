@@ -39,7 +39,7 @@ addPrefixToGroup(
     Route.get('news', 'NewsController.index')
     Route.get('newsById/:id', 'NewsController.show')
 
-    Route.get('getLicenses', 'LicenseController.index')
+    Route.get('get_License_course/:id', 'LicenseController.index')
 
     Route.get('communities', 'CommunityController.index')
     Route.get("email_send_app/:email", "UserController.recuperacionapp")
@@ -64,7 +64,6 @@ addPrefixToGroup(
   Route.group(() => {
     // Insertar rutas con protección de autenticación aquí
     Route.get("user_info", "UserController.userInfo")
-    Route.get("user_info_license", "UserController.userInfoLicense")
     Route.get("all_user", "UserController.index")
     Route.get("getUsers", "UserController.indexListable")
     Route.put('updateUser/:id', 'UserController.update')
@@ -207,6 +206,7 @@ addPrefixToGroup(
     Route.put('desafio_value/:id', 'AnswerController.editDesafio')
     
     Route.get('getCourses', 'CourseController.index')
+    Route.get('course_by_id/:id', 'CourseController.courseById')
     Route.get('getCoursesClient', 'CourseController.indexClient')
     Route.post('setCourse', 'CourseController.store')
     Route.put('updateCourse/:id', 'CourseController.update')
@@ -236,7 +236,7 @@ addPrefixToGroup(
     Route.delete('deleteAllAudios', 'AudioController.destroyAll')
     Route.get('audiosByTopic/:id', 'AudioController.audiosByTopic')
 
-    Route.put('setBuy/:id', 'UserController.setBuy')
+    Route.put('setBuy/:type/:id', 'LicenseController.setBuy')
     Route.get('getIncomes', 'IncomeController.index')
     
   }).middleware("auth")

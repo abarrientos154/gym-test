@@ -29,8 +29,8 @@
         <q-card class="bordes q-pa-none" style="width: 100%; border-radius: 10px;">
           <div class="row items-center q-py-xs q-pl-xs">
             <div class="q-pl-xs">
-              <div class="text-primary">MIS EXAMENES</div>
-              <div class="text-grey-8 text-caption">Conoce el historial de tus examenes</div>
+              <div class="text-primary">MIS EXÁMENES</div>
+              <div class="text-grey-8 text-caption">Conoce el historial de tus exámenes</div>
             </div>
           </div>
           <div class="bg-primary q-py-md q-px-xs q-ma-none">
@@ -41,7 +41,7 @@
                 <div class="col-4 text-center">{{item.all_quest}} / {{item.correctas}}</div>
               </div>
             </div>
-            <div v-else class="text-white text-caption text-center">No hay examenes presentados</div>
+            <div v-else class="text-white text-caption text-center">No hay exámenes presentados</div>
           </div>
         </q-card>
 
@@ -94,7 +94,7 @@
         </q-scroll-area>
         <div v-else class="text-center text-bold text-grey-9 q-py-lg">Sin entrenamiento actualmente</div>
 
-        <div class="text-h6 text-bold text-primary q-mt-sm">Examenes</div>
+        <div class="text-h6 text-bold text-primary q-mt-sm">Exámenes</div>
         <q-scroll-area v-if="examenes.length" horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 140px; width: 100%;">
           <div class="row no-wrap q-gutter-md">
             <q-card flat style="width: 130px; height: 130px" clickable v-ripple v-for="(item, index) in examenes" :key="index"
@@ -107,6 +107,8 @@
             </q-card>
           </div>
         </q-scroll-area>
+        <div v-else class="text-center text-bold text-grey-9 q-py-lg">Sin exámenes actualmente</div>
+
         <div class="text-h6 text-bold text-primary q-mt-sm">Audios</div>
         <q-scroll-area v-if="topicsWithAudios.length" horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 140px; width: 100%;">
           <div class="row no-wrap q-gutter-md">
@@ -128,9 +130,7 @@
             <li @click="$router.push('/publicidad/' + item._id)">{{item.title}}</li>
           </div>
         </q-card>
-        <q-card class="bg-grey-2 q-pa-sm" v-else>
-          <div class="row justify-center text-grey-8">Aun no hay nuevas Noticias</div>
-        </q-card>
+        <div v-else class="text-center text-bold text-grey-9 q-py-lg">Aún no hay nuevas Noticias</div>
       </div>
   </div>
 </template>
