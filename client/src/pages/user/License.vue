@@ -45,7 +45,7 @@
         <q-img src="Imágenes web _Mesa de trabajo 1.png" style="width:200px;" />
         <div class="text-h6 q-pt-lg">Adquirir Membresía</div>
         <div class="text-subtitle1 q-pb-lg">Costo <b class="text-h5 text-bold text-light-green-14">€{{license.total}}</b></div>
-        <q-btn label="Pagar" color="primary" text-color="white" v-close-popup @click="setBuy()" no-caps style="width:100%"/>
+        <q-btn label="Pagar" color="primary" text-color="white" v-close-popup @click="buy()" no-caps style="width:100%"/>
         <q-btn flat label="Cancelar" color="primary" v-close-popup no-caps class="q-mt-sm"/>
       </q-card>
     </q-dialog>
@@ -55,7 +55,7 @@
         <q-img src="Imágenes web -02.png" style="width:200px;" />
         <div class="text-h6 q-pt-lg">Compra completada</div>
         <div class="text-subtitle1 q-pb-lg">Ya puedes acceder a este curso</div>
-        <q-btn label="Ir a inicio" color="primary" text-color="white" @click="$router.go(-1)" no-caps style="width:100%"/>
+        <q-btn label="Ir a inicio" color="primary" text-color="white" @click="$router.push('/courses_client')" no-caps style="width:100%"/>
       </q-card>
     </q-dialog>
 
@@ -82,7 +82,7 @@ export default {
       seeDays: false,
       ex: false,
       baseu: '',
-      courseId: this.$route.params.id,
+      courseId: this.$route.params.lic,
       user: {},
       course: {},
       license: {},
@@ -90,13 +90,14 @@ export default {
     }
   },
   mounted () {
-    /* if (this.$route.params.est) {
+    if (this.$route.params.est) {
+      alert(this.$route.params.est)
       if (this.$route.params.est < 2) {
         this.setBuy()
       } else {
         this.modalFault = true
       }
-    } */
+    }
     this.getUser()
     this.getCourse()
     this.getLicense()
@@ -118,6 +119,8 @@ export default {
         if (res) {
           this.course = res
           this.$q.loading.hide()
+        } else {
+          this.$q.loading.hide()
         }
       })
     },
@@ -130,7 +133,7 @@ export default {
       })
     },
     async buy () {
-      const ruta = `${this.baseu}&montoTotal=${this.license.total}&ref=${this.courseId}`
+      const ruta = `${this.baseu}&montoTotal=${this.license.total}&ref=${this.courseId}&dias=${this.license.name}`
       this.$q.loading.show({
         message: 'Comprando'
       })
@@ -141,7 +144,7 @@ export default {
       this.$q.loading.show({
         message: 'Procesando pago...'
       })
-      this.$api.put('setBuy/' + this.license.name + '/' + this.courseId).then(res => {
+      this.$api.put('setBuy/' + this.$route.params.dias + '/' + this.$route.params.lic).then(res => {
         if (res) {
           this.modalExi = true
           this.$q.loading.hide()

@@ -59,7 +59,7 @@ class LicenseController {
   async create ({ request, response, view }) {
     let body = request.get()
     View.global('ruta', function () {
-      return `/api/procesador_pagos/${body.user_id}/${body.montoTotal}/${body.ref}`
+      return `/api/procesador_pagos/${body.user_id}/${body.montoTotal}/${body.ref}/${body.dias}`
     })
     return view.render('paytoshop')
   }
@@ -116,8 +116,8 @@ class LicenseController {
         },
       ],
       mode: 'payment',
-      success_url: `${url1}?user_id=${params.user_id}&ref=${params.ref}`,
-      cancel_url: `${url2}?user_id=${params.user_id}&ref=${params.ref}&cancel=${0}`,
+      success_url: `${url1}?user_id=${params.user_id}&ref=${params.ref}&dias=${params.dias}`,
+      cancel_url: `${url2}?user_id=${params.user_id}&ref=${params.ref}&cancel=${0}&dias=${params.dias}`,
     })
     response.send({ id: session.id })
   }

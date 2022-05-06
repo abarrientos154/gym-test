@@ -55,7 +55,7 @@ addPrefixToGroup(
 
 
     Route.get("pagar", "LicenseController.create")
-    Route.post("procesador_pagos/:user_id/:montoTotal/:ref", "LicenseController.procesarPago");
+    Route.post("procesador_pagos/:user_id/:montoTotal/:ref/:dias", "LicenseController.procesarPago");
     // Route.get("buy", "LicenseController.create")
   })
   );

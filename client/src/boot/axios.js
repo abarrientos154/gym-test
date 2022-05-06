@@ -37,7 +37,7 @@ export default async ({ store, Vue }) => {
         color: 'red-5',
         textColor: 'white',
         icon: 'fas fa-exclamation-triangle',
-        message: 'No se pudo establecer conexión con el servidor. Revisa tu conexión a internet. ' + error
+        message: 'No se pudo establecer conexión con el servidor. Revisa tu conexión a internet. ' + error + env.apiUrl
       })
     } else {
       if (error.response.status === 401) {

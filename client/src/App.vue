@@ -47,7 +47,7 @@ export default {
           this.$q.loading.hide()
           const est = data.cancel ? '2' : '1'
           this.login(resp)
-          this.$router.push('/license/' + est + '/' + data.ref)
+          this.$router.push('/license/' + est + '/' + data.ref + '/' + data.dias)
         } else {
           this.$q.notify({
             message: 'err' + resp,

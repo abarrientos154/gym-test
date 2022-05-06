@@ -41,8 +41,8 @@ const routes = [
     ]
   },
 
-  { path: '/license/:id', component: () => import('pages/user/License.vue') },
-  { path: '/license/:est/:lic', component: () => import('pages/user/License.vue') },
+  { path: '/license/:lic', component: () => import('pages/user/License.vue') },
+  { path: '/license/:est/:lic/:dias', component: () => import('pages/user/License.vue') },
 
   { path: '/splash', component: () => import('pages/Splash.vue') },
   { path: '/pagina-principal', component: () => import('pages/Home.vue') },
