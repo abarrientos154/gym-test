@@ -132,9 +132,9 @@
         </q-card>
         <div v-else class="text-center text-bold text-grey-9 q-py-lg">Aún no hay nuevas Noticias</div>
         <div class="text-h6 text-bold text-primary q-mt-sm">Foro</div>
-        <q-card class="bg-grey-2 q-pa-sm" v-if="forum.length > 0">
+        <q-card class="bg-grey-2 q-pa-sm" v-if="forum.length > 0" @click="$router.push('/forums')">
           <div v-for="(item, index) in forum" :key="index" class="text-subtitle2 q-ml-sm">
-            <li @click="$router.push('/forum/' + item._id)">{{item.title}}</li>
+            <li>{{item.title}}</li>
           </div>
         </q-card>
         <div v-else class="text-center text-bold text-grey-9 q-py-lg">Aún no hay Foros</div>

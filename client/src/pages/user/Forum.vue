@@ -2,7 +2,7 @@
   <div>
     <q-btn class="absolute-top" round flat color="white" icon="arrow_back" style="z-index: 5"
     @click="$router.go(-1)" />
-    <q-img :src="baseu + data.image" style="height: 300px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
+    <q-img src="fondo.png" style="height: 300px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
         <div class="absolute-full column justify-end">
             <div class="row no-wrap items-center" style="padding-bottom: 60px">
                 <div class="text-h5 text-bold q-pl-sm">{{data.title}}</div>
