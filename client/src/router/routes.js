@@ -31,6 +31,7 @@ const routes = [
       { path: '/temas', component: () => import('pages/user/Temas.vue') },
       { path: '/news_user', component: () => import('pages/user/News.vue') },
       { path: '/publicidad/:id', component: () => import('pages/user/PublicidadBlog.vue') },
+      { path: '/forum/:id', component: () => import('pages/user/Forum.vue') },
       { path: '/tema/:idTema', component: () => import('pages/user/Examen.vue') },
       { path: '/examen/:idExamen', component: () => import('pages/user/Examen.vue') },
       { path: '/gym/:idType', component: () => import('pages/user/Examen.vue') },
