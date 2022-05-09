@@ -55,7 +55,7 @@
       <listable class="col" :columns="columns" :data="answers" title="Respuestas" @function="execute"/>
     </div>
     <q-dialog v-model="show" @hide="decartarCamb()">
-      <q-card style="border-radius: 20px;">
+      <q-card style="width:100%;border-radius: 20px;">
         <q-card-section>
           <div class="text-h6">{{editAnswer ? 'Editar Respuesta' : 'Crear Respuesta'}}</div>
         </q-card-section>
@@ -77,7 +77,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
-          <q-btn flat :label="editAnswer ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="editAnswer ? updateAnswer() : setAnswer()" no-caps/>
+          <q-btn flat :label="editAnswer ? 'Actualizar' :  'Crear'" color="primary" @click="editAnswer ? updateAnswer() : setAnswer()" no-caps/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -176,6 +176,7 @@ export default {
               message: 'Respuesta Actualizada Correctamente'
             })
             this.getAnswers()
+            this.show = false
           }
         })
       }
@@ -199,6 +200,7 @@ export default {
               message: 'Respuesta Creada Correctamente'
             })
             this.getAnswers()
+            this.show = false
           }
         })
       }

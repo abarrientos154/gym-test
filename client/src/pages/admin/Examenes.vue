@@ -58,8 +58,9 @@
     <div class="row justify-center" style="height: 70%">
       <listable class="col" :columns="columns" :data="exams" title="Examenes" @function="execute"/>
     </div>
+
     <q-dialog v-model="show" @hide="decartarCamb()">
-      <q-card style="border-radius: 20px;">
+      <q-card style="width:100%; border-radius: 20px;">
         <q-card-section>
           <div class="text-h6">{{editExam ? 'Editar examen' : 'Crear examen'}}</div>
         </q-card-section>
@@ -92,7 +93,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
-          <q-btn flat :label="editExam ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="editExam ? updateExam() : setExam()" no-caps/>
+          <q-btn flat :label="editExam ? 'Actualizar' :  'Crear'" color="primary" @click="editExam ? updateExam() : setExam()" no-caps/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -162,6 +163,7 @@ export default {
               message: 'Examen Actualizado Correctamente'
             })
             this.getExam()
+            this.show = false
           }
         })
       }
@@ -205,6 +207,7 @@ export default {
               message: 'Examen Creado Correctamente'
             })
             this.getExam()
+            this.show = false
           }
         })
       }

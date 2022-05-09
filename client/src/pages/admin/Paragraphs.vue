@@ -30,14 +30,15 @@
     <div class="row justify-center" style="height: 70%">
       <listable class="col" :columns="columns" :data="paragraphs" title="Párrafos" @function="execute"/>
     </div>
+
     <q-dialog v-model="show" @hide="decartarCamb()">
-      <q-card style="border-radius: 20px;">
+      <q-card style="width:100%;border-radius: 20px;">
         <q-card-section>
           <div class="text-h6">{{editParagraph ? 'Editar Párrafo' : 'Crear Párrafo'}}</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
-          <q-select style="min-width: 220px" class="q-mr-sm q-my-sm" outlined v-model="law" label="Escoga una ley" dense :options="laws" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="law_name" @input="getArticlesByLaw(law)" clearable></q-select>
-          <q-select style="min-width: 220px" class="q-mr-md q-my-sm" outlined v-model="form.article_id" label="Escoga un articulo" dense :options="articles" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="article_name" :error="$v.form.article_id.$error" error-message="Este campo es requerido"  @blur="$v.form.article_id.$touch()"  clearable>
+          <q-select class="q-mb-md" outlined v-model="law" label="Escoga una ley" dense :options="laws" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="law_name" @input="getArticlesByLaw(law)" clearable></q-select>
+          <q-select outlined v-model="form.article_id" label="Escoga un articulo" dense :options="articles" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="article_name" :error="$v.form.article_id.$error" error-message="Este campo es requerido"  @blur="$v.form.article_id.$touch()"  clearable>
             <template v-slot:no-option>
               <q-item>
                 <q-item-section class="text-grey">
@@ -53,7 +54,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
-          <q-btn flat :label="editParagraph ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="editParagraph ? updateParagraph() : setParagraph()" no-caps/>
+          <q-btn flat :label="editParagraph ? 'Actualizar' :  'Crear'" color="primary" @click="editParagraph ? updateParagraph() : setParagraph()" no-caps/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -134,6 +135,7 @@ export default {
               message: 'Párrafo Actualizado Correctamente'
             })
             this.getParagraphs()
+            this.show = false
           }
         })
       }
@@ -157,6 +159,7 @@ export default {
               message: 'Párrafo Creado Correctamente'
             })
             this.getParagraphs()
+            this.show = false
           }
         })
       }

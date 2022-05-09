@@ -15,7 +15,7 @@
       <listable class="col" :columns="columns" :data="audios" title="Audios" @function="execute"/>
     </div>
     <q-dialog v-model="show" @hide="decartarCamb()">
-      <q-card style="border-radius: 20px; width: 80%">
+      <q-card style="border-radius: 20px; width: 100%">
         <q-card-section>
           <div class="text-h6">{{editAudio ? 'Editar Audio' : 'Crear Audio'}}</div>
         </q-card-section>
@@ -30,7 +30,7 @@
               <q-icon name="edit" color="primary"/>
             </template>
           </q-input>
-          <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.topic" label="Escoga un tema" dense :options="topics" :error="$v.form.topic.$error" error-message="Este campo es requerido"  @blur="$v.form.topic.$touch()" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="topic" clearable></q-select>
+          <q-select outlined v-model="form.topic" label="Escoga un tema" dense :options="topics" :error="$v.form.topic.$error" error-message="Este campo es requerido"  @blur="$v.form.topic.$touch()" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="topic" clearable></q-select>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>

@@ -42,8 +42,9 @@
     <div class="row justify-center" style="height: 70%">
       <listable class="col" :columns="columns" :data="laws" title="Leyes" @function="execute"/>
     </div>
+
     <q-dialog v-model="show" @hide="decartarCamb()">
-      <q-card style="border-radius: 20px;">
+      <q-card style="width:100%;border-radius: 20px;">
         <q-card-section>
           <div class="text-h6">{{editLaw ? 'Editar Ley' : 'Crear Ley'}}</div>
         </q-card-section>
@@ -55,7 +56,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
-          <q-btn flat :label="editLaw ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="editLaw ? updateLaw() : setLaw()" no-caps/>
+          <q-btn flat :label="editLaw ? 'Actualizar' :  'Crear'" color="primary" @click="editLaw ? updateLaw() : setLaw()" no-caps/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -108,6 +109,7 @@ export default {
               message: 'Ley Actualizada Correctamente'
             })
             this.getLaws()
+            this.show = false
           }
         })
       }
@@ -141,6 +143,7 @@ export default {
               message: 'Ley Creada Correctamente'
             })
             this.getLaws()
+            this.show = false
           }
         })
       }

@@ -9,19 +9,23 @@
       </div>
       <q-btn color="primary" label="Nueva Noticia" icon="add" dense no-caps size="md" class="q-ml-md" @click="newNews()"/>
     </div>
-    <q-card class="row q-pa-sm q-ma-sm bg-grey-2" style="width: 90%" v-for="(item, index) in news" :key="index">
-      <q-avatar square size="100px" >
-        <img style="width: 100%" :src="item.image ? baseu + item.image : 'noimg.png'" spinner-color="white">
-      </q-avatar>
-      <div class="q-ml-md q-mt-sm" style="width: 80%">
-        <div>{{item.title}}</div>
-        <div v-html="item.text" class="ellipsis-3-lines"></div>
-      </div>
-      <div class="q-mt-sm row absolute-top-right">
-        <q-btn color="primary" flat icon="edit" @click="setEditNews(item)"/>
-        <q-btn color="primary" flat icon="delete" @click="deleteNews(item._id)"/>
-      </div>
-    </q-card>
+
+    <div class="column items-center">
+      <q-card class="row q-pa-sm q-ma-sm bg-grey-2" style="width: 90%" v-for="(item, index) in news" :key="index">
+        <q-avatar square size="100px" >
+          <img style="width: 100%" :src="item.image ? baseu + item.image : 'noimg.png'" spinner-color="white">
+        </q-avatar>
+        <div class="q-ml-md q-mt-sm" style="width: 80%">
+          <div>{{item.title}}</div>
+          <div v-html="item.text" class="ellipsis-3-lines"></div>
+        </div>
+        <div class="q-mt-sm row absolute-top-right">
+          <q-btn color="primary" flat icon="edit" @click="setEditNews(item)"/>
+          <q-btn color="primary" flat icon="delete" @click="deleteNews(item._id)"/>
+        </div>
+      </q-card>
+    </div>
+
     <q-dialog v-model="show" @hide="decartarCamb()">
       <q-card style="border-radius: 20px; width: 80%">
         <q-card-section>

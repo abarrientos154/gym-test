@@ -45,22 +45,22 @@
     <div class="row justify-center" style="height: 70%">
       <listable class="col" :columns="columns" :data="articles" title="Artículos" @function="execute"/>
     </div>
+
     <q-dialog v-model="show" @hide="decartarCamb()">
-      <q-card style="border-radius: 20px;">
+      <q-card style="width:100%;border-radius: 20px;">
         <q-card-section>
           <div class="text-h6">{{editArticle ? 'Editar Artículo' : 'Crear Artículo'}}</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
           <q-input dense outlined type="text" v-model="form.article_name" label="Nuevo Artículo" :error="$v.form.article_name.$error" error-message="Este campo es requerido"  @blur="$v.form.article_name.$touch()">
           </q-input>
-          <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.law" label="Escoga una ley" dense :options="laws" :error="$v.form.law.$error" error-message="Este campo es requerido"  @blur="$v.form.law.$touch()" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="law_name" clearable></q-select>
+          <q-select outlined v-model="form.law" label="Escoga una ley" dense :options="laws" :error="$v.form.law.$error" error-message="Este campo es requerido"  @blur="$v.form.law.$touch()" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="law_name" clearable></q-select>
           <q-input dense outlined type="text" v-model="form.sub_title" label="Sub Título" :error="$v.form.sub_title.$error" error-message="Este campo es requerido"  @blur="$v.form.sub_title.$touch()">
           </q-input>
-          {{form}}
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
-          <q-btn flat :label="editArticle ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="editArticle ? updateArticle() : setArticle()" no-caps/>
+          <q-btn flat :label="editArticle ? 'Actualizar' :  'Crear'" color="primary" @click="editArticle ? updateArticle() : setArticle()" no-caps/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -129,6 +129,7 @@ export default {
               message: 'Articulo Actualizada Correctamente'
             })
             this.getArticles()
+            this.show = false
           }
         })
       }
@@ -152,6 +153,7 @@ export default {
               message: 'Articulo Creado Correctamente'
             })
             this.getArticles()
+            this.show = false
           }
         })
       }

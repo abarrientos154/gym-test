@@ -23,8 +23,9 @@
     <div class="row justify-center" style="height: 70%">
       <listable class="col" :columns="columns" :data="questions" title="Preguntas" @function="execute"/>
     </div>
+
     <q-dialog v-model="show" @hide="decartarCamb()">
-      <q-card style="border-radius: 20px;">
+      <q-card style="width:100%;border-radius: 20px;">
         <q-card-section>
           <div class="text-h6">{{editQuestion ? 'Editar pregunta' : 'Crear pregunta'}}</div>
         </q-card-section>
@@ -39,7 +40,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
-          <q-btn flat :label="editQuestion ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="editQuestion ? updateQuestion() : setQuestion()" no-caps/>
+          <q-btn flat :label="editQuestion ? 'Actualizar' :  'Crear'" color="primary" @click="editQuestion ? updateQuestion() : setQuestion()" no-caps/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -178,6 +179,7 @@ export default {
               color: 'positive',
               message: 'Pregunta Actualizada Correctamente'
             })
+            this.show = false
           }
         })
       }
@@ -200,6 +202,7 @@ export default {
               color: 'positive',
               message: 'Pregunta Creada Correctamente'
             })
+            this.show = false
           }
         })
       }
