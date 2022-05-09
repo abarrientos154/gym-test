@@ -143,7 +143,6 @@ export default {
     decartarCamb () {
       this.form = {}
       this.file2 = null
-      this.show = false
       this.$v.$reset()
     },
     setTopic () {

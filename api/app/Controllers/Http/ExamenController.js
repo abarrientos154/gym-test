@@ -69,9 +69,9 @@ class ExamenController {
       for (const i in data) {
         if (data[i].date === null) {
           data[i].date = ''
-        } else {
-          data[i].date = moment(data[i].date).format('DD/MM/YYYY')
-        }
+        }/*  else {
+          data[i].date = data[i].date
+        } */
         data[i].actions = [
           {
             color: "primary",

@@ -11,12 +11,12 @@
       <div class="text-bold text-primary text-center text-italic text-h6">Temas</div>
         <q-card v-for="(item, index) in temas" :key="index" clickable v-ripple @click="$router.push('/tema/' + item._id)"
           class="q-mt-md" style="width:100%; border-radius: 10px;">
-            <!-- <q-img :src="item.image ? baseu + item.image : 'noimg.png'" style="height: 150px; width: 100%;border-radius: 10px;" /> -->
-            <div class="row justify-end q-pl-md" style="width:100%">
+            <q-img :src="item.image ? baseu + item.image : 'noimg.png'" style="height: 150px; width: 100%;border-radius: 10px;" />
+            <div class="absolute-top row justify-end q-pl-md" style="width:100%">
               <div class="text-white text-h6 ellipsis bg-primary q-py-sm q-px-md"
                style="border-bottom-left-radius: 30px; border-top-right-radius: 10px">{{item.name}}</div>
             </div>
-            <div class="q-px-md q-pb-md text-italic">{{item.long_name}}</div>
+            <!-- <div class="q-px-md q-pb-md text-italic">{{item.long_name}}</div> -->
         </q-card>
     </div>
   </div>

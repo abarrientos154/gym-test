@@ -73,53 +73,18 @@ export default {
           ruta: '/administrador'
         },
         {
+          src: '',
+          src2: '',
+          label: 'Cursos',
+          icon: 'book',
+          ruta: '/courses'
+        },
+        {
           src: 'temas 1.png',
           src2: '',
           label: 'Temas',
           icon: 'style',
           ruta: '/topics'
-        },
-        {
-          src: 'pregunta 1.png',
-          src2: 'pregunta 12.png',
-          label: 'Preguntas',
-          icon: 'quiz',
-          ruta: '/questions'
-        },
-        {
-          src: 'examen 12.png',
-          src2: 'examen 1.png',
-          label: 'Examenes',
-          icon: 'rule',
-          ruta: '/exams'
-        },
-        {
-          src: '',
-          src2: '',
-          label: 'Articulos',
-          icon: 'article',
-          ruta: '/articles'
-        },
-        {
-          src: '',
-          src2: '',
-          label: 'Parrafos',
-          icon: 'view_headline',
-          ruta: '/paragraphs'
-        },
-        {
-          src: '',
-          src2: '',
-          label: 'Leyes',
-          icon: 'gavel',
-          ruta: '/laws'
-        },
-        {
-          src: '',
-          src2: '',
-          label: 'Respuestas',
-          icon: 'verified',
-          ruta: '/answers'
         },
         {
           src: '',
@@ -138,9 +103,49 @@ export default {
         {
           src: '',
           src2: '',
-          label: 'Cursos',
-          icon: 'book',
-          ruta: '/courses'
+          label: 'Leyes',
+          icon: 'gavel',
+          ruta: '/laws'
+        },
+        {
+          src: '',
+          src2: '',
+          label: 'Articulos',
+          icon: 'article',
+          ruta: '/articles'
+        },
+        {
+          src: '',
+          src2: '',
+          label: 'Parrafos',
+          icon: 'view_headline',
+          ruta: '/paragraphs'
+        },
+        {
+          src: 'pregunta 1.png',
+          src2: 'pregunta 12.png',
+          label: 'Preguntas',
+          icon: 'quiz',
+          ruta: '/questions'
+        },
+        {
+          src: '',
+          src2: '',
+          label: 'Respuestas',
+          icon: 'verified',
+          ruta: '/answers'
+        },
+        {
+          src: 'examen 12.png',
+          src2: 'examen 1.png',
+          label: 'Examenes',
+          icon: 'rule',
+          ruta: '/exams'
+        },
+        {
+          label: 'Test General',
+          icon: 'settings_suggest',
+          ruta: '/configTest'
         },
         {
           src: 'blog 1.png',
@@ -157,18 +162,6 @@ export default {
           ruta: '/forum'
         },
         {
-          label: 'Test General',
-          icon: 'settings_suggest',
-          ruta: '/configTest'
-        },
-        {
-          src: '',
-          src2: '',
-          label: 'Fallos',
-          icon: 'feedback',
-          ruta: '/faults'
-        },
-        {
           src: '',
           src2: '',
           label: 'Audios',
@@ -181,6 +174,13 @@ export default {
           label: 'Usuarios',
           icon: 'group',
           ruta: '/users'
+        },
+        {
+          src: '',
+          src2: '',
+          label: 'Fallos',
+          icon: 'feedback',
+          ruta: '/faults'
         },
         {
           src: '',

@@ -145,6 +145,7 @@ export default {
     },
     decartarCamb () {
       this.form = {}
+      this.$v.$reset()
       this.edit = false
     },
     setUser () {

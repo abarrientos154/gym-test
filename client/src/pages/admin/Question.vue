@@ -32,11 +32,11 @@
         <q-card-section class="q-pt-none">
           <q-input dense outlined type="text" v-model="form.title" label="Nueva pregunta" :error="$v.form.title.$error" error-message="Este campo es requerido"  @blur="$v.form.title.$touch()">
           </q-input>
-          <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.topic" label="Escoga un tema" dense :options="topics" :error="$v.form.topic.$error" error-message="Este campo es requerido"  @blur="$v.form.topic.$touch()" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="topic" clearable></q-select>
-          <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.law_id" label="Escoga una ley" dense :options="laws" :error="$v.form.law_id.$error" error-message="Este campo es requerido"  @blur="$v.form.law_id.$touch()" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="law_name" @input="getArticlesByLaw(form.law_id)" clearable></q-select>
-          <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.article" label="Escoga un Articulo" dense :options="articles" :error="$v.form.article.$error" error-message="Este campo es requerido"  @blur="$v.form.article.$touch()" map-options emit-value option-value="article_name" options-selected-class="text-primary" option-label="article_name" @input="getParagraphsByLawAndArticle(form.law_id, form.article)" clearable></q-select>
-          <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.paragraph_id" label="Escoga un Parrafo" dense :options="paragraphs" :error="$v.form.paragraph_id.$error" error-message="Este campo es requerido"  @blur="$v.form.paragraph_id.$touch()" map-options emit-value option-value="_id" options-selected-class="text-primary" option-label="paragraph_text" clearable></q-select>
-          <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.type" label="Escoga un Tipo" dense :options="types" :error="$v.form.type.$error" error-message="Este campo es requerido"  @blur="$v.form.type.$touch()" map-options emit-value option-value="type_name" options-selected-class="text-primary" option-label="type_name" clearable></q-select>
+          <q-select outlined v-model="form.topic" label="Escoga un tema" dense :options="topics" :error="$v.form.topic.$error" error-message="Este campo es requerido"  @blur="$v.form.topic.$touch()" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="topic" clearable></q-select>
+          <q-select outlined v-model="form.law_id" label="Escoga una ley" dense :options="laws" :error="$v.form.law_id.$error" error-message="Este campo es requerido"  @blur="$v.form.law_id.$touch()" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="law_name" @input="getArticlesByLaw(form.law_id)" clearable></q-select>
+          <q-select outlined v-model="form.article" label="Escoga un Articulo" dense :options="articles" :error="$v.form.article.$error" error-message="Este campo es requerido"  @blur="$v.form.article.$touch()" map-options emit-value option-value="article_name" options-selected-class="text-primary" option-label="article_name" @input="getParagraphsByLawAndArticle(form.law_id, form.article)" clearable></q-select>
+          <q-select outlined v-model="form.paragraph_id" label="Escoga un Parrafo" dense :options="paragraphs" :error="$v.form.paragraph_id.$error" error-message="Este campo es requerido"  @blur="$v.form.paragraph_id.$touch()" map-options emit-value option-value="_id" options-selected-class="text-primary" option-label="paragraph_text" clearable></q-select>
+          <q-select outlined v-model="form.type" label="Escoga un Tipo" dense :options="types" :error="$v.form.type.$error" error-message="Este campo es requerido"  @blur="$v.form.type.$touch()" map-options emit-value option-value="type_name" options-selected-class="text-primary" option-label="type_name" clearable></q-select>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
@@ -186,6 +186,7 @@ export default {
     },
     decartarCamb () {
       this.form = {}
+      this.$v.$reset()
       this.show = false
     },
     setQuestion () {

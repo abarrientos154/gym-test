@@ -35,8 +35,9 @@
         <div class="absolute-center">Importar archivo</div>
       </q-btn>
     </div>
-    <!-- <q-btn color="primary" label="Nueva Respuesta" icon="add" dense no-caps size="md" class="q-ml-md" @click="newAnswer()"/> -->
-    <div class="row justify-end">
+
+    <div class="row justify-between">
+      <q-btn color="primary" label="Nueva Respuesta" icon="add" dense no-caps size="md" class="q-ml-md" @click="newAnswer()"/>
       <q-btn color="red" label="Eliminar Respuestas" icon="delete" dense no-caps size="md" class="q-mr-md" @click="deleteAllAnswers()"/>
     </div>
     <div class="row q-my-sm q-mx-md">
@@ -54,13 +55,14 @@
     <div class="row justify-center" style="height: 70%">
       <listable class="col" :columns="columns" :data="answers" title="Respuestas" @function="execute"/>
     </div>
+
     <q-dialog v-model="show" @hide="decartarCamb()">
       <q-card style="width:100%;border-radius: 20px;">
         <q-card-section>
           <div class="text-h6">{{editAnswer ? 'Editar Respuesta' : 'Crear Respuesta'}}</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
-          <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.id_question" label="Escoga una pregunta" dense :options="questions" :error="$v.form.id_question.$error" error-message="Este campo es requerido"  @blur="$v.form.id_question.$touch()" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="title" clearable>
+          <q-select outlined v-model="form.id_question" label="Escoga una pregunta" dense :options="questions" :error="$v.form.id_question.$error" error-message="Este campo es requerido"  @blur="$v.form.id_question.$touch()" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="title" clearable>
             <template v-slot:no-option>
               <q-item>
                 <q-item-section class="text-grey">
@@ -73,7 +75,7 @@
           </q-input>
           <q-input dense outlined type="text" v-model="form.order" label="Orden" :error="$v.form.order.$error" error-message="Este campo es requerido"  @blur="$v.form.order.$touch()">
           </q-input>
-          <q-checkbox left-label v-model="form.isCorrect" label="Respuesta correcta" :error="$v.form.isCorrect.$error" error-message="Este campo es requerido"  @blur="$v.form.isCorrect.$touch()"/>
+          <q-checkbox left-label v-model="form.isCorrect" label="Respuesta correcta"/>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
@@ -93,7 +95,9 @@ export default {
     return {
       editAnswer: false,
       nuevo: false,
-      form: {},
+      form: {
+        isCorrect: false
+      },
       answers: [],
       file: null,
       questions: [],
@@ -130,7 +134,6 @@ export default {
     form: {
       answer_name: { required },
       id_question: { required },
-      isCorrect: { required },
       order: { required, maxLength: maxLength(1) }
     }
   },
@@ -182,7 +185,10 @@ export default {
       }
     },
     decartarCamb () {
-      this.form = {}
+      this.form = {
+        isCorrect: false
+      }
+      this.$v.$reset()
       this.edit = false
     },
     setAnswer () {
@@ -302,7 +308,9 @@ export default {
     },
     newAnswer () {
       this.editAnswer = false
-      this.form = {}
+      this.form = {
+        isCorrect: false
+      }
       this.show = true
     }
   }

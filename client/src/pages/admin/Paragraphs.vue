@@ -142,6 +142,7 @@ export default {
     },
     decartarCamb () {
       this.form = {}
+      this.$v.$reset()
       this.show = false
     },
     setParagraph () {

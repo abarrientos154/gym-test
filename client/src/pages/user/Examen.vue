@@ -9,8 +9,8 @@
       <div class="text-bold text-primary text-center text-italic text-h6">{{esGym ? tema.type_name : tema.name}}</div>
       <div v-if="esTema" class="q-pa-md text-italic text-grey-9">{{tema.long_name}}</div>
       <div v-if="esTema">
-        <div class="text-primary text-caption text-bold text-italic">Selecciona los subtemas para realizar el test</div>
-        <div v-if="subTemas.length">
+        <div class="text-primary text-bold text-italic">Selecciona los subtemas para realizar el test</div>
+        <div v-if="subTemas.length" class="row q-py-sm">
           <div v-for="(item, index) in subTemas" :key="index">
             <q-chip clickable color="primary" :outline="selectedSubTemas.find(v => v._id === item._id) ? false : true"
                 :text-color="selectedSubTemas.find(v => v._id === item._id) ? 'white' : 'primary'" @click="selecSub(item)">
@@ -20,28 +20,29 @@
         </div>
         <div v-else class="text-center text-grey-8 q-py-md">Sin Subtemas</div>
       </div>
-      <div v-if="esExamen">
-        <div class="text-bold text-primary">Convocatoria</div>
-        <div class="text-caption text-grey-8">{{tema.convocatoria}}</div>
-      </div>
 
-      <div class="row items-center">
-        <div class="text-primary text-caption text-bold">Cantidad de preguntas</div>
-        <div class="text-caption q-pl-md">{{preguntas.length}} preguntas</div>
-      </div>
-
-      <div class="row items-center">
-        <div class="text-primary text-caption text-bold">Fecha de realización</div>
-        <div class="text-caption q-pl-md">{{resultado.fecha ? resultado.fecha : 'Nunca'}}</div>
+      <div class="q-pt-md">
+        <div v-if="esExamen" class="row items-center">
+          <div class="text-primary text-bold">Convocatoria</div>
+          <div class="q-pl-md">{{tema.convocatoria}}</div>
+        </div>
+        <div class="row items-center">
+          <div class="text-primary text-bold">Cantidad de preguntas</div>
+          <div class="q-pl-md">{{preguntas.length}} preguntas</div>
+        </div>
+        <div class="row items-center">
+          <div class="text-primary text-bold">Fecha de realización</div>
+          <div class="q-pl-md">{{resultado.fecha ? resultado.fecha : 'Nunca'}}</div>
+        </div>
       </div>
 
       <div>
-        <div class="text-primary text-center text-subtitle1 q-pt-md">Último resultado</div>
-        <div class="text-caption text-primary text-center"><b>{{esExamen ? 'Preguntas:' : 'Respondidas:'}}</b> {{resultado.total_quest}}</div>
+        <div class="text-primary text-center text-h6 q-pt-md">Último resultado</div>
+        <div class="text-primary text-center"><b>{{esExamen ? 'Preguntas:' : 'Respondidas:'}}</b> {{resultado.total_quest}}</div>
         <div class="row justify-between q-pt-md">
-          <div class="text-caption text-primary text-center"><b>Correctas</b><br>{{resultado.correctas}}</div>
-          <div v-if="esExamen" class="text-caption text-primary text-center"><b>Incorrectas</b><br>{{resultado.incorrectas}}</div>
-          <div v-if="esExamen" class="text-caption text-primary text-center"><b>Omitidas</b><br>{{resultado.vacias}}</div>
+          <div class="text-primary text-center"><b>Correctas</b><br>{{resultado.correctas}}</div>
+          <div v-if="esExamen" class="text-primary text-center"><b>Incorrectas</b><br>{{resultado.incorrectas}}</div>
+          <div v-if="esExamen" class="text-primary text-center"><b>Omitidas</b><br>{{resultado.vacias}}</div>
         </div>
       </div>
 

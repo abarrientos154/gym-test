@@ -111,7 +111,6 @@ export default {
       this.form = {}
       this.edit = false
       this.file2 = null
-      this.show = false
       this.$v.$reset()
     },
     setType () {

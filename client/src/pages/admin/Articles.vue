@@ -99,11 +99,24 @@ export default {
     }
   },
   mounted () {
-    // this.getArticles()
     this.courseId = localStorage.getItem('course_id')
     this.getLaws()
   },
   methods: {
+    async getArticles (isFilter) {
+      if (isFilter === true) {
+        this.filter.law = this.law
+      }
+      this.$q.loading.show({
+        message: 'Cargando datos...'
+      })
+      await this.$api.post('getArticlesByFilter/' + this.courseId, this.filter).then(res => {
+        if (res) {
+          this.articles = res
+          this.$q.loading.hide()
+        }
+      })
+    },
     async getLaws () {
       this.$q.loading.show({
         message: 'Cargando datos...'
@@ -136,6 +149,7 @@ export default {
     },
     decartarCamb () {
       this.form = {}
+      this.$v.$reset()
       this.edit = false
     },
     setArticle () {
@@ -196,20 +210,6 @@ export default {
         })
       }).onCancel(() => {
         // console.log('>>>> Cancel')
-      })
-    },
-    async getArticles (isFilter) {
-      if (isFilter === true) {
-        this.filter.law = this.law
-      }
-      this.$q.loading.show({
-        message: 'Cargando datos...'
-      })
-      await this.$api.post('getArticlesByFilter/' + this.courseId, this.filter).then(res => {
-        if (res) {
-          this.articles = res
-          this.$q.loading.hide()
-        }
       })
     },
     uploadFile () {
