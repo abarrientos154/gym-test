@@ -157,6 +157,11 @@ export default {
           ruta: '/forum'
         },
         {
+          label: 'Test General',
+          icon: 'settings_suggest',
+          ruta: '/configTest'
+        },
+        {
           src: '',
           src2: '',
           label: 'Fallos',

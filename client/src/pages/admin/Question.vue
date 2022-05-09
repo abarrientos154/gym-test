@@ -152,7 +152,7 @@ export default {
     },
     async getParagraphsByLawAndArticle (law, article) {
       const filterArticle = this.articles.filter(res => res.law === law && res.article_name === article)
-      await this.$api.get('getParagraphsByArticle/' + filterArticle[0]._id).then(res => {
+      await this.$api.get('getParagraphsByArticle/' + filterArticle[0].id).then(res => {
         if (res) {
           this.paragraphs = res
         }

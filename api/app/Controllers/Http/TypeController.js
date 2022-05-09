@@ -92,7 +92,7 @@ class TypeController {
       types: ['image'],
       size: '20mb'
     })
-    body.id = await Type.query().where({}).count()
+    body.id = (await Type.query().where({}).count()) +1
     body.course_id = new ObjectId(body.course_id)
     let type = await Type.create(body)
     const id = ObjectId(type._id).toString()

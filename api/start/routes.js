@@ -243,6 +243,9 @@ addPrefixToGroup(
 
     Route.put('setBuy/:type/:id', 'LicenseController.setBuy')
     Route.get('getIncomes', 'IncomeController.index')
+
+    Route.get('topicsWithQuestions/:id', 'TopicController.topicsWithQuestions')
+    Route.get('verifyQuestions/:id', 'TopicController.verifyQuestions')
     
   }).middleware("auth")
   );

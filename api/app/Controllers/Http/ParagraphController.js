@@ -23,7 +23,7 @@ class ParagraphController {
   }
   
   async getParagraphsByArticle ({params, response}) {
-    const data = (await Paragraph.query().where({ article_id: params.id }).fetch()).toJSON()
+    const data = (await Paragraph.query().where({article_id: Number(params.id)}).fetch()).toJSON()
     response.send(data)
   }
 
@@ -71,7 +71,7 @@ class ParagraphController {
   async store ({ request, response, auth }) {
     let data = request.body
     data.course_id = new ObjectId(data.course_id)
-    data.id = await Paragraph.query().where({}).count()
+    data.id = (await Paragraph.query().where({}).count()) +1
     let save = await Paragraph.create(data)
     response.send(save)
   }

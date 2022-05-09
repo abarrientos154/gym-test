@@ -235,7 +235,7 @@ class ExamenController {
       size: '20mb'
     })
     body.course_id = new ObjectId(body.course_id)
-    body.id = await Examen.query().where({}).count()
+    body.id = await (Examen.query().where({}).count()) +1
     let exam = await Examen.create(body)
     const id = ObjectId(exam._id).toString()
     if (Helpers.appRoot('storage/uploads/exams')) {

@@ -56,6 +56,7 @@
           <q-select style="min-width: 220px" class="q-mr-md" outlined v-model="form.law" label="Escoga una ley" dense :options="laws" :error="$v.form.law.$error" error-message="Este campo es requerido"  @blur="$v.form.law.$touch()" map-options emit-value option-value="id" options-selected-class="text-primary" option-label="law_name" clearable></q-select>
           <q-input dense outlined type="text" v-model="form.sub_title" label="Sub Título" :error="$v.form.sub_title.$error" error-message="Este campo es requerido"  @blur="$v.form.sub_title.$touch()">
           </q-input>
+          {{form}}
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
