@@ -11,7 +11,7 @@
     </div>
 
     <div class="row justify-around q-pt-md">
-        <q-card v-for="(item, index) in forums" :key="index" style="width: 47%; border-radius: 10px">
+        <q-card v-for="(item, index) in forums" :key="index" style="width: 47%; border-radius: 10px" @click="$router.push('/forum/' + item._id)">
           <div class="bg-primary text-white text-h6 q-pa-sm row justify-between items-center">
             <div>{{item.title}}</div>
             <!-- <div class="row">
