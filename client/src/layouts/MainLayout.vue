@@ -14,7 +14,7 @@
         </q-toolbar> -->
       </q-header>
 
-      <q-drawer v-if="rol === 1" v-model="DrawerOpen" style="width: 175px;">
+      <q-drawer v-if="rol === 1" v-model="DrawerOpen" persistent style="width: 175px;">
         <div class="row items-center justify-center" style="background: linear-gradient(to right, #002938, #004e6d); height: 200px; width: 100%;">
           <div>
             <div class="column items-center q-pt-lg q-pb-xs">

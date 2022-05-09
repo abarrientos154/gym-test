@@ -1,6 +1,6 @@
 <template>
     <q-layout view="lHh Lpr lFf">
-      <q-drawer v-model="drawer" style="width: 175px;">
+      <q-drawer v-model="drawer" show-if-above style="width: 175px;">
         <div class="fit bg-primary">
           <div class="column items-center justify-center" style="background: linear-gradient(to right, #002938, #004e6d); height: 200px; width: 100%;">
             <div class="column items-center q-pt-xl q-pb-xs">
