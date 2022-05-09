@@ -1,66 +1,52 @@
 <template>
   <div>
-    <q-btn class="absolute-top" round flat color="white" icon="arrow_back" @click="$router.go(-1)" />
-    <q-img v-if="esTema" :src="tema.image ? baseu + tema.image : 'noimg.png'" style="height: 330px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
-        <div class="row no-wrap items-center q-mb-xl absolute-bottom bg-transparent">
-          <div class="text-h5 text-bold q-pl-sm">{{esGym ? tema.type_name : tema.name}}</div>
-        </div>
-    </q-img>
-    <q-img v-if="esGym" :src="tema.image ? baseuTy + tema.image : 'noimg.png'" style="height: 330px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
-        <div class="row no-wrap items-center q-mb-xl absolute-bottom bg-transparent">
-          <div class="text-h5 text-bold q-pl-sm">{{esGym ? tema.type_name : tema.name}}</div>
-        </div>
-    </q-img>
-    <q-img v-if="esExamen" :src="tema.image ? baseuEx + tema.image : 'noimg.png'" style="height: 330px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
-        <div class="row no-wrap items-center q-mb-xl absolute-bottom bg-transparent">
-          <div class="text-h5 text-bold q-pl-sm">{{esGym ? tema.type_name : tema.name}}</div>
-        </div>
-    </q-img>
+    <q-btn class="absolute-top-left" round flat color="white" icon="arrow_back" @click="$router.go(-1)" style="z-index: 10" />
+    <q-img v-if="esTema" :src="tema.image ? baseu + tema.image : 'fondo.png'" style="height: 240px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px" />
+    <q-img v-if="esGym" :src="tema.image ? baseuTy + tema.image : 'fondo.png'" style="height: 240px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px" />
+    <q-img v-if="esExamen" :src="tema.image ? baseuEx + tema.image : 'fondo.png'" style="height: 240px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px" />
 
-    <div class="q-mx-md q-pa-md bg-white" style="position:relative; top: -40px;border-top-left-radius: 20px; border-top-right-radius: 20px">
-        <div v-if="esTema" class="row item-start">
-            <div class="col-6">
-                <div class="text-bold text-primary">Tema</div>
-                <div class="text-caption text-grey-8">Tema seleccionado</div>
-                <div class="q-pt-sm q-pr-xs text-italic text-grey-9 text-caption">{{tema.long_name}}</div>
-            </div>
-            <div class="col-6">
-                <div class="text-bold text-primary">Sub temas</div>
-                <div class="text-caption text-grey-8">Sub temas incluidos</div>
-                <div v-if="subTemas.length">
-                  <q-card clickable v-ripple v-for="(item, index) in subTemas" :key="index" style="border-radius: 5px"
-                    :class="selectedSubTemas.find(v => v._id === item._id) ? 'bg-primary text-white' : 'bg-white text-primary'" class="bordes q-px-xs q-mb-sm"
-                    @click="selecSub(item)">
-                    <div class="text-caption text-center">{{item.process}}</div>
-                </q-card>
-                </div>
-                <div v-else class="text-center text-grey-8 q-pt-md">Sin sub temas</div>
-            </div>
+    <div class="q-pa-md bg-white" style="position:relative; top: -40px;border-top-left-radius: 20px; border-top-right-radius: 20px">
+      <div class="text-bold text-primary text-center text-italic text-h6">{{esGym ? tema.type_name : tema.name}}</div>
+      <div v-if="esTema" class="q-pa-md text-italic text-grey-9">{{tema.long_name}}</div>
+      <div v-if="esTema">
+        <div class="text-primary text-caption text-bold text-italic">Selecciona los subtemas para realizar el test</div>
+        <div v-if="subTemas.length">
+          <div v-for="(item, index) in subTemas" :key="index">
+            <q-chip clickable color="primary" :outline="selectedSubTemas.find(v => v._id === item._id) ? false : true"
+                :text-color="selectedSubTemas.find(v => v._id === item._id) ? 'white' : 'primary'" @click="selecSub(item)">
+              {{item.process}}
+            </q-chip>
+          </div>
         </div>
-        <div v-if="esExamen">
-          <div class="text-bold text-primary">Convocatoria</div>
-          <div class="text-caption text-grey-8">{{tema.convocatoria}}</div>
-        </div>
+        <div v-else class="text-center text-grey-8 q-py-md">Sin Subtemas</div>
+      </div>
+      <div v-if="esExamen">
+        <div class="text-bold text-primary">Convocatoria</div>
+        <div class="text-caption text-grey-8">{{tema.convocatoria}}</div>
+      </div>
 
-        <q-separator v-if="!esGym" color="primary" class="q-my-md" />
+      <div class="row items-center">
+        <div class="text-primary text-caption text-bold">Cantidad de preguntas</div>
+        <div class="text-caption q-pl-md">{{preguntas.length}} preguntas</div>
+      </div>
 
-        <div class="row item-start q-my-md">
-            <div class="col-6">
-                <div class="text-caption text-bold text-primary">Preguntas</div>
-                <div class="text-caption text-grey-8">Cantidad {{preguntas.length}} preguntas</div>
-                <div class="text-caption text-bold text-primary q-mt-md">Fecha de realización</div>
-                <div class="text-caption text-grey-8">{{resultado.fecha ? resultado.fecha : 'Nunca'}}</div>
-            </div>
-            <div class="col-6">
-                <div class="text-caption text-bold text-primary">Resultados del test</div>
-                <div class="text-caption text-grey-8">{{esExamen ? 'Preguntas:' : 'Respondidas:'}} {{resultado.total_quest}}</div>
-                <div class="text-caption text-grey-8">Correctas: {{resultado.correctas}}</div>
-                <div v-if="esExamen" class="text-caption text-grey-8">Incorrectas: {{resultado.incorrectas}}</div>
-                <div v-if="esExamen" class="text-caption text-grey-8">Vacias: {{resultado.vacias}}</div>
-            </div>
+      <div class="row items-center">
+        <div class="text-primary text-caption text-bold">Fecha de realización</div>
+        <div class="text-caption q-pl-md">{{resultado.fecha ? resultado.fecha : 'Nunca'}}</div>
+      </div>
+
+      <div>
+        <div class="text-primary text-center text-subtitle1 q-pt-md">Último resultado</div>
+        <div class="text-caption text-primary text-center"><b>{{esExamen ? 'Preguntas:' : 'Respondidas:'}}</b> {{resultado.total_quest}}</div>
+        <div class="row justify-between q-pt-md">
+          <div class="text-caption text-primary text-center"><b>Correctas</b><br>{{resultado.correctas}}</div>
+          <div v-if="esExamen" class="text-caption text-primary text-center"><b>Incorrectas</b><br>{{resultado.incorrectas}}</div>
+          <div v-if="esExamen" class="text-caption text-primary text-center"><b>Omitidas</b><br>{{resultado.vacias}}</div>
         </div>
-        <div class="row justify-center">
-          <q-btn no-caps color="primary" label="Iniciar test" style="width:80%"
+      </div>
+
+        <div class="row justify-center q-py-xl">
+          <q-btn no-caps color="primary" label="Iniciar" size="lg" style="width:100%;border-radius:10px"
           @click="esTema ? iniciarTema() : esGym ? iniciarGym() : verifyExam()" />
         </div>
     </div>
