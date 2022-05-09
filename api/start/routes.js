@@ -224,6 +224,10 @@ addPrefixToGroup(
     Route.put('updateForum/:id', 'ForumController.update')
     Route.delete('deleteForum/:id', 'ForumController.destroy')
     Route.get('forumById/:id', 'ForumController.show')
+    Route.post('setQuestion', 'ForumController.setQuestion')
+    Route.post('setResponse', 'ForumController.setResponse')
+    Route.get('QuestionsForum/:id', 'ForumController.QuestionsForum')
+    Route.get('questionAndResponses/:id', 'ForumController.questionAndResponses')
     
     Route.post('setFault', 'FaultController.store')
     Route.get('faultsByCourse/:id', 'FaultController.indexByCourse')

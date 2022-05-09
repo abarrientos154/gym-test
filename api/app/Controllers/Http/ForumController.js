@@ -2,6 +2,8 @@
 
 const ObjectId = require('mongodb').ObjectId
 const Forum = use('App/Models/Forum')
+const Question = use('App/Models/QuestionForum')
+const Respon = use('App/Models/ResponseForum')
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -24,12 +26,24 @@ class ForumController {
     data = data.sort((a, b) => a.created_at < b.created_at)
     response.send(data)
   }
-    async indexByCourse ({ response, params }) {
+  async indexByCourse ({ response, params }) {
     const id = new ObjectId(params.id)
     let data = (await Forum.query().where({ course_id: id }).fetch()).toJSON()
     data = data.sort((a, b) => a.created_at < b.created_at)
     response.send(data)
   }
+  async QuestionsForum ({ response, params }) {
+    const id = (params.id)
+    let data = (await Question.query().where({ forum_id: id }).with('user').fetch()).toJSON()
+    data = data.sort((a, b) => a.created_at < b.created_at)
+    response.send(data)
+  }
+  async questionAndResponses ({ response, params }) {
+    const id = (params.id)
+    let data = (await Question.query().where({ _id: id }).with(['user', 'forum']).with('responses.user').first())
+    response.send(data)
+  }
+  
 
   /**
    * Render a form to be used for creating a new forum.
@@ -56,6 +70,20 @@ class ForumController {
     body.course_id = new ObjectId(body.course_id)
     let forum = await Forum.create(body)
     response.send(forum)
+  }
+  async setQuestion ({ request, response, auth }) {
+    let body = request.all()
+    const user = (await auth.getUser()).toJSON()
+    body.user_id = user._id
+    let question = await Question.create(body)
+    response.send(question)
+  }
+  async setResponse ({ request, response, auth }) {
+    let body = request.all()
+    const user = (await auth.getUser()).toJSON()
+    body.user_id = user._id
+    let respon = await Respon.create(body)
+    response.send(respon)
   }
 
   /**
