@@ -10,8 +10,9 @@
       <q-btn color="primary" label="Nuevo Foro" icon="add" dense no-caps size="md" class="q-ml-md" @click="newForum()"/>
     </div>
 
-    <div class="row justify-around q-pt-md">
-        <q-card v-for="(item, index) in forums" :key="index" style="width: 47%; border-radius: 10px">
+    <div class="row q-pt-md">
+      <div v-for="(item, index) in forums" :key="index" class="col-6 q-px-md q-mb-md">
+        <q-card style="width: 100%; height:100%; border-radius: 10px">
           <div class="bg-primary text-white text-h6 q-pa-sm row justify-between items-center">
             <div>{{item.title}}</div>
             <div class="row">
@@ -19,8 +20,9 @@
               <q-btn color="white" flat round dense icon="delete" @click="deleteForum(item._id)"/>
             </div>
           </div>
-          <div v-html="item.text" class="ellipsis-3-lines q-pa-sm"></div>
+          <div v-html="item.text" class="ellipsis-3-lines q-ma-sm"></div>
         </q-card>
+      </div>
     </div>
 
     <q-dialog v-model="show" @hide="decartarCamb()">

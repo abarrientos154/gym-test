@@ -5,7 +5,7 @@
     <q-img :src="data.image ? baseu + data.image : ''" style="height: 280px; width: 100%;" />
 
     <div class="q-pa-md bg-white" style="position:relative; top: -60px; border-radius: 20px; height: 100%">
-      <div class="text-bold text-primary text-center text-italic text-h6">{{data.title}}</div>
+      <div class="text-bold text-primary text-center text-italic text-h5">{{data.title}}</div>
       <div class="text-grey-8 q-mb-lg q-mt-sm" v-html="data.text"></div>
     </div>
   </div>

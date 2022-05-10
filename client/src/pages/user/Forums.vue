@@ -1,26 +1,24 @@
 <template>
   <div>
-    <div style="background: linear-gradient(to right, #002938, #004e6d); height: 200px; width: 100%;"></div>
-    <!-- <q-img src="noimg.png" style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; height: 265px; width: 100%;"/> -->
-    <div class="column q-pa-lg no-wrap" style="margin-top: -200px">
-      <div class="text-h4 text-white text-bold q-mb-xl q-px-xl">Foro</div>
-      <div>
-       <!--  <div class="text-h5 text-white q-mb-sm q-px-md">Listado de Foros creados</div> -->
-      </div>
-     <!--  <q-btn color="primary" label="Nuevo Foro" icon="add" dense no-caps size="md" class="q-ml-md" @click="newForum()"/> -->
-    </div>
+    <q-btn class="absolute-top-left" round flat color="white" icon="arrow_back" @click="$router.go(-1)" style="z-index:5" />
+    <q-img src="fondo.png" style="height: 180px; width: 100%;">
+        <div class="bg-transparent q-mt-lg" style="width:100%">
+          <q-img src="gymtest 1.png" style="width: 150px"/>
+        </div>
+    </q-img>
 
-    <div class="row justify-around q-pt-md">
-        <q-card v-for="(item, index) in forums" :key="index" style="width: 47%; border-radius: 10px" @click="$router.push('/forum/' + item._id)">
-          <div class="bg-primary text-white text-h6 q-pa-sm row justify-between items-center">
-            <div>{{item.title}}</div>
-            <!-- <div class="row">
-              <q-btn color="white" flat round dense icon="edit" @click="setEditForum(item)"/>
-              <q-btn color="white" flat round dense icon="delete" @click="deleteForum(item._id)"/>
-            </div> -->
-          </div>
-          <div v-html="item.text" class="ellipsis-3-lines q-pa-sm"></div>
-        </q-card>
+    <div class="q-pa-md bg-white" style="position:relative; top: -40px;border-top-left-radius: 20px; border-top-right-radius: 20px">
+      <div class="text-bold text-primary text-center text-italic text-h5">Foro</div>
+      <q-card v-for="(item, index) in forums" :key="index" clickable v-ripple @click="$router.push('/forum/' + item._id)"
+          class="q-mt-md bordes" style="width:100%; border-radius: 10px;">
+            <div class="row justify-end q-pl-md" style="width:100%">
+              <div class="text-white text-h6 ellipsis bg-primary q-py-xs q-px-lg"
+               style="border-bottom-left-radius: 30px; border-top-right-radius: 10px">{{item.title}}</div>
+            </div>
+            <div class="q-pa-md">
+              <div v-html="item.text" class="ellipsis-3-lines text-right"></div>
+            </div>
+      </q-card>
     </div>
   </div>
 </template>
@@ -57,3 +55,10 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.bordes {
+  border: 1px solid $primary;
+  border-radius: 10px;
+}
+</style>

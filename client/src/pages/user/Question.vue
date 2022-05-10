@@ -1,45 +1,55 @@
 <template>
   <div>
-    <q-btn class="absolute-top" round flat color="white" icon="arrow_back" style="z-index: 5"
-    @click="$router.go(-1)" />
-    <q-img src="fondo.png" style="height: 300px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
-        <div class="absolute-full column justify-end">
-            <div class="row no-wrap items-center" style="padding-bottom: 60px">
-                <div v-if="data.forum" class="text-h5 text-bold q-pl-sm">{{data.forum['title']}}</div>
-            </div>
+    <q-btn class="absolute-top-left" round flat color="white" icon="arrow_back" @click="$router.go(-1)" style="z-index: 5" />
+    <q-img src="fondo.png" style="height: 180px; width: 100%;">
+        <div class="bg-transparent q-mt-lg" style="width:100%">
+          <q-img src="gymtest 1.png" style="width: 150px"/>
         </div>
     </q-img>
-    <div class="q-mx-md q-pa-md bg-grey-2" style="position:relative; top: -60px; border-radius: 20px; height: 100%">
-        <q-card style="width: 47%; border-radius: 10px">
-            <div class="bg-primary text-white text-h6 q-pa-sm row justify-between items-center">
-                <q-img v-if="data.user" :src="data.user.perfile ? baseuPerfil + data.user._id : 'avatar gris 1.png'" class="bg-grey-5" style="width: 50px; height: 50px; border-radius: 100%"/>
-                <div v-if="data.user">{{data.user.name}} {{data.created_at}}</div>
-                <!-- <div class="row">
-                <q-btn color="white" flat round dense icon="edit" @click="setEditForum(item)"/>
-                <q-btn color="white" flat round dense icon="delete" @click="deleteForum(item._id)"/>
-                </div> -->
+
+    <div class="q-pa-md bg-white" style="position:relative; top: -40px;border-top-left-radius: 20px; border-top-right-radius: 20px">
+      <div class="text-bold text-primary text-center text-italic text-h5">{{data.forum ? data.forum.title : ''}}</div>
+      <q-card class="row no-wrap q-my-md bg-primary text-white" style="width: 100%; border-radius: 10px">
+          <div class="q-pa-md column justify-center" style="border-bottom-left-radius:10px; border-top-right-radius:0">
+            <q-avatar size="70px">
+              <q-img :src="data.user ? data.user.perfile ? baseuPerfil + data.user._id : 'avatar gris 1.png' : ''" style="height: 100%;"/>
+            </q-avatar>
+            <div class="text-center text-caption text-bold">{{data.user ? data.user.name : ''}}</div>
+          </div>
+          <div class="q-pa-sm">
+            <div class="absolute-right q-pa-sm">
+              <div class="text-subtitle2 text-right">Fecha de publicación</div>
+              <div class="text-right">{{data.date}}</div>
             </div>
-            <div class="q-pa-sm"> {{data.question}} </div>
+            <div class="q-mt-xl text-italic"> {{data.question}}</div>
+          </div>
+      </q-card>
+
+      <q-btn v-if="canResponse" color="primary" no-caps size="lg" @click="response = true" label="Responder" style="width:100%; border-radius:10px" />
+
+      <div v-if="data.responses" class="q-py-md">
+        <q-card v-for="(item, index) in data.responses" :key="index" class="row no-wrap bordes q-mb-md" style="width: 100%; border-radius: 10px">
+          <div class="bg-primary q-pa-md column justify-center" style="border-bottom-left-radius:10px; border-top-right-radius:0">
+            <q-avatar size="70px">
+              <q-img :src="item.user.perfile ? baseuPerfil + item.user._id : 'avatar gris 1.png'" style="height: 100%;"/>
+            </q-avatar>
+            <div class="text-center text-white text-caption text-bold">{{item.user.name}}</div>
+          </div>
+          <div class="q-pa-sm">
+            <div class="absolute-right q-pa-sm">
+              <div class="text-primary text-subtitle2 text-right">Fecha de publicación</div>
+              <div class="text-grey-8 text-right">{{item.date}}</div>
+            </div>
+            <div class="q-mt-xl text-italic"> {{item.response}}</div>
+          </div>
         </q-card>
-             <q-btn v-if="canResponse" color="primary" @click="response = true" label="Responder" />
-        <div v-if="data.responses">
-            <q-card v-for="(item, index) in data.responses" :key="index" style="width: 47%; border-radius: 10px">
-            <div class="bg-primary text-white text-h6 q-pa-sm row justify-between items-center">
-                <q-img :src="item.user.perfile ? baseuPerfil + user._id : 'avatar gris 1.png'" class="bg-grey-5" style="width: 50px; height: 50px; border-radius: 100%"/>
-                <div>{{item.user.name}} {{item.created_at}}</div>
-                <!-- <div class="row">
-                <q-btn color="white" flat round dense icon="edit" @click="setEditForum(item)"/>
-                <q-btn color="white" flat round dense icon="delete" @click="deleteForum(item._id)"/>
-                </div> -->
-            </div>
-            <div class="q-pa-sm"> {{item.response}} </div>
-            </q-card>
-        </div>
+      </div>
     </div>
+
     <q-dialog v-model="response" @hide="decartarCamb()">
-      <q-card style="width: 100%">
+      <q-card style="width: 100%; border-radius:20px">
         <q-card-section>
-          <div class="text-h6 text-center text-primary text-italic">{{'Crear Respuesta'}}</div>
+          <div class="text-h6 text-center text-primary text-italic">Nueva Respuesta</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
           <q-input dense outlined rounded type="text" v-model="form.response" label="Escriba su pregunta"

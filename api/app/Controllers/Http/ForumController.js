@@ -4,6 +4,7 @@ const ObjectId = require('mongodb').ObjectId
 const Forum = use('App/Models/Forum')
 const Question = use('App/Models/QuestionForum')
 const Respon = use('App/Models/ResponseForum')
+const moment = require('moment')
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -36,11 +37,24 @@ class ForumController {
     const id = (params.id)
     let data = (await Question.query().where({ forum_id: id }).with('user').fetch()).toJSON()
     data = data.sort((a, b) => a.created_at < b.created_at)
+    data = data.map(v => {
+      return {
+        ...v,
+        date: moment(v.created_at).format('DD/MM/YYYY')
+      }
+    })
     response.send(data)
   }
   async questionAndResponses ({ response, params }) {
     const id = (params.id)
-    let data = (await Question.query().where({ _id: id }).with(['user', 'forum']).with('responses.user').first())
+    let data = (await Question.query().where({ _id: id }).with(['user', 'forum']).with('responses.user').first()).toJSON()
+    data.date = moment(data.created_at).format('DD/MM/YYYY')
+    data.responses = data.responses.map(v => {
+      return {
+        ...v,
+        date: moment(v.created_at).format('DD/MM/YYYY')
+      }
+    })
     response.send(data)
   }
   

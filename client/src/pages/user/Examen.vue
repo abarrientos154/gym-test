@@ -6,7 +6,7 @@
     <q-img v-if="esExamen" :src="tema.image ? baseuEx + tema.image : 'fondo.png'" style="height: 240px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px" />
 
     <div class="q-pa-md bg-white" style="position:relative; top: -40px;border-top-left-radius: 20px; border-top-right-radius: 20px">
-      <div class="text-bold text-primary text-center text-italic text-h6">{{esGym ? tema.type_name : tema.name}}</div>
+      <div class="text-bold text-primary text-center text-italic text-h5">{{esGym ? tema.type_name : tema.name}}</div>
       <div v-if="esTema" class="q-pa-md text-italic text-grey-9">{{tema.long_name}}</div>
       <div v-if="esTema">
         <div class="text-primary text-bold text-italic">Selecciona los subtemas para realizar el test</div>

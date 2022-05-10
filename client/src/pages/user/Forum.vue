@@ -1,39 +1,49 @@
 <template>
   <div>
-    <q-btn class="absolute-top" round flat color="white" icon="arrow_back" style="z-index: 5"
-    @click="$router.go(-1)" />
-    <q-img src="fondo.png" style="height: 300px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
-        <div class="absolute-full column justify-end">
-            <div class="row no-wrap items-center" style="padding-bottom: 60px">
-                <div class="text-h5 text-bold q-pl-sm">{{data.title}}</div>
-            </div>
+    <q-btn class="absolute-top-left" round flat color="white" icon="arrow_back" @click="$router.go(-1)" style="z-index: 5" />
+    <q-img src="fondo.png" style="height: 180px; width: 100%;">
+        <div class="bg-transparent q-mt-lg" style="width:100%">
+          <q-img src="gymtest 1.png" style="width: 150px"/>
         </div>
     </q-img>
-    <div class="q-mx-md q-pa-md bg-grey-2" style="position:relative; top: -60px; border-radius: 20px; height: 100%">
-        <div class="text-grey-8 q-mb-lg q-mt-sm" v-html="data.text">
-        </div>
-        <div v-if="questions.length">
-            <q-card v-for="(item, index) in questions" :key="index" style="width: 47%; border-radius: 10px" @click="$router.push('/question/' + item._id)">
-            <div class="bg-primary text-white text-h6 q-pa-sm row justify-between items-center">
-                <q-img :src="item.user.perfile ? baseuPerfil + user._id : 'avatar gris 1.png'" class="bg-grey-5" style="width: 50px; height: 50px; border-radius: 100%"/>
-                <div>{{item.user.name}} {{item.created_at}}</div>
+
+    <div class="q-pa-md bg-white" style="position:relative; top: -40px;border-top-left-radius: 20px; border-top-right-radius: 20px">
+      <div class="text-bold text-primary text-center text-italic text-h5">{{data.title}}</div>
+      <div class="text-grey-8 q-mb-lg q-mt-sm" v-html="data.text"></div>
+      <div v-if="data.question" class="row justify-center">
+        <q-btn color="primary" no-caps size="lg" @click="question = true" label="Realizar Pregunta" style="width:100%; border-radius:10px" />
+      </div>
+      <div v-if="questions.length" class="q-py-md">
+        <q-card v-for="(item, index) in questions" :key="index" class="row no-wrap bordes q-mb-md" style="width: 100%; border-radius: 10px"
+          @click="$router.push('/question/' + item._id)">
+          <div class="bg-primary q-pa-md column justify-center" style="border-bottom-left-radius:10px; border-top-right-radius:0">
+            <q-avatar size="70px">
+              <q-img :src="item.user.perfile ? baseuPerfil + item.user._id : 'avatar gris 1.png'" style="height: 100%;"/>
+            </q-avatar>
+            <div class="text-center text-white text-caption text-bold">{{item.user.name}}</div>
+          </div>
+          <div class="q-pa-sm">
+            <div class="absolute-right q-pa-sm">
+              <div class="text-primary text-subtitle2 text-right">Fecha de publicación</div>
+              <div class="text-grey-8 text-right">{{item.date}}</div>
+            </div>
+            <div class="q-mt-xl text-italic"> {{item.question}}</div>
                 <!-- <div class="row">
                 <q-btn color="white" flat round dense icon="edit" @click="setEditForum(item)"/>
                 <q-btn color="white" flat round dense icon="delete" @click="deleteForum(item._id)"/>
                 </div> -->
-            </div>
-            <div class="q-pa-sm"> {{item.question}} </div>
-            </q-card>
-        </div>
-         <q-btn v-if="data.question" color="primary" @click="question = true" label="Realizar Pregunta" />
+          </div>
+        </q-card>
+      </div>
     </div>
+
     <q-dialog v-model="question" @hide="decartarCamb()">
-      <q-card style="width: 100%">
+      <q-card style="width: 100%; border-radius:20px">
         <q-card-section>
-          <div class="text-h6 text-center text-primary text-italic">{{'Crear Pregunta'}}</div>
+          <div class="text-h6 text-center text-primary text-italic">Nueva Pregunta</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
-          <q-input dense outlined rounded type="text" v-model="form.question" label="Escriba su pregunta"
+          <q-input dense outlined rounded type="text" v-model="form.question" label="Ingrese su pregunta"
             :error="$v.form.question.$error" error-message="Este campo es requerido"  @blur="$v.form.question.$touch()"/>
         </q-card-section>
         <q-card-actions align="right">
@@ -72,18 +82,22 @@ export default {
   },
   mounted () {
     this.baseuPerfil = env.apiUrl + 'perfil_img/'
-    this.getNews()
+    this.getForums()
   },
   methods: {
-    getNews () {
+    getForums () {
       this.$api.get('forumById/' + this.$route.params.id).then(res => {
         if (res) {
           this.data = res
           if (res.question) {
             this.getQuestions()
           }
-          console.log(res)
         }
+      })
+    },
+    getQuestions () {
+      this.$api.get('QuestionsForum/' + this.data._id).then(v => {
+        this.questions = v
       })
     },
     decartarCamb () {
@@ -110,12 +124,14 @@ export default {
           }
         })
       }
-    },
-    getQuestions () {
-      this.$api.get('QuestionsForum/' + this.data._id).then(v => {
-        this.questions = v
-      })
     }
   }
 }
 </script>
+
+<style scoped lang="scss">
+.bordes {
+  border: 1px solid $primary;
+  border-radius: 10px;
+}
+</style>

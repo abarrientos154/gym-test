@@ -126,13 +126,9 @@
         </q-scroll-area>
         <div v-else class="text-center text-bold text-grey-9 q-py-lg">Sin audios actualmente</div>
 
-        <div class="text-h6 text-bold text-primary q-mt-sm">Foro</div>
-        <q-card class="bg-grey-2 q-pa-sm" v-if="forum.length > 0" @click="$router.push('/forums')">
-          <div v-for="(item, index) in forum" :key="index" class="text-subtitle2 q-ml-sm">
-            <li>{{item.title}}</li>
-          </div>
+        <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/forums')">
+          <div class="text-right text-h5 text-bold">Foro</div>
         </q-card>
-        <div v-else class="text-center text-bold text-grey-9 q-py-lg">Aún no hay Foros</div>
       </div>
   </div>
 </template>
@@ -158,8 +154,7 @@ export default {
       rutinaGym: [],
       gym: [],
       examenes: [],
-      blogs: [1, 2, 3],
-      forum: [],
+      blogs: [],
       topicsWithAudios: []
     }
   },
@@ -171,7 +166,6 @@ export default {
     this.getRutinas()
     this.getGym()
     this.getExamenes()
-    this.getForum()
     this.getTopicsWithAudio()
   },
   methods: {
@@ -212,13 +206,6 @@ export default {
       this.$api.get('getExamByCourse/' + this.courseId).then(res => {
         if (res) {
           this.examenes = res
-        }
-      })
-    },
-    getForum () {
-      this.$api.get('forumByCourse/' + this.courseId).then(res => {
-        if (res) {
-          this.forum = res
         }
       })
     },
