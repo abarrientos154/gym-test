@@ -13,9 +13,15 @@
     </q-card>
     <div v-for="(item, index) in topics" :key="index">
         <div>{{item.name}}</div>
-        <q-input dense outlined rounded :hint="'Preguntas Disponibles:' + item.questions.length"  v-model.number="topics[index].cant" label="Numero de preguntas">  <!-- :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()" -->
+        <q-input type="number" dense outlined rounded :hint="'Preguntas Disponibles:' + item.questions.length"
+        v-model.number="topics[index].cant" label="Numero de preguntas"
+        :error="$v.topics.$each[index].cant.$error"
+        error-message="Exede la cantidad disponible de preguntas en el tema"
+        @blur="$v.topics.$each[index].cant.$touch()"
+        >  <!-- :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()" -->
         </q-input>
     </div>
+    <q-btn :label="'Cerrar'" color="primary" @click="verify()" no-caps/>
     <q-dialog v-model="alert" persistent>
       <q-card style="width: 100%">
         <q-card-section>
@@ -30,16 +36,37 @@
 </template>
 
 <script>
+import { numeric } from 'vuelidate/lib/validators'
+const priceGreater = (value, vm) => {
+  console.log(value, vm)
+  let val
+  if (value > vm.questions.length) {
+    val = false
+  } else {
+    val = true
+  }
+  return val
+}
 export default {
   data () {
     return {
       topics: [],
-      alert: false
+      alert: false,
+      am: 5
+    }
+  },
+  validations () {
+    return {
+      topics: {
+        $each: {
+          cant: { priceGreater, numeric }
+        }
+      }
     }
   },
   computed: {
     total () {
-      var val = 0
+      let val = 0
       for (let x = 0; x < this.topics.length; x++) {
         const element = this.topics[x]
         if (element.cant) {
@@ -54,6 +81,39 @@ export default {
     this.verifyQuestions()
   },
   methods: {
+    verify () {
+      if (this.total !== 2) {
+        this.$q.notify({
+          message: 'La cantidad de preguntas no es el requerido (100).',
+          color: 'negative'
+        })
+      } else if (this.$v.topics.$error) {
+        this.$q.notify({
+          message: 'Existen errores en el formulario.',
+          color: 'negative'
+        })
+      } else {
+        this.setConfig()
+      }
+    },
+    setConfig () {
+      this.$q.loading.show({
+        message: 'Guardando datos...'
+      })
+      this.$api.post('setConfig', { data: this.topics, course_id: this.courseId }).then(res => {
+        if (res) {
+          this.$q.loading.hide()
+          this.$q.notify({
+            message: 'Configuración cargada con exito.',
+            color: 'positive'
+          })
+          this.getTopics()
+        } else {
+          this.alert = true
+          this.$q.loading.hide()
+        }
+      })
+    },
     verifyQuestions () {
       this.$q.loading.show({
         message: 'Verificando datos...'
@@ -62,6 +122,7 @@ export default {
         if (res) {
           this.$q.loading.hide()
           this.getTopics()
+          this.getConfig()
         } else {
           this.alert = true
           this.$q.loading.hide()

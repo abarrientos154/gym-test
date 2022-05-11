@@ -86,25 +86,6 @@ class TopicController {
     })
     response.send(data)
   }
-  async topicsWithQuestions ({ response, params }) {
-    const id = new ObjectId(params.id)
-    let data = (await Topic.query().where({ course_id: id }).with('questions').fetch()).toJSON()
-    data = data.sort(function(a, b) {
-      return a.id - b.id
-    })
-    response.send(data)
-  }
-  async verifyQuestions ({ response, params }) {
-    const id = new ObjectId(params.id)
-    let data = (await Question.query().where({ course_id: id }).fetch()).toJSON()
-    var isValid = false
-    if (data.length >= 100) {
-      isValid = true
-    }
-    isValid = true
-    response.send(isValid)
-  }
-
   async getTopicById ({ request, response, params }) {
     let tema = (await Topic.query().where({_id: params.id}).with('subTemas').first()).toJSON()
     let arr = []
