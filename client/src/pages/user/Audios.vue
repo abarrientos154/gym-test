@@ -1,66 +1,52 @@
 <template>
   <div>
-    <q-img src="fondo.png" style="height: 150px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px">
-      <div class="q-pa-md absolute-full">
-        <q-img src="gymtest 1.png" style="width: 150px; margin-left: -15px;"/>
-      </div>
-    </q-img>
-    <div class="q-mx-md q-pa-md bg-white" style="position:relative; top: -40px;border-top-left-radius: 20px; border-top-right-radius: 20px">
-      <div class="text-h6 text-bold text-primary q-mt-sm">{{topic.name}}</div>
-      <div class="text-h6 text-bold text-grey q-mt-sm">Audios:</div>
-        <div v-if="audios.length > 0">
-          <q-card v-for="(item, index) in audios" :key="index" class="bg-grey-2 q-pa-sm q-mb-xs">
-            <div class="text-subtitle2">
-              <q-btn @click="playAudio(item._id)" no-caps outline color="primary" class="q-my-xs" style="width: 100%;">{{item.title}}</q-btn>
-              <div style="max-width: 800px; width: 100%;">
-                <audio v-if="item.isActive === true" controls style="width: 100%;">
-                  <source :src="audio" type="audio/mpeg">
-                </audio>
-              </div>
-            </div>
-          </q-card>
+    <q-btn class="absolute-top-left" round flat color="white" icon="arrow_back" @click="$router.go(-1)" style="z-index:5" />
+    <q-img src="fondo.png" style="height: 180px; width: 100%;">
+        <div class="bg-transparent q-mt-lg" style="width:100%">
+          <q-img src="gymtest 1.png" style="width: 150px"/>
         </div>
-      </div>
+    </q-img>
+
+    <div class="q-pa-md bg-white" style="position:relative; top: -40px;border-top-left-radius: 20px; border-top-right-radius: 20px">
+      <div class="text-bold text-primary text-center text-italic text-h5">Audios por tema</div>
+      <q-card v-for="(item, index) in topicsWithAudios" :key="index" clickable v-ripple @click="$router.push('/audios_por_tema/' + item.topic)"
+          class="q-mt-md" style="width:100%; border-radius: 10px;">
+            <q-img src="audio.jpg" style="height: 150px; width: 100%;border-radius: 10px;" />
+            <div class="absolute-top row justify-end q-pl-md" style="width:100%">
+              <div class="text-white text-h6 ellipsis bg-primary q-py-xs q-px-lg"
+               style="border-bottom-left-radius: 30px; border-top-right-radius: 10px">{{item.name}}</div>
+            </div>
+        </q-card>
+    </div>
   </div>
 </template>
 
 <script>
-import env from '../../env'
 export default {
   data () {
     return {
-      audios: [],
-      audio: '',
-      baseu: '',
-      topic: {}
+      topicsWithAudios: []
     }
   },
   mounted () {
-    this.getAudios()
-    this.getTopicById()
-    this.baseu = env.apiUrl + 'audios/'
+    this.courseId = localStorage.getItem('course_id')
+    this.getTopicsWithAudio()
   },
   methods: {
-    getAudios () {
-      this.$api.get('audiosByTopic/' + this.$route.params.id).then(res => {
-        if (res) {
-          this.audios = res
-        }
+    getTopicsWithAudio () {
+      this.$q.loading.show({
+        message: 'Cargando datos...'
       })
-    },
-    playAudio (id) {
-      this.audio = this.baseu + id
-      for (const i in this.audios) {
-        this.audios[i].isActive = false
-        if (this.audios[i]._id === id) {
-          this.audios[i].isActive = true
-        }
-      }
-    },
-    async getTopicById () {
-      await this.$api.get('getTopicByNum/' + this.$route.params.id).then(res => {
+      this.$api.get('getTopicWithAudio/' + this.courseId).then(res => {
         if (res) {
-          this.topic = { ...res }
+          this.topicsWithAudios = res
+          this.$q.loading.hide()
+        } else {
+          this.$q.loading.hide()
+          this.$q.notify({
+            color: 'negative',
+            message: 'Error al consultar datos'
+          })
         }
       })
     }
@@ -71,5 +57,6 @@ export default {
 <style scoped lang="scss">
 .bordes {
   border: 1px solid $primary;
+  border-radius: 10px;
 }
 </style>

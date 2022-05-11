@@ -9,7 +9,9 @@
         </q-card>
         <q-btn flat dense round icon="arrow_back" color="white" class="absolute-top-left" @click="$router.go(-1)" />
 
-        <div v-if="!user.disabled">
+        <div v-if="!user.disabled && course.free" class="text-center text-white text-h5 text-italic q-pt-lg">Este curso es gratuito</div>
+
+        <div v-else-if="!user.disabled">
           <div v-if="seeDays" class="text-center text-white text-italic q-pt-md">
             <div>Quedan <b class="text-h6">{{licenseTime.days}} días</b> de licencia</div>
           </div>
@@ -36,9 +38,8 @@
             </div>
           </q-card>
         </div>
-        <div v-else class="q-mx-md q-px-md q-pt-lg q-pb-xl bg-white q-mb-xl" style="position:relative; top: -30px; border-top-left-radius: 20px; border-top-right-radius: 20px">
-          <div class="text-grey-7 text-h6 text-center">Tu licencia fue suspendida debes comunicarte con el admin</div>
-        </div>
+
+        <div v-else class="text-center text-white text-h5 text-italic q-pt-lg">Tu licencia fue suspendida debes comunicarte con el admin</div>
       </q-page>
     </q-page-container>
 

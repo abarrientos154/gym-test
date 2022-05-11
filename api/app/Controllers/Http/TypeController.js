@@ -183,7 +183,8 @@ class TypeController {
 
   async getTestById ({ request, response, params }) {
     try {
-      let type = (await TypeTest.query().where({_id: params.id}).first()).toJSON()
+      const id = new ObjectId(params.id)
+      let type = (await TypeTest.query().where({_id: id}).first()).toJSON()
       let questions = (await Question.query().where({ type: type.type_name }).with('answers').with('leyInfo').fetch()).toJSON()
       for (let i = 0; i < questions.length; i++) {
         if (questions[i].exam !== '') {

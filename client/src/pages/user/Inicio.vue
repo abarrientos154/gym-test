@@ -42,7 +42,7 @@
                   <div class="text-primary">Mis Exámenes</div>
                   <div class="text-grey-9 text-caption text-italic">Historial de resultados</div>
                 </div>
-                <div class="bg-primary q-py-md q-px-xs q-ma-none" style="height:80%">
+                <div class="bg-primary q-py-sm q-px-xs q-ma-none" style="height:80%">
                   <div v-if="rutinaExamen.length">
                     <div class="row justify-between text-white text-caption q-pb-xs" v-for="(item, index) in rutinaExamen" :key="index">
                       <div class="col-5 text-center ellipsis">{{item.examen_name}}</div>
@@ -59,7 +59,7 @@
                     <div class="text-primary">Rutinas de Entrenamiento</div>
                     <div class="text-grey-9 text-caption text-italic">Historial de resultados</div>
                 </div>
-                <div class="bg-primary q-py-md q-px-xs q-ma-none" style="height:80%">
+                <div class="bg-primary q-py-sm q-px-xs q-ma-none" style="height:80%">
                   <div v-if="rutinaGym.length">
                     <div class="row justify-between text-white text-caption q-pb-xs" v-for="(item, index) in rutinaGym" :key="index">
                       <div class="col-4 text-center ellipsis">{{item.type_name}}</div>
@@ -77,54 +77,21 @@
           <div class="text-right text-h5 text-bold">Noticias</div>
         </q-card>
 
-        <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/temas')">
+        <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/ver/Temas')">
           <div class="text-right text-h5 text-bold">Test por temas</div>
         </q-card>
 
-        <div class="text-h6 text-bold text-primary q-mt-sm">Gym</div>
-        <q-scroll-area v-if="gym.length" horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 140px; width: 100%;">
-          <div class="row no-wrap q-gutter-md">
-            <q-card flat style="width: 130px; height: 130px" clickable v-ripple v-for="(item, index) in gym" :key="index"
-            @click="$router.push('/gym/' + item._id)">
-              <q-img src="materia3 1.png" style="height: 100%; width: 100%; border-radius: 10px">
-                <div class="absolute-full row items-end justify-center">
-                  <div class="text-subtitle1 text-bold ellipsis-2-lines">{{item.type_name}}</div>
-                </div>
-              </q-img>
-            </q-card>
-          </div>
-        </q-scroll-area>
-        <div v-else class="text-center text-bold text-grey-9 q-py-lg">Sin entrenamiento actualmente</div>
+        <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/ver/Gym')">
+          <div class="text-right text-h5 text-bold">Gym</div>
+        </q-card>
 
-        <div class="text-h6 text-bold text-primary q-mt-sm">Exámenes</div>
-        <q-scroll-area v-if="examenes.length" horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 140px; width: 100%;">
-          <div class="row no-wrap q-gutter-md">
-            <q-card flat style="width: 130px; height: 130px" clickable v-ripple v-for="(item, index) in examenes" :key="index"
-            @click="$router.push('/examen/' + item._id)">
-              <q-img src="materia1 1.png" style="height: 100%; width: 100%; border-radius: 10px">
-                <div class="absolute-full row items-end">
-                  <div class="text-subtitle2 ellipsis-3-lines">{{item.name}}</div>
-                </div>
-              </q-img>
-            </q-card>
-          </div>
-        </q-scroll-area>
-        <div v-else class="text-center text-bold text-grey-9 q-py-lg">Sin exámenes actualmente</div>
+        <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/ver/Examenes')">
+          <div class="text-right text-h5 text-bold">Examenes</div>
+        </q-card>
 
-        <div class="text-h6 text-bold text-primary q-mt-sm">Audios</div>
-        <q-scroll-area v-if="topicsWithAudios.length" horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 140px; width: 100%;">
-          <div class="row no-wrap q-gutter-md">
-            <q-card flat style="width: 130px; height: 130px" clickable v-ripple v-for="(item, index) in topicsWithAudios" :key="index"
-            @click="$router.push('/audios/' + item.topic)">
-              <q-img src="audio.jpg" style="height: 100%; width: 100%; border-radius: 10px">
-                <div class="absolute-full row items-end">
-                  <div class="text-subtitle2 ellipsis-2-lines">{{item.name}}</div>
-                </div>
-              </q-img>
-            </q-card>
-          </div>
-        </q-scroll-area>
-        <div v-else class="text-center text-bold text-grey-9 q-py-lg">Sin audios actualmente</div>
+        <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/audios')">
+          <div class="text-right text-h5 text-bold">Audios</div>
+        </q-card>
 
         <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/forums')">
           <div class="text-right text-h5 text-bold">Foro</div>
@@ -152,10 +119,7 @@ export default {
       },
       rutinaExamen: [],
       rutinaGym: [],
-      gym: [],
-      examenes: [],
-      blogs: [],
-      topicsWithAudios: []
+      blogs: []
     }
   },
   mounted () {
@@ -164,9 +128,6 @@ export default {
     this.getUser()
     this.getLicense()
     this.getRutinas()
-    this.getGym()
-    this.getExamenes()
-    this.getTopicsWithAudio()
   },
   methods: {
     getUser () {
@@ -194,36 +155,6 @@ export default {
           this.rutinaGym = v
         }
       })
-    },
-    getGym () {
-      this.$api.get('gettypesByCourse/' + this.courseId).then(res => {
-        if (res) {
-          this.gym = res
-        }
-      })
-    },
-    getExamenes () {
-      this.$api.get('getExamByCourse/' + this.courseId).then(res => {
-        if (res) {
-          this.examenes = res
-        }
-      })
-    },
-    getTopicsWithAudio () {
-      this.$api.get('getTopicWithAudio/' + this.courseId).then(res => {
-        if (res) {
-          this.topicsWithAudios = res
-        }
-      })
-    },
-    playAudio (id) {
-      this.audio = this.baseu + id
-      for (const i in this.audios) {
-        this.audios[i].isActive = false
-        if (this.audios[i]._id === id) {
-          this.audios[i].isActive = true
-        }
-      }
     }
   }
 }

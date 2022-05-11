@@ -29,7 +29,7 @@ const routes = [
       // User
       { path: '/inicio', component: () => import('pages/user/Inicio.vue') },
       { path: '/perfil', component: () => import('pages/user/Perfil.vue') },
-      { path: '/temas', component: () => import('pages/user/Temas.vue') },
+      { path: '/ver/:title', component: () => import('pages/user/Temas.vue') },
       { path: '/news_user', component: () => import('pages/user/News.vue') },
       { path: '/publicidad/:id', component: () => import('pages/user/PublicidadBlog.vue') },
       { path: '/forum/:id', component: () => import('pages/user/Forum.vue') },
@@ -41,7 +41,8 @@ const routes = [
       { path: '/tema/test/:idTema', component: () => import('pages/user/TestStar.vue') },
       { path: '/examen/test/:idExamen', component: () => import('pages/user/TestStar.vue') },
       { path: '/gym/test/:idType', component: () => import('pages/user/TestStar.vue') },
-      { path: '/audios/:id', component: () => import('pages/user/Audios.vue') }
+      { path: '/audios_por_tema/:id', component: () => import('pages/user/AudiosByTopic.vue') },
+      { path: '/audios', component: () => import('pages/user/Audios.vue') }
     ]
   },
 

@@ -9,7 +9,7 @@
 
           <div v-for="(item, index) in courses" :key="index" class="q-pt-md">
             <div class="text-h5 text-center text-white text-weight-medium q-my-xs">{{item.name}}</div>
-            <q-card class="q-pa-md q-mt-sm" style="border-radius: 10px" clickable v-ripple @click="item2.free ? $router.push('/inicio') : getLicense(item2._id)"
+            <q-card class="q-pa-md q-mt-sm" style="border-radius: 10px" clickable v-ripple @click="verifyLicense(item2)"
               v-for="(item2, index2) in item.courses" :key="index2">
               <div class="text-primary text-subtitle1 text-bold">{{item2.name}}</div>
               <div class="q-pt-sm q-pb-lg">{{item2.description}}</div>
@@ -27,14 +27,23 @@ import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
+      user: {},
       courses: []
     }
   },
   mounted () {
     this.getCourses()
+    this.getUser()
   },
   methods: {
     ...mapMutations('generals', ['logout']),
+    async getUser () {
+      await this.$api.get('user_info').then(res => {
+        if (res) {
+          this.user = res
+        }
+      })
+    },
     getCourses () {
       this.$api.get('getCoursesClient').then(res => {
         if (res) {
@@ -42,24 +51,39 @@ export default {
         }
       })
     },
-    getLicense (id) {
-      this.$api.get('get_License_course/' + id).then(res => {
-        if (res && !res.disable) {
-          localStorage.setItem('course_id', id)
+    verifyLicense (data) {
+      if (data.free) {
+        if (!this.user.disabled) {
+          localStorage.setItem('course_id', data._id)
           this.$router.push('/inicio')
         } else {
           this.$q.dialog({
             title: 'Atención',
-            message: 'No tienes licencia para este curso ¿Deseas adquirir una nueva?',
-            cancel: true,
+            message: 'Tu usuario ha sido suspendido, debes comunicarte con el admin',
             persistent: true
           }).onOk(() => {
-            this.$router.push('/license/' + id)
-          }).onCancel(() => {
-            // console.log('>>>> Cancel')
+            // ok
           })
         }
-      })
+      } else {
+        this.$api.get('get_License_course/' + data._id).then(res => {
+          if (res && !res.disable) {
+            localStorage.setItem('course_id', data._id)
+            this.$router.push('/inicio')
+          } else {
+            this.$q.dialog({
+              title: 'Atención',
+              message: 'No tienes licencia para este curso ¿Deseas adquirir una nueva?',
+              cancel: true,
+              persistent: true
+            }).onOk(() => {
+              this.$router.push('/license/' + data._id)
+            }).onCancel(() => {
+              // console.log('>>>> Cancel')
+            })
+          }
+        })
+      }
     },
     cerrarSesion () {
       this.logout()

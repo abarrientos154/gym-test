@@ -61,7 +61,7 @@
           </q-input>
           <q-input dense outlined type="text" v-model="form.long_name" label="Nombre Completo" :error="$v.form.long_name.$error" error-message="Este campo es requerido"  @blur="$v.form.long_name.$touch()">
           </q-input>
-          <q-input dense outlined type="text" v-model="form.topic" label="Número de Tema" :error="$v.form.topic.$error" error-message="Este campo es requerido"  @blur="$v.form.topic.$touch()">
+          <q-input dense outlined type="text" :disable="editTopic" v-model="form.topic" label="Número de Tema" :error="$v.form.topic.$error" error-message="Este campo es requerido"  @blur="$v.form.topic.$touch()">
           </q-input>
         </q-card-section>
         <q-card-actions align="right">
