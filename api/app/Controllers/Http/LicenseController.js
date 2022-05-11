@@ -78,7 +78,7 @@ class LicenseController {
 
     const data = (await License.query().where({user_id: user._id, course_id: params.id}).first())
     let date = moment().format('YYYY-MM-DD')
-    let days = params.type === 'price30' ? 30 : params.type === 'price60' ? 60 : 90
+    let days = params.type === 'price1' ? 30 : params.type === 'price2' ? 180 : 365
     if (data) {
       let daysRes = moment(data.expirationDate).diff(date , 'days')
       if (daysRes > 0) {

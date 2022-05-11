@@ -9,10 +9,13 @@
 
           <div v-for="(item, index) in courses" :key="index" class="q-pt-md">
             <div class="text-h5 text-center text-white text-weight-medium q-my-xs">{{item.name}}</div>
-            <q-card class="q-pa-md q-mt-sm" style="border-radius: 10px" clickable v-ripple @click="getLicense(item2._id)"
+            <q-card class="q-pa-md q-mt-sm" style="border-radius: 10px" clickable v-ripple @click="item2.free ? $router.push('/inicio') : getLicense(item2._id)"
               v-for="(item2, index2) in item.courses" :key="index2">
               <div class="text-primary text-subtitle1 text-bold">{{item2.name}}</div>
-              <div class="q-py-sm">{{item2.description}}</div>
+              <div class="q-pt-sm q-pb-lg">{{item2.description}}</div>
+              <div v-if="item2.free" class="row justify-end absolute-bottom q-pa-xs">
+                <q-chip color="green" text-color="white" dense class="q-px-md">Curso gratuito</q-chip>
+              </div>
             </q-card>
           </div>
       </q-page>

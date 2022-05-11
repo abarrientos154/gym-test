@@ -29,10 +29,13 @@
                     <q-btn class="q-ml-xs" icon="edit" flat round color="white" @click="setUpdate(item2)"/>
                     <div class="text-white">
                       <div class="text-h6 text-bold">{{item2.name}}</div>
-                      <div class="row q-gutter-x-md">
-                        <div class="text-subtitle2">30 días: €{{item2.price30}}</div>
-                        <div class="text-subtitle2">60 días: €{{item2.price60}}</div>
-                        <div class="text-subtitle2">90 días: €{{item2.price90}}</div>
+                      <div v-if="!item2.free" class="row q-gutter-x-md">
+                        <div class="text-subtitle2">30 días: €{{item2.price1}}</div>
+                        <div class="text-subtitle2">180 días: €{{item2.price2}}</div>
+                        <div class="text-subtitle2">365 días: €{{item2.price3}}</div>
+                      </div>
+                      <div v-else>
+                        <q-chip color="green" text-color="white" dense class="q-px-md">Curso gratuito</q-chip>
                       </div>
                     </div>
                   </div>
@@ -68,22 +71,25 @@
               <q-input dense outlined rounded v-model="form.description" label="Breve descripción" type="textarea"
                 :error="$v.form.description.$error" error-message="Este campo es requerido"  @blur="$v.form.description.$touch()">
               </q-input>
-              <div class="row items-start justify-between">
-                <q-input dense outlined rounded type="number" v-model.number="form.price30" label="Costo de 30 días" class="col-5"
-                  :error="$v.form.price30.$error" error-message="Este campo es requerido"  @blur="$v.form.price30.$touch()">
+              <div class="column q-pb-md">
+                <q-checkbox v-model="form.isEnabled" keep-color color="primary" label="Curso activo"/>
+                <q-toggle v-model="form.free" label="Curso gratuito" />
+              </div>
+              <div v-if="!form.free" class="row items-start justify-between">
+                <q-input dense outlined rounded type="number" v-model.number="form.price1" label="Costo de 30 días" class="col-5"
+                  :error="$v.form.price1.$error" error-message="Este campo es requerido"  @blur="$v.form.price1.$touch()">
                 </q-input>
-                <q-input dense outlined rounded type="number" v-model.number="form.price60" label="Costo de 60 días" class="col-5"
-                  :error="$v.form.price60.$error" error-message="Este campo es requerido"  @blur="$v.form.price60.$touch()">
+                <q-input dense outlined rounded type="number" v-model.number="form.price2" label="Costo de 180 días" class="col-5"
+                  :error="$v.form.price2.$error" error-message="Este campo es requerido"  @blur="$v.form.price2.$touch()">
                 </q-input>
-                <q-input dense outlined rounded type="number" v-model.number="form.price90" label="Costo de 90 días" class="col-5"
-                  :error="$v.form.price90.$error" error-message="Este campo es requerido"  @blur="$v.form.price90.$touch()">
+                <q-input dense outlined rounded type="number" v-model.number="form.price3" label="Costo de 365 días" class="col-5"
+                  :error="$v.form.price3.$error" error-message="Este campo es requerido"  @blur="$v.form.price3.$touch()">
                 </q-input>
-                <q-checkbox v-model="form.isEnabled" keep-color color="primary" label="Activo" class="q-ml-lg col-5"/>
               </div>
             </q-card-section>
             <q-card-actions align="right">
               <q-btn flat label="Cancelar" color="primary" v-close-popup @click="show = false" no-caps/>
-              <q-btn :label="editCourse ? 'Actualizar' :  'Crear'" color="primary" v-close-popup @click="editCourse ? updateCourse() : setCourse()" no-caps/>
+              <q-btn :label="editCourse ? 'Actualizar' :  'Crear'" color="primary" @click="editCourse ? updateCourse() : setCourse()" no-caps/>
             </q-card-actions>
           </q-card>
         </q-dialog>
@@ -99,7 +105,7 @@
             </q-card-section>
             <q-card-actions align="right">
               <q-btn flat label="Cancelar" color="primary" v-close-popup no-caps/>
-              <q-btn label="Guardar" color="primary" v-close-popup @click="editCat ? updateCat() : setCat()" no-caps/>
+              <q-btn label="Guardar" color="primary" @click="editCat ? updateCat() : setCat()" no-caps/>
             </q-card-actions>
           </q-card>
         </q-dialog>
@@ -107,7 +113,7 @@
     </q-layout>
 </template>
 <script>
-import { required } from 'vuelidate/lib/validators'
+import { required, requiredIf } from 'vuelidate/lib/validators'
 export default {
   data () {
     return {
@@ -117,7 +123,8 @@ export default {
       show: false,
       showCat: false,
       form: {
-        isEnabled: false
+        isEnabled: false,
+        free: false
       },
       formCat: {},
       categories: [],
@@ -127,11 +134,23 @@ export default {
   validations: {
     form: {
       name: { required },
-      price30: { required },
-      price60: { required },
-      price90: { required },
       category_id: { required },
-      description: { required }
+      description: { required },
+      price1: {
+        required: requiredIf(function (nestedModel) {
+          return !this.form.free
+        })
+      },
+      price2: {
+        required: requiredIf(function (nestedModel) {
+          return !this.form.free
+        })
+      },
+      price3: {
+        required: requiredIf(function (nestedModel) {
+          return !this.form.free
+        })
+      }
     },
     formCat: {
       name: { required }
@@ -169,6 +188,7 @@ export default {
               color: 'positive'
             })
             this.getData()
+            this.show = false
             this.$q.loading.hide()
           }
         })
@@ -180,17 +200,18 @@ export default {
         this.$q.loading.show({
           message: 'Guardando Datos...'
         })
+        this.$api.put('updateCourse/' + this.form._id, this.form).then(res => {
+          if (res) {
+            this.$q.notify({
+              message: 'Curso guardado correctamente',
+              color: 'positive'
+            })
+            this.getData()
+            this.show = false
+            this.$q.loading.hide()
+          }
+        })
       }
-      this.$api.put('updateCourse/' + this.form._id, this.form).then(res => {
-        if (res) {
-          this.$q.notify({
-            message: 'Curso guardado correctamente',
-            color: 'positive'
-          })
-          this.getData()
-          this.$q.loading.hide()
-        }
-      })
     },
     setCat () {
       this.$v.formCat.$touch()
@@ -205,6 +226,7 @@ export default {
               color: 'positive'
             })
             this.getData()
+            this.showCat = false
             this.$q.loading.hide()
           }
         })
@@ -224,6 +246,7 @@ export default {
             color: 'positive'
           })
           this.getData()
+          this.showCat = false
           this.$q.loading.hide()
         }
       })
@@ -231,7 +254,8 @@ export default {
     newCourse () {
       this.editCourse = false
       this.form = {
-        isEnabled: false
+        isEnabled: false,
+        free: false
       }
       this.$v.form.$reset()
       this.show = true

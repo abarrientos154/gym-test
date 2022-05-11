@@ -16,23 +16,23 @@
           <div class="text-white text-center text-h6 q-pt-md">Licencias Disponibles</div>
           <q-card class="q-mt-md q-pa-sm" style="border-radius: 10px">
             <div class="text-primary text-h6">30 días de licencia</div>
-            <div class="text-primary text-h5 text-weight-bolder">€{{course.price30}}</div>
+            <div class="text-primary text-h5 text-weight-bolder">€{{course.price1}}</div>
             <div class="row justify-end">
-              <q-btn color="primary" outline dense class="q-px-md" no-caps label="Comprar" @click="show = true, license = { name: 'price30', total: course.price30 }"/>
+              <q-btn color="primary" outline dense class="q-px-md" no-caps label="Comprar" @click="show = true, license = { name: 'price1', total: course.price1 }"/>
             </div>
           </q-card>
           <q-card class="q-mt-md q-pa-sm" style="border-radius: 10px">
-            <div class="text-primary text-h6">60 días de licencia</div>
-            <div class="text-primary text-h5 text-weight-bolder">€{{course.price60}}</div>
+            <div class="text-primary text-h6">180 días de licencia</div>
+            <div class="text-primary text-h5 text-weight-bolder">€{{course.price2}}</div>
             <div class="row justify-end">
-              <q-btn color="primary" outline dense class="q-px-md" no-caps label="Comprar" @click="show = true, license = { name: 'price60', total: course.price60 }"/>
+              <q-btn color="primary" outline dense class="q-px-md" no-caps label="Comprar" @click="show = true, license = { name: 'price2', total: course.price2 }"/>
             </div>
           </q-card>
           <q-card class="q-mt-md q-pa-sm" style="border-radius: 10px">
-            <div class="text-primary text-h6">90 días de licencia</div>
-            <div class="text-primary text-h5 text-weight-bolder">€{{course.price90}}</div>
+            <div class="text-primary text-h6">365 días de licencia</div>
+            <div class="text-primary text-h5 text-weight-bolder">€{{course.price3}}</div>
             <div class="row justify-end">
-              <q-btn color="primary" outline dense class="q-px-md" no-caps label="Comprar" @click="show = true, license = { name: 'price90', total: course.price90 }"/>
+              <q-btn color="primary" outline dense class="q-px-md" no-caps label="Comprar" @click="show = true, license = { name: 'price3', total: course.price3 }"/>
             </div>
           </q-card>
         </div>

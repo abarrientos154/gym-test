@@ -101,6 +101,18 @@ export default {
           ruta: '/types'
         },
         {
+          src: 'examen 12.png',
+          src2: 'examen 1.png',
+          label: 'Examenes',
+          icon: 'rule',
+          ruta: '/exams'
+        },
+        {
+          label: 'Test General',
+          icon: 'settings_suggest',
+          ruta: '/configTest'
+        },
+        {
           src: '',
           src2: '',
           label: 'Leyes',
@@ -134,18 +146,6 @@ export default {
           label: 'Respuestas',
           icon: 'verified',
           ruta: '/answers'
-        },
-        {
-          src: 'examen 12.png',
-          src2: 'examen 1.png',
-          label: 'Examenes',
-          icon: 'rule',
-          ruta: '/exams'
-        },
-        {
-          label: 'Test General',
-          icon: 'settings_suggest',
-          ruta: '/configTest'
         },
         {
           src: 'blog 1.png',
