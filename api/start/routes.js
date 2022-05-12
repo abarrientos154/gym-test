@@ -247,6 +247,7 @@ addPrefixToGroup(
     Route.get('topicsWithQuestions/:id', 'GeneralTestController.topicsWithQuestions')
     Route.get('verifyQuestions/:id', 'GeneralTestController.verifyQuestions')
     Route.post('setConfig', 'GeneralTestController.store')
+    Route.get('test_general/:idCourse', 'GeneralTestController.getTestGeneral')
     
   }).middleware("auth")
   );

@@ -1,13 +1,21 @@
 <template>
   <div>
     <q-btn class="absolute-top-left" round flat color="white" icon="arrow_back" @click="$router.go(-1)" style="z-index: 10" />
-    <q-img v-if="esTema" :src="tema.image ? baseu + tema.image : 'fondo.png'" style="height: 240px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px" />
-    <q-img v-if="esGym" :src="tema.image ? baseuTy + tema.image : 'fondo.png'" style="height: 240px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px" />
-    <q-img v-if="esExamen" :src="tema.image ? baseuEx + tema.image : 'fondo.png'" style="height: 240px; width: 100%; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px" />
+    <q-img v-if="esTema" :src="tema.image ? baseu + tema.image : 'fondo.png'" style="height: 240px; width: 100%;" />
+    <q-img v-if="esGym" :src="tema.image ? baseuTy + tema.image : 'fondo.png'" style="height: 240px; width: 100%;" />
+    <q-img v-if="esExamen" :src="tema.image ? baseuEx + tema.image : 'fondo.png'" style="height: 240px; width: 100%;" />
+    <q-img v-if="esGeneral" src="fondo.png" style="height: 240px; width: 100%;">
+        <div class="bg-transparent q-mt-xl" style="width:100%">
+          <q-img src="gymtest 1.png" style="width: 150px"/>
+        </div>
+    </q-img>
 
     <div class="q-pa-md bg-white" style="position:relative; top: -40px;border-top-left-radius: 20px; border-top-right-radius: 20px">
-      <div class="text-bold text-primary text-center text-italic text-h5">{{esGym ? tema.type_name : tema.name}}</div>
+      <div class="text-bold text-primary text-center text-italic text-h5">{{esGeneral ? 'Test General' : esGym ? tema.type_name : tema.name}}</div>
       <div v-if="esTema" class="q-pa-md text-italic text-grey-9">{{tema.long_name}}</div>
+
+      <div v-if="esGeneral" class="q-pa-md q-mt-md text-italic text-grey-9 text-center">Aquí vas a realizar un test general donde hacemos una recopilación aleatoria de 100 preguntas de todos los temas para prepararte como puede ser la realización de un examen oficial</div>
+
       <div v-if="esTema">
         <div class="text-primary text-bold text-italic">Selecciona los subtemas para realizar el test</div>
         <div v-if="subTemas.length" class="row q-py-sm">
@@ -21,7 +29,7 @@
         <div v-else class="text-center text-grey-8 q-py-md">Sin Subtemas</div>
       </div>
 
-      <div class="q-pt-md">
+      <div v-if="!esGeneral" class="q-pt-md">
         <div v-if="esExamen" class="row items-center">
           <div class="text-primary text-bold">Convocatoria</div>
           <div class="q-pl-md">{{tema.convocatoria}}</div>
@@ -36,7 +44,7 @@
         </div>
       </div>
 
-      <div>
+      <div v-if="!esGeneral">
         <div class="text-primary text-center text-h6 q-pt-md">Último resultado</div>
         <div class="text-primary text-center"><b>{{esExamen ? 'Preguntas:' : 'Respondidas:'}}</b> {{resultado.total_quest}}</div>
         <div class="row justify-between q-pt-md">
@@ -48,7 +56,7 @@
 
         <div class="row justify-center q-py-xl">
           <q-btn no-caps color="primary" label="Iniciar" size="lg" style="width:100%;border-radius:10px"
-          @click="esTema ? iniciarTema() : esGym ? iniciarGym() : verifyExam()" />
+          @click="esGeneral ? verifyGeneral() : esTema ? iniciarTema() : esGym ? iniciarGym() : verifyExam()" />
         </div>
     </div>
 
@@ -83,6 +91,7 @@ export default {
       esExamen: false,
       esGym: false,
       examTime: false,
+      esGeneral: false,
       tiempo: false,
       timeTest: 1,
       user: {},
@@ -98,7 +107,7 @@ export default {
       root: ''
     }
   },
-  mounted () {
+  created () {
     this.baseu = env.apiUrl + 'topics_img/'
     this.baseuTy = env.apiUrl + 'types_img/'
     this.baseuEx = env.apiUrl + 'exams_img/'
@@ -118,6 +127,8 @@ export default {
       this.getType()
       this.id = this.$route.params.idType
       this.root = 'type_test_by_id/'
+    } else if (this.$route.params.general) {
+      this.esGeneral = true
     }
   },
   methods: {
@@ -266,6 +277,24 @@ export default {
           color: 'black'
         })
       }
+    },
+    async verifyGeneral () {
+      this.$q.loading.show({
+        message: 'Verificando Datos...'
+      })
+      const courseId = localStorage.getItem('course_id')
+      await this.$api.get('test_general/' + courseId).then(res => {
+        if (res) {
+          this.$router.push('/general/test')
+          this.$q.loading.hide()
+        } else {
+          this.$q.loading.hide()
+          this.$q.notify({
+            color: 'black',
+            message: 'No hay preguntas suficientes para este test'
+          })
+        }
+      })
     },
     verifyExam () {
       if (this.preguntas.length) {

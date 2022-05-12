@@ -37,10 +37,12 @@ const routes = [
       { path: '/forums', component: () => import('pages/user/Forums.vue') },
       { path: '/tema/:idTema', component: () => import('pages/user/TestData.vue') },
       { path: '/examen/:idExamen', component: () => import('pages/user/TestData.vue') },
+      { path: '/test/:general', component: () => import('pages/user/TestData.vue') },
       { path: '/gym/:idType', component: () => import('pages/user/TestData.vue') },
       { path: '/tema/test/:idTema', component: () => import('pages/user/TestStar.vue') },
       { path: '/examen/test/:idExamen', component: () => import('pages/user/TestStar.vue') },
       { path: '/gym/test/:idType', component: () => import('pages/user/TestStar.vue') },
+      { path: '/general/:test', component: () => import('pages/user/TestStar.vue') },
       { path: '/audios_por_tema/:id', component: () => import('pages/user/AudiosByTopic.vue') },
       { path: '/audios', component: () => import('pages/user/Audios.vue') }
     ]

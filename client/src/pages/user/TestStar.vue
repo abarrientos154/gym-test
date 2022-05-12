@@ -9,14 +9,14 @@
             <q-carousel-slide :name="index + 1" class="q-pa-none" v-for="(item, index) in preguntas" :key="index">
                 <div class="row justify-center q-pa-md">
                   <q-card class="bordes" style="width:100%; border-radius:10px">
-                    <div class="text-center text-primary text-h6">{{esTema ? test.tema_name : esExamen ? test.examen_name : test.type_name}}</div>
+                    <div class="text-center text-primary text-h6">{{esGeneral ? 'Test General' : esTema ? test.tema_name : esExamen ? test.examen_name : test.type_name}}</div>
                     <div class="bg-primary text-white row justify-between items-center q-pa-md">
                       <div>
                         <div v-if="esExamen && test.tiempo">
                           <div class="text-subtitle2">Duración del test</div>
                           <div>{{minutos + ':' + segundos}}</div>
                         </div>
-                        <div v-if="item.examData !== null && item.examData !== undefined" style="width: 50%; border-radius: 20px" class="bg-green text-h6 row q-py-xs q-px-sm">
+                        <div v-if="!esGeneral && item.examData !== null && item.examData !== undefined" style="width: 50%; border-radius: 20px" class="bg-green text-h6 row q-py-xs q-px-sm">
                           <div class="ellipsis">{{item.examData.name ? item.examData.name : ''}}</div>
                         </div>
                       </div>
@@ -79,6 +79,7 @@
             </div>
           </q-card>
         </q-dialog>
+
         <q-dialog v-model="report" v-if="report">
           <q-card class="q-pa-md bordes" style="width: 100%; border-radius: 15px">
             <div class="text-bold text-primary">Reportar Fallo</div>
@@ -107,6 +108,7 @@ export default {
       verLey: false,
       esTema: false,
       esExamen: false,
+      esGeneral: false,
       idTest: '',
       slide: 1,
       minutos: 0,
@@ -127,7 +129,7 @@ export default {
       message: { required }
     }
   },
-  mounted () {
+  created () {
     this.courseId = localStorage.getItem('course_id')
     this.getUser()
     if (this.$route.params.idTema) {
@@ -141,6 +143,9 @@ export default {
       this.idTest = this.$route.params.idExamen
       this.esExamen = true
       this.getTestById('examen_test_by_id/', this.idTest)
+    } else if (this.$route.params.test) {
+      this.esGeneral = true
+      this.getGeneralTest()
     }
   },
   methods: {
@@ -168,6 +173,23 @@ export default {
           this.$q.notify({
             color: 'negative',
             message: 'Aun no hay datos'
+          })
+        }
+      })
+    },
+    async getGeneralTest () {
+      this.$q.loading.show({
+        message: 'Verificando Datos...'
+      })
+      await this.$api.get('test_general/' + this.courseId).then(res => {
+        if (res) {
+          this.preguntas = res
+          this.$q.loading.hide()
+        } else {
+          this.$q.loading.hide()
+          this.$q.notify({
+            color: 'negative',
+            message: 'Aún no hay datos'
           })
         }
       })
@@ -240,7 +262,7 @@ export default {
         if (bool) {
           clearInterval(vm.timeCounter2)
           clearInterval(vm.timeCounter)
-          if (pregunta.isActive) {
+          if (!vm.esGeneral && pregunta.isActive) {
             vm.$api.put(vm.esTema ? 'topic_test/' + vm.idTest : vm.esExamen ? 'examen_test/' + vm.idTest : 'type_test/' + vm.idTest, pregunta).then(res => {
               if (res) {
                 vm.$router.go(-1)
@@ -251,12 +273,17 @@ export default {
           }
         } else {
           clearInterval(vm.timeCounter2)
-          vm.$api.put(vm.esTema ? 'topic_test/' + vm.idTest : vm.esExamen ? 'examen_test/' + vm.idTest : 'type_test/' + vm.idTest, pregunta).then(res => {
-            if (res) {
-              vm.$refs.carousel.next()
-              vm.listo = false
-            }
-          })
+          if (!vm.esGeneral) {
+            vm.$api.put(vm.esTema ? 'topic_test/' + vm.idTest : vm.esExamen ? 'examen_test/' + vm.idTest : 'type_test/' + vm.idTest, pregunta).then(res => {
+              if (res) {
+                vm.$refs.carousel.next()
+                vm.listo = false
+              }
+            })
+          } else {
+            vm.$refs.carousel.next()
+            vm.listo = false
+          }
         }
         vm.loading = false
         return true

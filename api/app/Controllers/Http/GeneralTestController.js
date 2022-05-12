@@ -2,6 +2,8 @@
 const GeneralTest = use("App/Models/GeneralTest")
 const Topic = use("App/Models/Topic")
 const Question = use("App/Models/Question")
+const Articulos = use("App/Models/Article")
+const Parrafos = use("App/Models/Paragraph")
 var ObjectId = require('mongodb').ObjectId
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -21,6 +23,69 @@ class GeneralTestController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
+  }
+
+  async getTestGeneral ({ request, response, params }) {
+    try {
+      const id = new ObjectId(params.idCourse)
+      let test = (await GeneralTest.findBy('course_id', id)).toJSON()
+      if (test) {
+        let questions = []
+        // traemos las preguntas que tendra el test general
+        for (let i = 0; i < test.config.length; i++) {
+          let element = test.config[i]
+          let questByTopic = (await Question.query().where({ topic: element.topic }).with('answers').with('leyInfo').fetch()).toJSON()
+          questByTopic = questByTopic.sort(() => Math.random() - 0.5)
+          let length = questByTopic.length >= element.number ? element.number : questByTopic.length
+          for (let q = 0; q < length; q++) {
+            questions.push(questByTopic[q])
+          }
+        }
+
+        // Ordenamos las preguntas
+        for (let i = 0; i < questions.length; i++) {
+          if (questions[i].answers[0].order === null || questions[i].answers[0].order === '') {
+            questions[i].answers = questions[i].answers.sort(() => Math.random() - 0.5)
+          } else {
+            var arrayAnswers = []
+            arrayAnswers[0] = questions[i].answers.find(v => v.order.toLowerCase() === 'a')
+            arrayAnswers[1] = questions[i].answers.find(v => v.order.toLowerCase() === 'b')
+            arrayAnswers[2] = questions[i].answers.find(v => v.order.toLowerCase() === 'c')
+            arrayAnswers[3] = questions[i].answers.find(v => v.order.toLowerCase() === 'd')
+            questions[i].answers = arrayAnswers
+          }
+          questions[i].articuloInfo = (await Articulos.query().where({article_name: questions[i].article, law: questions[i].law_id}).first())
+          if (questions[i].articuloInfo) {
+            questions[i].parrafoInfo = (await Parrafos.query().where({article_id: Number(questions[i].articuloInfo.id)}).fetch()).toJSON()
+          } else {
+            questions[i].parrafoInfo = []
+          }
+          if (questions[i].parrafoInfo.length) {
+            questions[i].parrafoInfo.sort(function(a, b) {
+              return a.order - b.order;
+            })
+          }
+          questions[i].answers = questions[i].answers.map(v => {
+            questions[i].selected = false
+            return {
+              ...v,
+              isActive: false
+            }
+          })
+        }
+
+        /* if (questions.length < 100) {
+          response.send(false)
+        } else {
+          response.send(questions)
+        } */
+        response.send(questions)
+      } else {
+        response.send(false)
+      }
+    } catch (error) {
+      console.error('get general test:' + error.name + ':' + error.message);
+    }
   }
 
   /**
@@ -48,11 +113,11 @@ class GeneralTestController {
   async topicsWithQuestions ({ response, params }) {
     const id = new ObjectId(params.id)
     let data = (await Topic.query().where({ course_id: id }).with('questions').fetch()).toJSON()
-    let config = (await GeneralTest.query().where({ course_id: id }).first()).toJSON()
+    let config = (await GeneralTest.query().where({ course_id: id }).first())
     if (config) {
       for (let x = 0; x < data.length; x++) {
         const element = data[x]
-        const conf = config.config.find(v => v.topic == element._id)
+        const conf = config.config.find(v => v.topic == element.topic)
         if (conf) {
           data[x].cant = conf.number
         }
@@ -78,17 +143,17 @@ class GeneralTestController {
     let guardar = {}
     guardar.course_id = new ObjectId(body.course_id)
     let data = []
-    body.data = body.data.filter(v => v.cant || v.cant != 0)
+    body.data = body.data.filter(v => v.cant && v.cant != 0)
     for (let x = 0; x < body.data.length; x++) {
       const element = body.data[x]
       data.push({
-        topic: element._id,
+        topic: element.topic,
         number: element.cant
       })
     }
     guardar.config = data
     let general 
-    let config = (await GeneralTest.query().where({ course_id: guardar.course_id }).first()).toJSON()
+    let config = (await GeneralTest.query().where({ course_id: guardar.course_id }).first())
     if (config) {
       general = await GeneralTest.where({ course_id: guardar.course_id }).update(guardar)
     } else {

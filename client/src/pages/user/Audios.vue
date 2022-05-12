@@ -9,7 +9,9 @@
 
     <div class="q-pa-md bg-white" style="position:relative; top: -40px;border-top-left-radius: 20px; border-top-right-radius: 20px">
       <div class="text-bold text-primary text-center text-italic text-h5">Audios por tema</div>
-      <q-card v-for="(item, index) in topicsWithAudios" :key="index" clickable v-ripple @click="$router.push('/audios_por_tema/' + item.topic)"
+
+      <div v-if="topicsWithAudios.length">
+        <q-card v-for="(item, index) in topicsWithAudios" :key="index" clickable v-ripple @click="$router.push('/audios_por_tema/' + item.topic)"
           class="q-mt-md" style="width:100%; border-radius: 10px;">
             <q-img src="audio.jpg" style="height: 150px; width: 100%;border-radius: 10px;" />
             <div class="absolute-top row justify-end q-pl-md" style="width:100%">
@@ -17,6 +19,8 @@
                style="border-bottom-left-radius: 30px; border-top-right-radius: 10px">{{item.name}}</div>
             </div>
         </q-card>
+      </div>
+      <div v-else class="text-center text-italic text-grey-8 q-pt-lg text-h6">Aún no hay audios</div>
     </div>
   </div>
 </template>

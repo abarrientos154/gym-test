@@ -18,7 +18,7 @@
             <q-img :src="baseu + item.image" style="height: 110px; width: 100%; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px" />
           </q-card>
         </div>
-        <div v-else class="q-py-xl text-center text-grey-8">Aún no hay noticias</div>
+        <div v-else class="text-center text-italic text-grey-8 q-pt-lg text-h6">Aún no hay noticias</div>
     </div>
   </div>
 </template>

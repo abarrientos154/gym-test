@@ -9,7 +9,8 @@
 
     <div class="q-pa-md bg-white" style="position:relative; top: -40px;border-top-left-radius: 20px; border-top-right-radius: 20px">
       <div class="text-bold text-primary text-center text-italic text-h5">Foro</div>
-      <q-card v-for="(item, index) in forums" :key="index" clickable v-ripple @click="$router.push('/forum/' + item._id)"
+      <div v-if="forums.length">
+        <q-card v-for="(item, index) in forums" :key="index" clickable v-ripple @click="$router.push('/forum/' + item._id)"
           class="q-mt-md bordes" style="width:100%; border-radius: 10px;">
             <div class="row justify-end q-pl-md" style="width:100%">
               <div class="text-white text-h6 ellipsis bg-primary q-py-xs q-px-lg"
@@ -18,7 +19,9 @@
             <div class="q-pa-md">
               <div v-html="item.text" class="ellipsis-3-lines text-right"></div>
             </div>
-      </q-card>
+        </q-card>
+      </div>
+      <div v-else class="text-center text-italic text-grey-8 q-pt-lg text-h6">Aún no hay foros</div>
     </div>
   </div>
 </template>

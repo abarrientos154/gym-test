@@ -85,6 +85,10 @@
           <div class="text-right text-h5 text-bold">Gym</div>
         </q-card>
 
+        <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/test/general')">
+          <div class="text-right text-h5 text-bold">Test general</div>
+        </q-card>
+
         <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/ver/Examenes')">
           <div class="text-right text-h5 text-bold">Examenes</div>
         </q-card>
