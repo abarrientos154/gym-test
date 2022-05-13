@@ -5,19 +5,44 @@
           <q-card class="row justify-center q-py-lg q-mt-md bg-white" style="width: 100%; border-radius: 10px;">
             <q-img src="gymtest 1.png" style="width: 150px"/>
           </q-card>
-          <q-btn flat dense no-caps label="Cerrar sesión" color="white" class="absolute-top-left q-mx-sm" @click="cerrarSesion()" />
+          <q-btn v-if="login" flat dense no-caps label="Cerrar sesión" color="white" class="absolute-top-left q-mx-sm" @click="cerrarSesion()" />
+          <q-btn v-else flat dense icon="arrow_back" color="white" class="absolute-top-left q-mx-sm" @click="$router.go(-1)" />
 
           <div v-for="(item, index) in courses" :key="index" class="q-pt-md">
             <div class="text-h5 text-center text-white text-weight-medium q-my-xs">{{item.name}}</div>
-            <q-card class="q-pa-md q-mt-sm" style="border-radius: 10px" clickable v-ripple @click="verifyLicense(item2)"
+            <q-card class="q-pa-md q-mt-sm" style="border-radius: 10px" clickable v-ripple @click="login ? verifyLicense(item2) : seeDetails(item2)"
               v-for="(item2, index2) in item.courses" :key="index2">
               <div class="text-primary text-subtitle1 text-bold">{{item2.name}}</div>
-              <div class="q-pt-sm q-pb-lg">{{item2.description}}</div>
+              <div class="q-pt-sm q-mb-lg ellipsis-2-lines">{{item2.description}}</div>
               <div v-if="item2.free" class="row justify-end absolute-bottom q-pa-xs">
                 <q-chip color="green" text-color="white" dense class="q-px-md">Curso gratuito</q-chip>
               </div>
             </q-card>
           </div>
+
+          <q-dialog v-model="details" persistent maximized>
+            <q-card class="q-pa-md column justify-between no-wrap">
+              <div>
+                <q-card class="row justify-center q-py-lg q-mt-md bg-grey-5" style="width: 100%; border-radius: 10px;">
+                  <q-img src="gymtest 1.png" style="width: 150px"/>
+                </q-card>
+
+                <div class="text-center text-primary text-h5 text-bold q-pt-md">{{course.name}}</div>
+                <div v-if="course.free" class="row justify-center q-pa-xs">
+                  <q-chip color="green" text-color="white" dense class="q-px-md">Curso gratuito</q-chip>
+                </div>
+                <div class="text-center text-italic text-grey-8 text-subtitle1 q-py-md">{{course.description}}</div>
+                </div>
+
+              <div class="q-pb-md q-px-md column items-center">
+                <q-btn v-if="login" no-caps label="Adquirir curso" color="primary" size="lg" style="width:100%" @click="$router.push('/license/' + course._id)" />
+                <div v-else class="q-py-md">
+                  <div class="text-grey-8 text-subtitle1 text-center">Para {{course.free ? 'entrar' : 'adquirirlo'}} debes <b class="text-primary cursor-pointer" @click="$router.push('/login')">Iniciar Sesión</b> o <b class="text-primary cursor-pointer" @click="$router.push('/registro')">Registrarte</b></div>
+                </div>
+                <q-btn no-caps flat color="primary" label="Volver" class="q-mt-md" @click="details = false" />
+              </div>
+            </q-card>
+          </q-dialog>
       </q-page>
     </q-page-container>
   </q-layout>
@@ -27,13 +52,22 @@ import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
+      login: false,
+      details: false,
       user: {},
+      course: {},
       courses: []
     }
   },
   mounted () {
     this.getCourses()
-    this.getUser()
+    const value = localStorage.getItem('SESSION_INFO')
+    if (value) {
+      this.login = true
+      this.getUser()
+    } else {
+      this.login = false
+    }
   },
   methods: {
     ...mapMutations('generals', ['logout']),
@@ -50,6 +84,10 @@ export default {
           this.courses = res
         }
       })
+    },
+    seeDetails (data) {
+      this.course = data
+      this.details = true
     },
     verifyLicense (data) {
       if (data.free) {
@@ -71,16 +109,7 @@ export default {
             localStorage.setItem('course_id', data._id)
             this.$router.push('/inicio')
           } else {
-            this.$q.dialog({
-              title: 'Atención',
-              message: 'No tienes licencia para este curso ¿Deseas adquirir una nueva?',
-              cancel: true,
-              persistent: true
-            }).onOk(() => {
-              this.$router.push('/license/' + data._id)
-            }).onCancel(() => {
-              // console.log('>>>> Cancel')
-            })
+            this.seeDetails(data)
           }
         })
       }

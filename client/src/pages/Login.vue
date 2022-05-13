@@ -35,6 +35,7 @@
           <div class="text-grey q-mr-xs">¿No tienes cuenta aun?</div>
           <div class="text-bold text-primary cursor-pointer" @click="$router.push('/registro')">Crear una cuenta</div>
         </div>
+        <div class="text-bold text-center text-grey-7 q-pt-md cursor-pointer" @click="$router.push('/pagina-principal')">Ir a página principal</div>
       </div>
 
     <q-dialog v-model="modal">
@@ -93,9 +94,12 @@ export default {
       password: { required }
     }
   },
+  created () {
+    this.logout()
+  },
   methods: {
     // $router.push('/recuperar_clave')
-    ...mapMutations('generals', ['login']),
+    ...mapMutations('generals', ['login', 'logout']),
     ...mapActions('generals', ['saveUser']),
     async recuperar () {
       if (this.email) {

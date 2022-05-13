@@ -1,7 +1,12 @@
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+
+Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/index',
+    name: 'index',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       // Admin
@@ -31,9 +36,9 @@ const routes = [
       { path: '/perfil', component: () => import('pages/user/Perfil.vue') },
       { path: '/ver/:title', component: () => import('pages/user/Temas.vue') },
       { path: '/news_user', component: () => import('pages/user/News.vue') },
-      { path: '/publicidad/:id', component: () => import('pages/user/PublicidadBlog.vue') },
-      { path: '/forum/:id', component: () => import('pages/user/Forum.vue') },
-      { path: '/question/:id', component: () => import('pages/user/Question.vue') },
+      { path: '/publicidad/:id', name: 'publicidad', component: () => import('pages/user/PublicidadBlog.vue') },
+      { path: '/forum/:id', name: 'foro', component: () => import('pages/user/Forum.vue') },
+      { path: '/question/:id', name: 'foroQuestion', component: () => import('pages/user/Question.vue') },
       { path: '/forums', component: () => import('pages/user/Forums.vue') },
       { path: '/tema/:idTema', component: () => import('pages/user/TestData.vue') },
       { path: '/examen/:idExamen', component: () => import('pages/user/TestData.vue') },
@@ -50,14 +55,14 @@ const routes = [
 
   { path: '/license/:lic', component: () => import('pages/user/License.vue') },
   { path: '/license/:est/:lic/:dias', component: () => import('pages/user/License.vue') },
-
-  { path: '/splash', component: () => import('pages/Splash.vue') },
-  { path: '/pagina-principal', component: () => import('pages/Home.vue') },
   { path: '/courses', component: () => import('pages/Courses.vue') },
-  { path: '/courses_client', component: () => import('pages/CoursesClient.vue') },
-  { path: '/login', component: () => import('pages/Login.vue') },
-  { path: '/registro', component: () => import('pages/Registro.vue') },
-  { path: '/recuperar_clave/:code', component: () => import('pages/NewPassword.vue') },
+  { path: '/courses_client', name: 'courses_client', component: () => import('pages/CoursesClient.vue') },
+
+  { path: '/splash', name: 'splash', component: () => import('pages/Splash.vue') },
+  { path: '/pagina-principal', name: 'pagina-principal', component: () => import('pages/Home.vue') },
+  { path: '/login', name: 'login', component: () => import('pages/Login.vue') },
+  { path: '/registro', name: 'registro', component: () => import('pages/Registro.vue') },
+  { path: '/recuperar_clave/:code', name: 'recuperar_clave', component: () => import('pages/NewPassword.vue') },
   {
     path: '/',
     redirect: '/splash'

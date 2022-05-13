@@ -25,6 +25,23 @@ export default function (/* { store, ssrContext } */) {
     mode: process.env.VUE_ROUTER_MODE,
     base: process.env.VUE_ROUTER_BASE
   })
-
+  Router.beforeEach((to, from, next) => {
+    const publicPages = ['login', 'pagina-principal', 'splash', 'registro', 'recuperar_clave', 'index', 'foroQuestion', 'foro', 'publicidad', 'courses_client']
+    const authPublic = publicPages.includes(to.name)
+    const userLog = localStorage.getItem('SESSION_INFO')
+    // Si la ruta amerita autenticacion y no estas logueado
+    if (authPublic) {
+      // ir al login
+      next()
+      // si no amerita autenticacion //y estas logueado
+    } else {
+      // ir a la ruta inical del admin
+      if (userLog) {
+        next()
+      } else {
+        next('/')
+      }
+    }
+  })
   return Router
 }

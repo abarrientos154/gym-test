@@ -98,7 +98,7 @@
         </q-card>
 
         <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/forums')">
-          <div class="text-right text-h5 text-bold">Foro</div>
+          <div class="text-right text-h5 text-bold">Foros</div>
         </q-card>
       </div>
   </div>

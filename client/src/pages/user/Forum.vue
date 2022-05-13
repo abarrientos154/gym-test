@@ -10,7 +10,7 @@
     <div class="q-pa-md bg-white" style="position:relative; top: -40px;border-top-left-radius: 20px; border-top-right-radius: 20px">
       <div class="text-bold text-primary text-center text-italic text-h5">{{data.title}}</div>
       <div class="text-grey-8 q-mb-lg q-mt-sm" v-html="data.text"></div>
-      <div v-if="data.question" class="row justify-center">
+      <div v-if="login && data.question" class="row justify-center">
         <q-btn color="primary" no-caps size="lg" @click="question = true" label="Realizar Pregunta" style="width:100%; border-radius:10px" />
       </div>
       <div v-if="questions.length" class="q-py-md">
@@ -61,6 +61,9 @@ import { required } from 'vuelidate/lib/validators'
 export default {
   data () {
     return {
+      login: false,
+      question: false,
+      baseuPerfil: '',
       thumbStyle: {
         right: '5px',
         borderRadius: '8px',
@@ -69,10 +72,8 @@ export default {
         opacity: 0
       },
       data: {},
-      questions: [],
-      question: false,
       form: {},
-      baseuPerfil: ''
+      questions: []
     }
   },
   validations: {
@@ -83,6 +84,12 @@ export default {
   mounted () {
     this.baseuPerfil = env.apiUrl + 'perfil_img/'
     this.getForums()
+    const value = localStorage.getItem('SESSION_INFO')
+    if (value) {
+      this.login = true
+    } else {
+      this.login = false
+    }
   },
   methods: {
     getForums () {

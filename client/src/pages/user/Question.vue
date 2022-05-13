@@ -25,7 +25,7 @@
           </div>
       </q-card>
 
-      <q-btn v-if="canResponse" color="primary" no-caps size="lg" @click="response = true" label="Responder" style="width:100%; border-radius:10px" />
+      <q-btn v-if="login && canResponse" color="primary" no-caps size="lg" @click="response = true" label="Responder" style="width:100%; border-radius:10px" />
 
       <div v-if="data.responses" class="q-py-md">
         <q-card v-for="(item, index) in data.responses" :key="index" class="row no-wrap bordes q-mb-md" style="width: 100%; border-radius: 10px">
@@ -70,6 +70,10 @@ import { required } from 'vuelidate/lib/validators'
 export default {
   data () {
     return {
+      response: false,
+      login: false,
+      canResponse: false,
+      baseuPerfil: '',
       thumbStyle: {
         right: '5px',
         borderRadius: '8px',
@@ -78,10 +82,7 @@ export default {
         opacity: 0
       },
       data: {},
-      response: false,
-      form: {},
-      baseuPerfil: '',
-      canResponse: false
+      form: {}
     }
   },
   validations: {
@@ -92,6 +93,12 @@ export default {
   async created () {
     this.baseuPerfil = env.apiUrl + 'perfil_img/'
     await this.getData()
+    const value = localStorage.getItem('SESSION_INFO')
+    if (value) {
+      this.login = true
+    } else {
+      this.login = false
+    }
   },
   methods: {
     getData () {

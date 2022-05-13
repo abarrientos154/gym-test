@@ -36,8 +36,15 @@ addPrefixToGroup(
     Route.post("login", "UserController.login");
     Route.post("register", "UserController.register")
 
+    Route.get('getCoursesClient', 'CourseController.indexClient')
+
     Route.get('news', 'NewsController.index')
     Route.get('newsById/:id', 'NewsController.show')
+
+    Route.get('forums', 'ForumController.index')
+    Route.get('forumById/:id', 'ForumController.show')
+    Route.get('QuestionsForum/:id', 'ForumController.QuestionsForum')
+    Route.get('questionAndResponses/:id', 'ForumController.questionAndResponses')
 
     Route.get('get_License_course/:id', 'LicenseController.index')
 
@@ -207,7 +214,6 @@ addPrefixToGroup(
     
     Route.get('getCourses', 'CourseController.index')
     Route.get('course_by_id/:id', 'CourseController.courseById')
-    Route.get('getCoursesClient', 'CourseController.indexClient')
     Route.post('setCourse', 'CourseController.store')
     Route.put('updateCourse/:id', 'CourseController.update')
 
@@ -223,11 +229,8 @@ addPrefixToGroup(
     Route.post('setForum', 'ForumController.store')
     Route.put('updateForum/:id', 'ForumController.update')
     Route.delete('deleteForum/:id', 'ForumController.destroy')
-    Route.get('forumById/:id', 'ForumController.show')
     Route.post('setQuestion', 'ForumController.setQuestion')
     Route.post('setResponse', 'ForumController.setResponse')
-    Route.get('QuestionsForum/:id', 'ForumController.QuestionsForum')
-    Route.get('questionAndResponses/:id', 'ForumController.questionAndResponses')
     
     Route.post('setFault', 'FaultController.store')
     Route.get('faultsByCourse/:id', 'FaultController.indexByCourse')
