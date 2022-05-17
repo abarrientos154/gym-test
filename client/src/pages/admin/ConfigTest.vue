@@ -119,7 +119,7 @@ export default {
           message: 'Existen errores en el formulario.',
           color: 'negative'
         })
-      } else if (this.total !== 2) {
+      } else if (this.total !== 100) {
         this.$q.notify({
           message: 'La cantidad de preguntas no es el requerido (100).',
           color: 'negative'

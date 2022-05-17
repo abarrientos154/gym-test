@@ -1,6 +1,12 @@
 <template>
     <q-layout view="lHh Lpr lFf">
-      <q-drawer v-model="drawer" show-if-above style="width: 175px;">
+      <q-header style="background: linear-gradient(to right, #002938, #004e6d);">
+        <q-toolbar>
+          <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
+        </q-toolbar>
+      </q-header>
+
+      <q-drawer v-model="drawer" style="width: 175px;">
         <div class="fit bg-primary">
           <div class="column items-center justify-center" style="background: linear-gradient(to right, #002938, #004e6d); height: 200px; width: 100%;">
             <div class="column items-center q-pt-xl q-pb-xs">
@@ -41,7 +47,9 @@
                   </div>
                   <q-btn class="q-ml-xs" icon="arrow_forward" flat round color="white" @click="selectCourse(item2._id)"/>
                 </div>
-                <div class="q-pa-md">{{item2.description}}</div>
+                <div class="q-pa-md">
+                  <div v-html="item2.description" class="ellipsis-3-lines"></div>
+                </div>
               </q-card>
             </div>
             <div v-else class="text-primary text-center text-italic q-py-lg">No tiene cursos asignados</div>
@@ -68,9 +76,9 @@
                   </q-item>
                 </template>
               </q-select>
-              <q-input dense outlined rounded v-model="form.description" label="Breve descripción" type="textarea"
-                :error="$v.form.description.$error" error-message="Este campo es requerido"  @blur="$v.form.description.$touch()">
-              </q-input>
+              <div :class="$v.description.$error ? 'text-red' : ''">Breve descripción</div>
+              <q-editor v-model="description" style="width: 100%" min-height="5rem"
+              :error="$v.description.$error" error-message="Este campo es requerido"  @blur="$v.description.$touch()"/>
               <div class="column q-pb-md">
                 <q-checkbox v-model="form.isEnabled" keep-color color="primary" label="Curso activo"/>
                 <q-toggle v-model="form.free" label="Curso gratuito" />
@@ -117,11 +125,12 @@ import { required, requiredIf } from 'vuelidate/lib/validators'
 export default {
   data () {
     return {
-      drawer: true,
+      drawer: false,
       editCourse: false,
       editCat: false,
       show: false,
       showCat: false,
+      description: '',
       form: {
         isEnabled: false,
         free: false
@@ -135,7 +144,6 @@ export default {
     form: {
       name: { required },
       category_id: { required },
-      description: { required },
       price1: {
         required: requiredIf(function (nestedModel) {
           return !this.form.free
@@ -152,6 +160,7 @@ export default {
         })
       }
     },
+    description: { required },
     formCat: {
       name: { required }
     }
@@ -177,10 +186,12 @@ export default {
     },
     setCourse () {
       this.$v.form.$touch()
-      if (!this.$v.form.$error) {
+      this.$v.description.$touch()
+      if (!this.$v.form.$error && !this.$v.description.$error) {
         this.$q.loading.show({
           message: 'Guardando Datos...'
         })
+        this.form.description = this.description
         this.$api.post('setCourse', this.form).then(res => {
           if (res) {
             this.$q.notify({
@@ -196,10 +207,12 @@ export default {
     },
     updateCourse () {
       this.$v.form.$touch()
-      if (!this.$v.form.$error) {
+      this.$v.description.$touch()
+      if (!this.$v.form.$error && !this.$v.description.$error) {
         this.$q.loading.show({
           message: 'Guardando Datos...'
         })
+        this.form.description = this.description
         this.$api.put('updateCourse/' + this.form._id, this.form).then(res => {
           if (res) {
             this.$q.notify({
@@ -253,11 +266,13 @@ export default {
     },
     newCourse () {
       this.editCourse = false
+      this.description = ''
       this.form = {
         isEnabled: false,
         free: false
       }
       this.$v.form.$reset()
+      this.$v.description.$reset()
       this.show = true
     },
     newCategorie () {
@@ -273,6 +288,8 @@ export default {
     setUpdate (item) {
       this.editCourse = true
       this.form = { ...item }
+      this.description = this.form.description
+      this.$v.description.$reset()
       this.$v.form.$reset()
       this.show = true
     },

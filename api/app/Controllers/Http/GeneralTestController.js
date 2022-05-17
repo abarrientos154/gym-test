@@ -74,12 +74,11 @@ class GeneralTestController {
           })
         }
 
-        /* if (questions.length < 100) {
+        if (questions.length < 100) {
           response.send(false)
         } else {
           response.send(questions)
-        } */
-        response.send(questions)
+        }
       } else {
         response.send(false)
       }

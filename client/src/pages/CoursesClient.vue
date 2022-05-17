@@ -13,7 +13,9 @@
             <q-card class="q-pa-md q-mt-sm" style="border-radius: 10px" clickable v-ripple @click="login ? verifyLicense(item2) : seeDetails(item2)"
               v-for="(item2, index2) in item.courses" :key="index2">
               <div class="text-primary text-subtitle1 text-bold">{{item2.name}}</div>
-              <div class="q-pt-sm q-mb-lg ellipsis-2-lines">{{item2.description}}</div>
+              <div class="q-pt-sm q-mb-lg">
+                <div v-html="item2.description" class="ellipsis-3-lines"></div>
+              </div>
               <div v-if="item2.free" class="row justify-end absolute-bottom q-pa-xs">
                 <q-chip color="green" text-color="white" dense class="q-px-md">Curso gratuito</q-chip>
               </div>

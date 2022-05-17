@@ -2,7 +2,12 @@
   <div>
     <q-layout view="lHh Lpr lFf">
       <q-header v-if="rol === 1" style="background: linear-gradient(to right, #002938, #004e6d);">
-        <!-- <q-toolbar>
+        <q-toolbar>
+          <q-btn flat @click="DrawerOpen = !DrawerOpen" round dense icon="menu" />
+        </q-toolbar>
+      </q-header>
+      <!-- <q-header v-if="rol === 1" style="background: linear-gradient(to right, #002938, #004e6d);">
+        <q-toolbar>
           <div class="row no-wrap q-px-lg">
             <q-btn flat dense rounded color="white" class="q-px-md" v-for="(item, index) in 5" :key="index">{{menu[index].label}}</q-btn>
             <q-input dense borderless v-model="buscar" style="background: #838383cc; border-radius: 20px; height: 35px;">
@@ -11,8 +16,8 @@
               </template>
             </q-input>
           </div>
-        </q-toolbar> -->
-      </q-header>
+        </q-toolbar>
+      </q-header> -->
 
       <q-drawer v-if="rol === 1" v-model="DrawerOpen" persistent style="width: 175px;">
         <div class="row items-center justify-center" style="background: linear-gradient(to right, #002938, #004e6d); height: 200px; width: 100%;">

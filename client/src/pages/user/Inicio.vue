@@ -78,7 +78,7 @@
         </q-card>
 
         <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/ver/Temas')">
-          <div class="text-right text-h5 text-bold">Test por temas</div>
+          <div class="text-right text-h5 text-bold">Tests</div>
         </q-card>
 
         <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/ver/Gym')">
