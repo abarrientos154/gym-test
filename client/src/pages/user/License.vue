@@ -94,7 +94,7 @@ export default {
   },
   mounted () {
     if (this.$route.params.est) {
-      alert(this.$route.params.est)
+      // alert(this.$route.params.est)
       if (this.$route.params.est < 2) {
         this.setBuy()
       } else {
