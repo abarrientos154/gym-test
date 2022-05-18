@@ -140,7 +140,11 @@ export default {
             if (this.user.roles[0] === 1) {
               this.$router.push('/courses')
             } else {
-              this.$router.push('/courses_client')
+              if (res.SESSION_INFO.isChecked) {
+                this.$router.push('/courses_client')
+              } else {
+                this.$router.push('/check')
+              }
             }
           } else {
             console.log('error de ususario')

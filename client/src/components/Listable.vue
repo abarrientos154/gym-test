@@ -5,7 +5,7 @@
       :data="data"
       :columns="columns"
       row-key="name"
-      :no-data-label="`Aún no existen ${title} debes escoger datos en algun filtro`"
+      :no-data-label="`Aún no existen ${title} intenta escoger datos en algún filtro`"
       :filter="filter"
     >
       <template v-slot:top-right>
@@ -83,6 +83,28 @@
             </q-tooltip>
           </q-btn>
       </q-td>
+      <q-td
+          slot="body-cell-userButton"
+          slot-scope="props"
+          :props="props"
+          v-if="checkIfSubscription()"
+        >
+          <q-btn
+            v-for="action in props.row.actions"
+            :key="action.icon"
+            :to="action.url"
+            :icon="action.icon"
+            @click="executeB(props.row, action.title)"
+            :color="action.color"
+            size="sm"
+            outline
+            style="margin-right:4px"
+          >
+            <q-tooltip>
+              {{action.title}}
+            </q-tooltip>
+          </q-btn>
+      </q-td>
     </q-table>
   </div>
 </template>
@@ -104,6 +126,9 @@ export default {
     },
     checkIfUser () {
       return this.columns.find((element) => element.name === 'userButton')
+    },
+    checkIfSubscription () {
+      return this.columns.find((element) => element.name === 'actionsSubscription')
     },
     execute (id, title, element) {
       const emit = {

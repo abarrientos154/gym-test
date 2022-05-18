@@ -35,6 +35,7 @@ addPrefixToGroup(
     Route.post('login_by_mail', 'UserController.logueoSinContrasena')
     Route.post("login", "UserController.login");
     Route.post("register", "UserController.register")
+    Route.put("verifyAccount", "UserController.verifyAccount")
 
     Route.get('getCoursesClient', 'CourseController.indexClient')
 
@@ -245,6 +246,7 @@ addPrefixToGroup(
     Route.get('audiosByTopic/:id', 'AudioController.audiosByTopic')
 
     Route.put('setBuy/:type/:id', 'LicenseController.setBuy')
+    Route.get('getSubscriptions', 'LicenseController.getSubscriptions')
     Route.get('getIncomes', 'IncomeController.index')
 
     Route.get('topicsWithQuestions/:id', 'GeneralTestController.topicsWithQuestions')

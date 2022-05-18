@@ -28,7 +28,7 @@
               <div class="text-grey-8">Hola...</div>
               <div class="text-primary text-h6">{{user.name}}</div>
             </div>
-            <div>
+            <div v-if="!freeCourse">
               <div class="text-caption text-primary text-bold">Días vigentes del curso</div>
               <div class="text-grey-8">{{licenseTime}} días</div>
             </div>
@@ -112,6 +112,7 @@ export default {
     return {
       baseuPerfil: '',
       courseId: '',
+      freeCourse: false,
       licenseTime: 0,
       user: {},
       thumbStyle: {
@@ -130,7 +131,7 @@ export default {
     this.courseId = localStorage.getItem('course_id')
     this.baseuPerfil = env.apiUrl + 'perfil_img/'
     this.getUser()
-    this.getLicense()
+    this.getCourse()
     this.getRutinas()
   },
   methods: {
@@ -138,6 +139,16 @@ export default {
       this.$api.get('user_info').then(v => {
         if (v) {
           this.user = v
+        }
+      })
+    },
+    getCourse () {
+      this.$api.get('course_by_id/' + this.courseId).then(v => {
+        if (v) {
+          this.freeCourse = v.free
+          if (!v.free) {
+            this.getLicense()
+          }
         }
       })
     },

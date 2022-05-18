@@ -26,6 +26,7 @@ const routes = [
       { path: '/audio', component: () => import('pages/admin/Audio.vue') },
       { path: '/users', component: () => import('pages/admin/Users.vue') },
       { path: '/incomes', component: () => import('pages/admin/Incomes.vue') },
+      { path: '/subscripciones', component: () => import('pages/admin/License.vue') },
       { path: '/configTest', component: () => import('pages/admin/ConfigTest.vue') },
       /* onent: () => import('pages/admin/Examenes.vue') },
       { path: '/tests_exam/:id', component: () => import('pages/admin/TestsExam.vue') },
@@ -62,6 +63,7 @@ const routes = [
   { path: '/pagina-principal', name: 'pagina-principal', component: () => import('pages/Home.vue') },
   { path: '/login', name: 'login', component: () => import('pages/Login.vue') },
   { path: '/registro', name: 'registro', component: () => import('pages/Registro.vue') },
+  { path: '/check', name: 'check', component: () => import('pages/Check.vue') },
   { path: '/recuperar_clave/:code', name: 'recuperar_clave', component: () => import('pages/NewPassword.vue') },
   {
     path: '/',

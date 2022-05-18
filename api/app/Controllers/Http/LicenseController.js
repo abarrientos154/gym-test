@@ -47,6 +47,31 @@ class LicenseController {
     response.send(data)
   }
 
+  async getSubscriptions ({ response, params, auth }) {
+    const data = (await License.query().where({}).with('course').with('userInfo').fetch()).toJSON()
+    for (let i = 0; i < data.length; i++) {
+      data[i].course_name = data[i].course.name
+      data[i].name = data[i].user.name
+      let date = moment().format('YYYY-MM-DD')
+      let days = moment(data[i].expirationDate).diff(date , 'days')
+      if (days <= 0) {
+        data[i].disable = true
+        days = 0
+      }
+      data[i].days = days
+      data[i].actions = [
+        {
+          color: "primary",
+          icon: "add",
+          url: "",
+          action: "",
+          title: "Añadir días",
+        }
+      ]
+    }
+    response.send(data)
+  }
+
   /**
    * Render a form to be used for creating a new license.
    * GET licenses/create

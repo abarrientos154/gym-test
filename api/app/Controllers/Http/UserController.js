@@ -9,6 +9,7 @@ const Place = use("App/Models/Place")
 const Email = use("App/Functions/Email")
 const Role = use("App/Models/Role")
 var randomize = require('randomatic');
+const Mail = use("App/Functions/Email")
 var ObjectId = require('mongodb').ObjectId;
 // const { validate } = use("Validator")
 
@@ -88,11 +89,19 @@ class UserController {
       })
     })
 
+    if (user.roles[0] === 2 && !user.isChecked) {
+      user.checkCode = randomize('0', 4)
+      const updateCode = await User.query().where({_id: user._id}).update({checkCode: user.checkCode})
+      let mail = await Mail.sendMail(user.email, `Código de vericación para la cuenta de ${user.name}`,
+        `Tu codigo de verificación es ${user.checkCode}. Por favor, introducelo para verificar tu cuenta`)
+    }
+
     token.email = user.email
     token.estatus = user.estatus
     token.full_name = user.full_name ? user.full_name : null
     token.last_name = user.last_name
     token._id = user._id
+    token.isChecked = user.isChecked ? user.isChecked : false
     token.disabled = user.disabled
     let data = {}
     data.SESSION_INFO = token
@@ -110,6 +119,10 @@ class UserController {
       let body = dat
       const rol = body.roles
       body.roles = [rol]
+      body.checkCode = randomize('0', 4)
+      let mail = await Mail.sendMail(body.email, `Código de vericación para la cuenta de ${body.name}`,
+        `Tu codigo de verificación es ${body.checkCode}. Por favor, introducelo para verificar tu cuenta`)
+
       const user = await User.create(body)
 
       if (request.file('files', { types: ['image'] })) {
@@ -127,6 +140,12 @@ class UserController {
       }
       response.send(user)
     }
+  }
+
+  async verifyAccount ({ response, auth }) {
+    const user = (await auth.getUser()).toJSON()
+    const userVerified = await User.query().where({_id: user._id}).update({isChecked: true, checkCode: null})
+    response.send(userVerified)
   }
 
   async userInfo({ response, auth }) {

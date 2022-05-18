@@ -183,16 +183,23 @@ export default {
         {
           src: '',
           src2: '',
-          label: 'Fallos',
-          icon: 'feedback',
-          ruta: '/faults'
+          label: 'Subscripciones',
+          icon: 'folder_shared',
+          ruta: '/subscripciones'
         },
         {
           src: '',
           src2: '',
           label: 'Ingresos',
-          icon: 'attach_money',
+          icon: 'request_quote',
           ruta: '/incomes'
+        },
+        {
+          src: '',
+          src2: '',
+          label: 'Fallos',
+          icon: 'feedback',
+          ruta: '/faults'
         },
         {
           src: 'salir 2.png',

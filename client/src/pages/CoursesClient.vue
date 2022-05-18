@@ -33,7 +33,7 @@
                 <div v-if="course.free" class="row justify-center q-pa-xs">
                   <q-chip color="green" text-color="white" dense class="q-px-md">Curso gratuito</q-chip>
                 </div>
-                <div class="text-center text-italic text-grey-8 text-subtitle1 q-py-md">{{course.description}}</div>
+                <div v-html="course.description" class="q-py-md"></div>
                 </div>
 
               <div class="q-pb-md q-px-md column items-center">

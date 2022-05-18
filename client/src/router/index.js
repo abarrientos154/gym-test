@@ -26,7 +26,7 @@ export default function (/* { store, ssrContext } */) {
     base: process.env.VUE_ROUTER_BASE
   })
   Router.beforeEach((to, from, next) => {
-    const publicPages = ['login', 'pagina-principal', 'splash', 'registro', 'recuperar_clave', 'index', 'foroQuestion', 'foro', 'publicidad', 'courses_client']
+    const publicPages = ['login', 'pagina-principal', 'splash', 'registro', 'recuperar_clave', 'index', 'foroQuestion', 'foro', 'publicidad', 'courses_client', 'check']
     const authPublic = publicPages.includes(to.name)
     const userLog = localStorage.getItem('SESSION_INFO')
     // Si la ruta amerita autenticacion y no estas logueado
