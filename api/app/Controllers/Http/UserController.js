@@ -120,10 +120,10 @@ class UserController {
       const rol = body.roles
       body.roles = [rol]
       body.checkCode = randomize('0', 4)
-      let mail = await Mail.sendMail(body.email, `Código de vericación para la cuenta de ${body.name}`,
+      /* let mail = await Mail.sendMail(body.email, `Código de vericación para la cuenta de ${body.name}`,
         `Tu codigo de verificación es ${body.checkCode}. Por favor, introducelo para verificar tu cuenta`)
 
-      const user = await User.create(body)
+ */      const user = await User.create(body)
 
       if (request.file('files', { types: ['image'] })) {
         const profilePic = request.file('files', {
