@@ -167,7 +167,7 @@ export default {
         cancel: true,
         persistent: true
       }).onOk(() => {
-        this.$api.delete('deleteAllTypes').then(res => {
+        this.$api.delete('deleteAllTypes/' + this.courseId).then(res => {
           if (res) {
             this.$q.notify({
               color: 'positive',

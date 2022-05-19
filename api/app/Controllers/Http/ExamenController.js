@@ -279,8 +279,9 @@ class ExamenController {
     const data = await Examen.where('_id', params.id).delete()
     response.send(data)
   }
-  async destroyAll ({ response }) {
-    const data = await Examen.where({}).delete()
+  async destroyAll ({ response, params }) {
+    let course_id = new ObjectId(params.id)
+    const data = await Examen.where({course_id: course_id}).delete()
     response.send(data)
   }
   async getExamWithTest ({ request, response, params }) {

@@ -107,8 +107,9 @@ class LawController {
     }
     response.send(data)
   }
-  async destroyAll ({ response }) {
-    const data = await Law.where({}).delete()
+  async destroyAll ({ response, params }) {
+    let course_id = new ObjectId(params.id)
+    const data = await Law.where({course_id: course_id}).delete()
     response.send(data)
   }
 

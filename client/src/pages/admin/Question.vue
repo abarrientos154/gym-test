@@ -131,14 +131,14 @@ export default {
       })
     },
     async getTopics () {
-      await this.$api.get('getTopics').then(res => {
+      await this.$api.get('getTopicsByCourse/' + this.courseId).then(res => {
         if (res) {
           this.topics = res
         }
       })
     },
     async getLaws () {
-      await this.$api.get('getLaws').then(res => {
+      await this.$api.get('getLawsByCourse/' + this.courseId).then(res => {
         if (res) {
           this.laws = res
         }
@@ -160,7 +160,7 @@ export default {
       })
     },
     async getTypes () {
-      await this.$api.get('types').then(res => {
+      await this.$api.get('getTypesByCourse/' + this.courseId).then(res => {
         if (res) {
           this.types = res
         }
@@ -234,7 +234,7 @@ export default {
         cancel: true,
         persistent: true
       }).onOk(() => {
-        this.$api.delete('deleteAllQuestions').then(res => {
+        this.$api.delete('deleteAllQuestions/' + this.courseId).then(res => {
           if (res) {
             this.$q.notify({
               color: 'positive',
@@ -267,7 +267,21 @@ export default {
             })
             this.file = null
             this.$q.loading.hide()
+          } else {
+            this.$q.notify({
+              message: 'Error al Cargar',
+              color: 'neagtive'
+            })
+            this.file = null
+            this.$q.loading.hide()
           }
+        }).catch(err => {
+          this.$q.notify({
+            message: 'Error al Cargar' + err,
+            color: 'neagtive'
+          })
+          this.file = null
+          this.$q.loading.hide()
         })
       }
     },
