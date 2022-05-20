@@ -157,6 +157,7 @@ class UploadController {
     var colComment = explanation.getColumn('B')
     var end = 0
     var questions = []
+    var las_del_curso = (await Question.query().where({ course_id: courseId }).fetch()).toJSON()
     return new Promise((resolve, reject) => {
       colComment.eachCell(async (cell, rowNumber) => {
         if (rowNumber >= 2) {
@@ -187,14 +188,18 @@ class UploadController {
           if (rowNumber >= end) {
             end = rowNumber
           }
-          var existQuestion = (await Question.query().where({ id: id, course_id: courseId }).first())
-          if (existQuestion === null || existQuestion === undefined) {
+          var existQuestion = las_del_curso.find(v => v.id === id)
+          var existQuestion2 = questions.find(v => v.id === id)
+          if (!existQuestion && !existQuestion2) {
             questions.push(question)
-          }
-          if (rowNumber === end) {
-            let s = Question.createMany(questions).then(v => {
+            let save = await Question.create(question)
+            if (rowNumber === end) {
               resolve(response.send(true))
-            })
+            }
+          } else {
+            if (rowNumber === end) {
+              resolve(response.send(true))
+            }
           }
         }
       })
@@ -258,6 +263,7 @@ class UploadController {
     var colComment = explanation.getColumn('B')
     var end = 0
     var articles = []
+    var las_del_curso = (await Article.query().where({ course_id: courseId }).fetch()).toJSON()
     return new Promise((resolve, reject) => {
       colComment.eachCell(async (cell, rowNumber) => {
       if (rowNumber >= 2) {
@@ -274,14 +280,18 @@ class UploadController {
           if (rowNumber >= end) {
             end = rowNumber
           }
-          var existArticle = (await Article.query().where({ article_name: article_name, law: law, course_id: courseId }).first())
-          if (existArticle === null || existArticle === undefined) {
-            parrafos.push(article)
-          }
-          if (rowNumber === end) {
-            let s = Article.createMany(articles).then(v => {
+          var existArticle = las_del_curso.find(v => v.id === id)
+          var existArticle2 = articles.find(v => v.id === id)
+          if (!existArticle && !existArticle2) {
+            articles.push(article)
+            let save = await Article.create(article)
+            if (rowNumber === end) {
               resolve(response.send(true))
-            })
+            }
+          } else {
+            if (rowNumber === end) {
+              resolve(response.send(true))
+            }
           }
         }
       })
@@ -298,6 +308,7 @@ class UploadController {
     var colComment = explanation.getColumn('B')
     var end = 0
     var parrafos = []
+    var las_del_curso = (await Paragraph.query().where({ course_id: courseId }).fetch()).toJSON()
     return new Promise((resolve, reject) => {
       colComment.eachCell(async (cell, rowNumber) => {
         if (rowNumber >= 2) {
@@ -315,14 +326,18 @@ class UploadController {
           if (rowNumber >= end) {
             end = rowNumber
           }
-          var existParagraph = (await Paragraph.query().where({ id: id, course_id: courseId }).first())
-          if (existParagraph === null || existParagraph === undefined) {
-            parrafos.push(paragraphDB)
-          }
-          if (rowNumber === end) {
-            let s = Paragraph.createMany(parrafos).then(v => {
+          var existParagraph = las_del_curso.find(v => v.id === id)
+          var existParagraph2 = parrafos.find(v => v.id === id)
+          if (!existParagraph && !existParagraph2) {
+            parrafos.push(paragraphDB) 
+            let save = await Paragraph.create(paragraphDB)
+            if (rowNumber === end) {
               resolve(response.send(true))
-            })
+            }
+          } else {
+            if (rowNumber === end) {
+              resolve(response.send(true))
+            }
           }
         }
       })
@@ -339,6 +354,7 @@ class UploadController {
     var colComment = explanation.getColumn('B')
     var end = 0
     var laws = []
+    var las_del_curso = (await Law.query().where({ course_id: courseId }).fetch()).toJSON()
     return new Promise((resolve, reject) => {
       colComment.eachCell(async (cell, rowNumber) => {
         if (rowNumber >= 2) {
@@ -361,14 +377,18 @@ class UploadController {
           if (rowNumber >= end) {
             end = rowNumber
           }
-          var existLaw = (await Law.query().where({ id: id, course_id: courseId }).first())
-          if (existLaw === null || existLaw === undefined) {
-            laws.push(law)
-          }
-          if (rowNumber === end) {
-            let s = Law.createMany(laws).then(v => {
+          var existLaw = las_del_curso.find(v => v.id === id)
+          var existLaw2 = laws.find(v => v.id === id)
+          if (!existLaw && !existLaw2) {
+            laws.push(law) 
+            let save = await Law.create(law)
+            if (rowNumber === end) {
               resolve(response.send(true))
-            })
+            }
+          } else {
+            if (rowNumber === end) {
+              resolve(response.send(true))
+            }
           }
         }
       })
@@ -385,6 +405,7 @@ class UploadController {
     var colComment = explanation.getColumn('B')
     var end = 0
     var answers = []
+    var las_del_curso = (await Answer.query().where({ course_id: courseId }).fetch()).toJSON()
     return new Promise((resolve, reject) => {
       colComment.eachCell(async (cell, rowNumber) => {
         if (rowNumber >= 2) {
@@ -403,21 +424,23 @@ class UploadController {
           if (rowNumber >= end) {
             end = rowNumber
           }
-          var existAnswer = (await Answer.query().where({ id: id, course_id: courseId }).first())
-          if (existAnswer === null || existAnswer === undefined) {
+          var existAnswer = las_del_curso.find(v => v.id === id)
+          var existAnswer2 = answers.find(v => v.id === id)
+          if (!existAnswer && !existAnswer2) {
             answers.push(answer)
-          }
-          if (rowNumber === end) {
-            let s = Answer.createMany(answers).then(v => {
+            let save = await Answer.create(answer)
+            if (rowNumber === end) {
               resolve(response.send(true))
-            })
+            }
+          } else {
+            if (rowNumber === end) {
+              resolve(response.send(true))
+            }
           }
         }
       })
-      // resolve(response.send(true))
     })
-  }
-  async excelSubTopic ({ request, response }) {
+  }  async excelSubTopic ({ request, response }) {
     var courseId = request.only(['courseId'])
     courseId = new ObjectId(courseId.courseId)
     var files = request.file('fileExcel')
