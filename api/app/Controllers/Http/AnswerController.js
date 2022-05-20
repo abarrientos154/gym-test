@@ -90,8 +90,9 @@ class AnswerController {
     response.send(data)
   }
 
-  async destroyAll ({ response }) {
-    const data = await Answer.where({}).delete()
+  async destroyAll ({ response, params }) {
+    let course_id = new ObjectId(params.id)
+    const data = await Answer.where({course_id: course_id}).delete()
     response.send(data)
   }
 

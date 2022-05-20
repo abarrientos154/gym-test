@@ -97,7 +97,7 @@ addPrefixToGroup(
     Route.post('setTopic', 'TopicController.store')
     Route.put('updateTopic/:id', 'TopicController.update')
     Route.delete('deleteTopic/:id', 'TopicController.destroy')
-    Route.delete('deleteAllTopics', 'TopicController.destroyAll')
+    Route.delete('deleteAllTopics/:id', 'TopicController.destroyAll')
     Route.get('getTopicWithAudio/:id', 'TopicController.getTopicWithAudio')
     Route.get('getTopicByNum/:id', 'TopicController.getTopicByNum')
     
@@ -108,7 +108,7 @@ addPrefixToGroup(
     Route.post('setLaw', 'LawController.store')
     Route.put('updateLaw/:id', 'LawController.update')
     Route.delete('deleteLaw/:id', 'LawController.destroy')
-    Route.delete('deleteAllLaws', 'LawController.destroyAll')
+    Route.delete('deleteAllLaws/:id', 'LawController.destroyAll')
     
     Route.post('excel_answer', 'UploadController.excelAnswer')
     Route.get('answers', 'AnswerController.indexAnswer')
@@ -126,7 +126,7 @@ addPrefixToGroup(
     Route.post('setSubTopic', 'SubTopicController.store')
     Route.put('updateSubTopic/:id', 'SubTopicController.update')
     Route.delete('deleteSubTopic/:id', 'SubTopicController.destroy')
-    Route.delete('deleteAllSubTopics', 'SubTopicController.destroyAll')
+    Route.delete('deleteAllSubTopics/:id', 'SubTopicController.destroyAll')
     
     Route.post('excel_type', 'UploadController.excelType')
     Route.get('types', 'TypeController.index')
@@ -141,7 +141,7 @@ addPrefixToGroup(
     Route.post('setType', 'TypeController.store')
     Route.put('updateType/:id', 'TypeController.update')
     Route.delete('deleteType/:id', 'TypeController.destroy')
-    Route.delete('deleteAllTypes', 'TypeController.destroyAll')
+    Route.delete('deleteAllTypes/:id', 'TypeController.destroyAll')
     
     Route.post('excel_article', 'UploadController.excelArticle')
     Route.post('excel_paragraph', 'UploadController.excelParagraph')
@@ -152,7 +152,7 @@ addPrefixToGroup(
     Route.put('updateArticle/:id', 'ArticleController.update')
     Route.delete('deleteArticle/:id', 'ArticleController.destroy')
     Route.post('getArticlesByFilter/:id', 'ArticleController.getArticlesByFilter')
-    Route.delete('deleteAllArticles', 'ArticleController.destroyAll')
+    Route.delete('deleteAllArticles/;id', 'ArticleController.destroyAll')
     
     
     Route.get('getParagraphsByArticle/:id', 'ParagraphController.getParagraphsByArticle')
@@ -161,7 +161,7 @@ addPrefixToGroup(
     Route.put('updateParagraph/:id', 'ParagraphController.update')
     Route.delete('deleteParagraph/:id', 'ParagraphController.destroy')
     Route.post('getParagraphsByFilter/:id', 'ParagraphController.getParagraphsByFilter')
-    Route.delete('deleteAllParagraphs', 'ParagraphController.destroyAll')
+    Route.delete('deleteAllParagraphs/:id', 'ParagraphController.destroyAll')
     
     Route.get('examen', 'ExamenController.index')
     Route.get('getExamByCourse/:id', 'ExamenController.indexByCourse')
@@ -177,7 +177,7 @@ addPrefixToGroup(
     Route.get('getExamById/:id', 'ExamenController.show')
     Route.put('examen/:id', 'ExamenController.update')
     Route.delete('examen/:id', 'ExamenController.destroy')
-    Route.delete('deleteAllExams', 'ExamenController.destroyAll')
+    Route.delete('deleteAllExams/:id', 'ExamenController.destroyAll')
     
     Route.get('titles', 'TitleController.index')
     
@@ -196,14 +196,14 @@ addPrefixToGroup(
     Route.put('updateQuest/:id', 'QuestionController.update')
     Route.get('getQuestionById/:id', 'QuestionController.show')
     Route.delete('destroyQuest/:id', 'QuestionController.destroy')
-    Route.delete('deleteAllQuestions', 'QuestionController.destroyAll')
+    Route.delete('deleteAllQuestions/:id', 'QuestionController.destroyAll')
     
     // Route.get('dateExamUser', 'DateExamController.dateExamUser')
     
     Route.post('answer', 'AnswerController.store')
     Route.put('answer/:id', 'AnswerController.update')
     Route.get('answerById/:id', 'AnswerController.show')
-    Route.delete('deleteAllAnswers', 'AnswerController.destroyAll')
+    Route.delete('deleteAllAnswers/:id', 'AnswerController.destroyAll')
     
     Route.post('desafio', 'AnswerController.storeDesafio')
     Route.get('desafio', 'AnswerController.index')

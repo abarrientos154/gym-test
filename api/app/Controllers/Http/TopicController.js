@@ -354,8 +354,9 @@ class TopicController {
     const data = await Topic.where('_id', params.id).delete()
     response.send(data)
   }
-  async destroyAll ({ response }) {
-    const data = await Topic.where({}).delete()
+  async destroyAll ({ response, params }) {
+    let course_id = new ObjectId(params.id)
+    const data = await Topic.where({course_id: course_id}).delete()
     response.send(data)
   }
 

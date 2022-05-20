@@ -88,8 +88,9 @@ class ParagraphController {
     response.send(data)
   }
 
-  async destroyAll ({ response }) {
-    const data = await Paragraph.where({}).delete()
+  async destroyAll ({ response, params }) {
+    let course_id = new ObjectId(params.id)
+    const data = await Paragraph.where({course_id: course_id}).delete()
     response.send(data)
   }
 

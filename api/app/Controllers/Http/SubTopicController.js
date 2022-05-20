@@ -97,8 +97,9 @@ class SubTopicController {
     response.send(data)
   }
 
-  async destroyAll ({ response }) {
-    const data = await SubTopic.where({}).delete()
+  async destroyAll ({ response, params }) {
+    let course_id = new ObjectId(params.id)
+    const data = await SubTopic.where({course_id: course_id}).delete()
     response.send(data)
   }
 

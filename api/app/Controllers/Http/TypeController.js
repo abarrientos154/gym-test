@@ -11,7 +11,7 @@ const Helpers = use('Helpers')
 const mkdirp = use('mkdirp')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
+/** @typedef {import('@adonisjs/framework/sdestroyAllrc/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 /**
@@ -138,8 +138,9 @@ class TypeController {
     response.send(data)
   }
 
-  async destroyAll ({ response }) {
-    const data = await Type.where({}).delete()
+  async destroyAll ({ response, params }) {
+    let course_id = new ObjectId(params.id)
+    const data = await Type.where({course_id: course_id}).delete()
     response.send(data)
   }
 

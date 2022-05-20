@@ -121,7 +121,7 @@ export default {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      await this.$api.get('getLaws').then(res => {
+      await this.$api.get('getLawsByCourse/' + this.courseId).then(res => {
         if (res) {
           this.laws = res
           this.$q.loading.hide()
@@ -199,7 +199,7 @@ export default {
         cancel: true,
         persistent: true
       }).onOk(() => {
-        this.$api.delete('deleteAllArticles').then(res => {
+        this.$api.delete('deleteAllArticles/' + this.courseId).then(res => {
           if (res) {
             this.$q.notify({
               color: 'positive',

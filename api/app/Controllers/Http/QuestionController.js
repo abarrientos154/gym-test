@@ -97,7 +97,7 @@ class QuestionController {
   }
 
   async getQuestionsByTopic ({ params, response }) {
-    const data = (await Question.query().where({ topic: params.id }).fetch()).toJSON()
+    const data = (await Question.query().where({ topic: Number(params.id) }).fetch()).toJSON()
     response.send(data)
   }
 
@@ -229,9 +229,10 @@ class QuestionController {
     }
     response.send(questToDestroy)
   }
-  async destroyAll ({ response }) {
-    const data = await Question.where({}).delete()
-    response.send(data)
+  async destroyAll ({ response, params }) {
+    let course_id = new ObjectId(params.id)
+    const data = await Question.where({course_id: course_id}).delete()
+    response.send(true)
   }
 }
 

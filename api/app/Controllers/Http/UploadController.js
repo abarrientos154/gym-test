@@ -130,7 +130,7 @@ class UploadController {
           if (rowNumber >= end) {
             end = rowNumber
           }
-          var existTopic = (await Topic.query().where({ id: topicDB.id }).first())
+          var existTopic = (await Topic.query().where({ id: topicDB.id, course_id: courseId }).first())
           if (existTopic === null || existTopic === undefined) {
             let save = await Topic.create(topicDB)
             if (rowNumber === end) {
@@ -156,19 +156,20 @@ class UploadController {
     var explanation = workbook.getWorksheet('Hoja1')
     var colComment = explanation.getColumn('B')
     var end = 0
+    var questions = []
     return new Promise((resolve, reject) => {
       colComment.eachCell(async (cell, rowNumber) => {
         if (rowNumber >= 2) {
           let question = {}
           let id = explanation.getCell('A' + rowNumber).value
           let title = explanation.getCell('B' + rowNumber).value
-          let topic = explanation.getCell('C' + rowNumber).value
-          let exam = explanation.getCell('D' + rowNumber).value
-          let order = explanation.getCell('E' + rowNumber).value
-          let law_id = explanation.getCell('F' + rowNumber).value
+          let topic = Number(explanation.getCell('C' + rowNumber).value)
+          let exam = Number(explanation.getCell('D' + rowNumber).value)
+          let order = Number(explanation.getCell('E' + rowNumber).value)
+          let law_id = Number(explanation.getCell('F' + rowNumber).value)
           let article = explanation.getCell('G' + rowNumber).value
-          let article_id = explanation.getCell('H' + rowNumber).value
-          let paragraph_id = explanation.getCell('I' + rowNumber).value
+          let article_id = Number(explanation.getCell('H' + rowNumber).value)
+          let paragraph_id = Number(explanation.getCell('I' + rowNumber).value)
           let type = explanation.getCell('J' + rowNumber).value
           let process = explanation.getCell('K' + rowNumber).value
           question.id = parseInt(id)
@@ -186,16 +187,14 @@ class UploadController {
           if (rowNumber >= end) {
             end = rowNumber
           }
-          var existQuestion = (await Question.query().where({ id: id }).first())
+          var existQuestion = (await Question.query().where({ id: id, course_id: courseId }).first())
           if (existQuestion === null || existQuestion === undefined) {
-            let save = await Question.create(question)
-            if (rowNumber === end) {
+            questions.push(question)
+          }
+          if (rowNumber === end) {
+            let s = Question.createMany(questions).then(v => {
               resolve(response.send(true))
-            }
-          } else {
-            if (rowNumber === end) {
-              resolve(response.send(true))
-            }
+            })
           }
         }
       })
@@ -232,7 +231,7 @@ class UploadController {
           if (rowNumber >= end) {
             end = rowNumber
           }
-          var existExam = (await Exam.query().where({ id: exam.id }).first())
+          var existExam = (await Exam.query().where({ id: exam.id, course_id: courseId }).first())
           if (existExam === null || existExam === undefined) {
             let save = await Exam.create(exam)
             if (rowNumber === end) {
@@ -258,6 +257,7 @@ class UploadController {
     var explanation = workbook.getWorksheet('Hoja1')
     var colComment = explanation.getColumn('B')
     var end = 0
+    var articles = []
     return new Promise((resolve, reject) => {
       colComment.eachCell(async (cell, rowNumber) => {
       if (rowNumber >= 2) {
@@ -274,16 +274,14 @@ class UploadController {
           if (rowNumber >= end) {
             end = rowNumber
           }
-          var existArticle = (await Article.query().where({ article_name: article_name, law: law }).first())
+          var existArticle = (await Article.query().where({ article_name: article_name, law: law, course_id: courseId }).first())
           if (existArticle === null || existArticle === undefined) {
-            var newArticle = await Article.create(article)
-            if (rowNumber === end) {
+            parrafos.push(article)
+          }
+          if (rowNumber === end) {
+            let s = Article.createMany(articles).then(v => {
               resolve(response.send(true))
-            }
-          } else {
-            if (rowNumber === end) {
-              resolve(response.send(true))
-            }
+            })
           }
         }
       })
@@ -299,6 +297,7 @@ class UploadController {
     var explanation = workbook.getWorksheet('Hoja1')
     var colComment = explanation.getColumn('B')
     var end = 0
+    var parrafos = []
     return new Promise((resolve, reject) => {
       colComment.eachCell(async (cell, rowNumber) => {
         if (rowNumber >= 2) {
@@ -316,16 +315,14 @@ class UploadController {
           if (rowNumber >= end) {
             end = rowNumber
           }
-          var existParagraph = (await Paragraph.query().where({ id: id }).first())
+          var existParagraph = (await Paragraph.query().where({ id: id, course_id: courseId }).first())
           if (existParagraph === null || existParagraph === undefined) {
-            var newParagrahp = await Paragraph.create(paragraphDB)
-            if (rowNumber === end) {
+            parrafos.push(paragraphDB)
+          }
+          if (rowNumber === end) {
+            let s = Paragraph.createMany(parrafos).then(v => {
               resolve(response.send(true))
-            }
-          } else {
-            if (rowNumber === end) {
-              resolve(response.send(true))
-            }
+            })
           }
         }
       })
@@ -341,6 +338,7 @@ class UploadController {
     var explanation = workbook.getWorksheet('Hoja1')
     var colComment = explanation.getColumn('B')
     var end = 0
+    var laws = []
     return new Promise((resolve, reject) => {
       colComment.eachCell(async (cell, rowNumber) => {
         if (rowNumber >= 2) {
@@ -363,16 +361,14 @@ class UploadController {
           if (rowNumber >= end) {
             end = rowNumber
           }
-          var existLaw = (await Law.query().where({ id: id }).first())
+          var existLaw = (await Law.query().where({ id: id, course_id: courseId }).first())
           if (existLaw === null || existLaw === undefined) {
-            let save = await Law.create(law)
-            if (rowNumber === end) {
+            laws.push(law)
+          }
+          if (rowNumber === end) {
+            let s = Law.createMany(laws).then(v => {
               resolve(response.send(true))
-            }
-          } else {
-            if (rowNumber === end) {
-              resolve(response.send(true))
-            }
+            })
           }
         }
       })
@@ -388,6 +384,7 @@ class UploadController {
     var explanation = workbook.getWorksheet('Hoja1')
     var colComment = explanation.getColumn('B')
     var end = 0
+    var answers = []
     return new Promise((resolve, reject) => {
       colComment.eachCell(async (cell, rowNumber) => {
         if (rowNumber >= 2) {
@@ -406,19 +403,18 @@ class UploadController {
           if (rowNumber >= end) {
             end = rowNumber
           }
-          var existAnswer = (await Answer.query().where({ id: id }).first())
+          var existAnswer = (await Answer.query().where({ id: id, course_id: courseId }).first())
           if (existAnswer === null || existAnswer === undefined) {
-            let save = await Answer.create(answer)
-            if (rowNumber === end) {
+            answers.push(answer)
+          }
+          if (rowNumber === end) {
+            let s = Answer.createMany(answers).then(v => {
               resolve(response.send(true))
-            }
-          } else {
-            if (rowNumber === end) {
-              resolve(response.send(true))
-            }
+            })
           }
         }
       })
+      // resolve(response.send(true))
     })
   }
   async excelSubTopic ({ request, response }) {
@@ -445,7 +441,7 @@ class UploadController {
           if (rowNumber >= end) {
             end = rowNumber
           }
-          var existSubTopic = (await SubTopic.query().where({ id: id }).first())
+          var existSubTopic = (await SubTopic.query().where({ id: id, course_id: courseId }).first())
           if (existSubTopic === null || existSubTopic === undefined) {
             let save = await SubTopic.create(subTopic)
             if (rowNumber === end) {
@@ -482,7 +478,7 @@ class UploadController {
           if (rowNumber >= end) {
             end = rowNumber
           }
-          var existType = (await Type.query().where({ id: id }).first())
+          var existType = (await Type.query().where({ id: id, course_id: courseId }).first())
           if (existType === null || existType === undefined) {
             let save = await Type.create(type)
             if (rowNumber === end) {
