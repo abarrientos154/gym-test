@@ -100,6 +100,9 @@ addPrefixToGroup(
     Route.delete('deleteAllTopics/:id', 'TopicController.destroyAll')
     Route.get('getTopicWithAudio/:id', 'TopicController.getTopicWithAudio')
     Route.get('getTopicByNum/:id', 'TopicController.getTopicByNum')
+
+    Route.post('test_by_tema/:id', 'TopicController.testByTopicCreate')
+    Route.get('test_by_topic_by_id/:id', 'TopicController.getTestByTopic')
     
     Route.post('excel_law', 'UploadController.excelLaw')
     Route.get('getLaws', 'LawController.index')
