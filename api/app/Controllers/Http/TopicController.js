@@ -1,6 +1,7 @@
 'use strict'
 const Topic = use("App/Models/Topic")
 const TopicTest = use("App/Models/TopicTest")
+const ByTopicTest = use("App/Models/ByTopicTest")
 const Question = use("App/Models/Question")
 const Examen = use("App/Models/Examen")
 const Articulos = use("App/Models/Article")
@@ -86,6 +87,67 @@ class TopicController {
     })
     response.send(data)
   }
+
+  async getTestByTopic ({ request, response, params }) {
+    try {
+      let test = (await ByTopicTest.query().where({_id: params.id}).first()).toJSON()
+      let questions = []
+      let cantQuest = Math.floor(test.cant_questions / test.temas.length)
+      // traemos las preguntas que tendra el test general
+      for (let i = 0; i < test.temas.length; i++) {
+        let element = test.temas[i]
+        let questByTopic = (await Question.query().where({ topic: element }).with('answers').with('leyInfo').fetch()).toJSON()
+        questByTopic = questByTopic.sort(() => Math.random() - 0.5)
+        let quests = []
+        if (i === (test.temas.length - 1)) {
+          let rest = test.cant_questions - questions.length
+          quests = questByTopic.slice(0, rest)
+        } else {
+          quests= questByTopic.slice(0, cantQuest)
+        }
+        questions = questions.concat(quests)
+      }
+      questions = questions.sort(() => Math.random() - 0.5)
+
+      // Ordenamos las preguntas
+      for (let i = 0; i < questions.length; i++) {
+        if (questions[i].answers[0].order === null || questions[i].answers[0].order === '') {
+          questions[i].answers = questions[i].answers.sort(() => Math.random() - 0.5)
+        } else {
+          var arrayAnswers = []
+          arrayAnswers[0] = questions[i].answers.find(v => v.order.toLowerCase() === 'a')
+          arrayAnswers[1] = questions[i].answers.find(v => v.order.toLowerCase() === 'b')
+          arrayAnswers[2] = questions[i].answers.find(v => v.order.toLowerCase() === 'c')
+          arrayAnswers[3] = questions[i].answers.find(v => v.order.toLowerCase() === 'd')
+          questions[i].answers = arrayAnswers
+        }
+        questions[i].articuloInfo = (await Articulos.query().where({article_name: questions[i].article, law: questions[i].law_id}).first())
+        if (questions[i].articuloInfo) {
+          questions[i].parrafoInfo = (await Parrafos.query().where({article_id: Number(questions[i].articuloInfo.id)}).fetch()).toJSON()
+        } else {
+          questions[i].parrafoInfo = []
+        }
+        if (questions[i].parrafoInfo.length) {
+          questions[i].parrafoInfo.sort(function(a, b) {
+            return a.order - b.order;
+          })
+        }
+        questions[i].answers = questions[i].answers.map(v => {
+          questions[i].selected = false
+          return {
+            ...v,
+            isActive: false
+          }
+        })
+      }
+
+      test.questions = questions
+      response.send(test)
+    } catch (error) {
+      console.error('get by topic test:' + error.name + ':' + error.message);
+    }
+  }
+
   async getTopicById ({ request, response, params }) {
     let tema = (await Topic.query().where({_id: params.id}).with('subTemas').first()).toJSON()
     let arr = []
@@ -212,6 +274,22 @@ class TopicController {
    * @param {View} ctx.view
    */
   async create ({ request, response, view }) {
+  }
+
+  async testByTopicCreate ({ request, response, auth, params }) {
+    try {
+      const id = new ObjectId(params.id)
+      const user = (await auth.getUser()).toJSON()
+      var data = request.all()
+      data.course_id = id
+      data.user_id = user._id
+      data.temas = data.temas.map(v => v.topic)
+      let save = await ByTopicTest.create(data)
+
+      response.send(save)
+    } catch (error) {
+      console.error('metodo store:' + error.name + ':' + error.message);
+    }
   }
 
   async testCreate ({ request, response, view }) {
