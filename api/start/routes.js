@@ -247,6 +247,7 @@ addPrefixToGroup(
 
     Route.put('setBuy/:type/:id', 'LicenseController.setBuy')
     Route.get('getSubscriptions', 'LicenseController.getSubscriptions')
+    Route.put('add_days/:id', 'LicenseController.edit')
     Route.get('getIncomes', 'IncomeController.index')
 
     Route.get('topicsWithQuestions/:id', 'GeneralTestController.topicsWithQuestions')

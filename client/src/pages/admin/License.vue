@@ -17,11 +17,13 @@
         <q-card-section>
           <div class="text-h6">Agregar días a la subscripción</div>
         </q-card-section>
-        <q-card-section class="q-pt-none">
+        <q-card-section>
+          <q-input dense outlined rounded type="number" v-model.number="days" label="Ingrese cantidad de días"
+            :error="$v.days.$error" error-message="Este campo es requerido"  @blur="$v.days.$touch()"/>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
-          <q-btn flat label="Guardar" color="primary" no-caps/>
+          <q-btn flat label="Guardar" color="primary" @click="addDays()" no-caps/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -43,6 +45,7 @@ export default {
         { name: 'name', label: 'Usuario', align: 'center', field: 'name' },
         { name: 'course_name', label: 'Curso', align: 'center', field: 'course_name' },
         { name: 'days', label: 'Días de la subscrición', align: 'center', field: 'days' },
+        { name: 'expirationDate', label: 'Fecha de expiración', align: 'center', field: 'expirationDate' },
         { name: 'actionsSubscription', required: true, align: 'left', field: 'actions', style: 'width: 9%' }
       ]
     }
@@ -66,6 +69,28 @@ export default {
           this.$q.loading.hide()
         }
       })
+    },
+    addDays () {
+      this.$v.$touch()
+      if (!this.$v.$error) {
+        this.$q.loading.show({
+          message: 'Modificando días...'
+        })
+        this.$api.put('add_days/' + this.subSelected._id, { days: this.days }).then(res => {
+          if (res) {
+            this.$q.notify({
+              message: 'Días modificados correctamente',
+              color: 'positive'
+            })
+            this.getData()
+            this.show = false
+            this.decartarCamb()
+            this.$q.loading.hide()
+          } else {
+            this.$q.loading.hide()
+          }
+        })
+      }
     },
     decartarCamb () {
       this.days = 0

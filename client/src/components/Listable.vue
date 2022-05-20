@@ -84,7 +84,7 @@
           </q-btn>
       </q-td>
       <q-td
-          slot="body-cell-userButton"
+          slot="body-cell-actionsSubscription"
           slot-scope="props"
           :props="props"
           v-if="checkIfSubscription()"

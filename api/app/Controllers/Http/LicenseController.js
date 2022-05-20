@@ -51,7 +51,7 @@ class LicenseController {
     const data = (await License.query().where({}).with('course').with('userInfo').fetch()).toJSON()
     for (let i = 0; i < data.length; i++) {
       data[i].course_name = data[i].course.name
-      data[i].name = data[i].user.name
+      data[i].name = data[i].userInfo.name
       let date = moment().format('YYYY-MM-DD')
       let days = moment(data[i].expirationDate).diff(date , 'days')
       if (days <= 0) {
@@ -180,6 +180,16 @@ class LicenseController {
    * @param {View} ctx.view
    */
   async edit ({ params, request, response, view }) {
+    const id = new ObjectId(params.id)
+    const data = (await License.query().where({_id: id}).first())
+    const days = request.all().days
+    if (data) {
+      let expiration = data.expirationDate.split('-')
+      let newArray = [Number(expiration[0]), Number(expiration[1]) - 1, Number(expiration[2])]
+      let date = moment(newArray).add(days, 'days').format('YYYY-MM-DD')
+      await License.query().where('_id', id).update({expirationDate: date})
+    }
+    response.send(data)
   }
 
   /**
