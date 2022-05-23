@@ -405,7 +405,7 @@ class UploadController {
     var colComment = explanation.getColumn('B')
     var end = 0
     var answers = []
-    // var las_del_curso = (await Answer.query().where({ course_id: courseId }).fetch()).toJSON()
+    var las_del_curso = (await Answer.query().where({ course_id: courseId }).fetch()).toJSON()
     return new Promise((resolve, reject) => {
       colComment.eachCell(async (cell, rowNumber) => {
         if (rowNumber >= 2) {
@@ -424,8 +424,8 @@ class UploadController {
           if (rowNumber >= end) {
             end = rowNumber
           }
-          var existAnswer = false //las_del_curso.find(v => v.id === id)
-          var existAnswer2 = false //answers.find(v => v.id === id)
+          var existAnswer = las_del_curso.find(v => v.id === id)
+          var existAnswer2 = answers.find(v => v.id === id)
           if (!existAnswer && !existAnswer2) {
             // answers.push(answer)
             let save = await Answer.create(answer)
