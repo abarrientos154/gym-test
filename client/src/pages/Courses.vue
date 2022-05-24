@@ -22,7 +22,7 @@
       </q-drawer>
 
       <q-page-container>
-        <div class="q-pa-xl">
+        <div class="q-pa-xl" v-if="courses.length">
           <div v-for="(item, index) in courses" :key="index" class="q-pb-lg">
             <div class="row items-center justify-center">
               <q-btn icon="edit" size="lg" flat round color="primary" @click="catUpdate(item)"/>
@@ -36,9 +36,9 @@
                     <div class="text-white">
                       <div class="text-h6 text-bold">{{item2.name}}</div>
                       <div v-if="!item2.free" class="row q-gutter-x-md">
-                        <div class="text-subtitle2">30 días: €{{item2.price1}}</div>
-                        <div class="text-subtitle2">180 días: €{{item2.price2}}</div>
-                        <div class="text-subtitle2">365 días: €{{item2.price3}}</div>
+                        <div class="text-subtitle2">1 mes: €{{item2.price1}}</div>
+                        <div class="text-subtitle2">6 meses: €{{item2.price2}}</div>
+                        <div class="text-subtitle2">1 año: €{{item2.price3}}</div>
                       </div>
                       <div v-else>
                         <q-chip color="green" text-color="white" dense class="q-px-md">Curso gratuito</q-chip>
@@ -55,6 +55,7 @@
             <div v-else class="text-primary text-center text-italic q-py-lg">No tiene cursos asignados</div>
           </div>
         </div>
+        <div v-else class="text-primary text-center text-italic text-h6 q-py-lg">Sin datos cargados...</div>
 
         <q-dialog v-model="show">
           <q-card style="width:100%;">
@@ -84,13 +85,13 @@
                 <q-toggle v-model="form.free" label="Curso gratuito" />
               </div>
               <div v-if="!form.free" class="row items-start justify-between">
-                <q-input dense outlined rounded type="number" v-model.number="form.price1" label="Costo de 30 días" class="col-5"
+                <q-input dense outlined rounded type="number" v-model.number="form.price1" label="Costo de 1 mes" class="col-5"
                   :error="$v.form.price1.$error" error-message="Este campo es requerido"  @blur="$v.form.price1.$touch()">
                 </q-input>
-                <q-input dense outlined rounded type="number" v-model.number="form.price2" label="Costo de 180 días" class="col-5"
+                <q-input dense outlined rounded type="number" v-model.number="form.price2" label="Costo de 6 meses" class="col-5"
                   :error="$v.form.price2.$error" error-message="Este campo es requerido"  @blur="$v.form.price2.$touch()">
                 </q-input>
-                <q-input dense outlined rounded type="number" v-model.number="form.price3" label="Costo de 365 días" class="col-5"
+                <q-input dense outlined rounded type="number" v-model.number="form.price3" label="Costo de 1 año" class="col-5"
                   :error="$v.form.price3.$error" error-message="Este campo es requerido"  @blur="$v.form.price3.$touch()">
                 </q-input>
               </div>

@@ -47,8 +47,11 @@
         </q-scroll-area> -->
       </div>
       <q-btn color="primary" dense no-caps size="md">
-        <q-file borderless v-model="file" hint="(.xlsx)" accept=".xlsx, /*" @input="changeFile()" style="height: 30px; font-size: 0px"/>
-        <div class="absolute-center">Importar archivo</div>
+        <q-file borderless v-model="file" hint="(.xlsx)" accept=".xlsx, /*" @input="changeFile()" style="height: 30px; font-size: 0px">
+          <div class="absolute-center">
+            <div class="text-white" style="margin-top:-20px; font-size: 15px">Importar archivo</div>
+          </div>
+        </q-file>
       </q-btn>
     </div>
     <div class="row justify-between">
