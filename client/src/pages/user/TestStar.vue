@@ -10,24 +10,37 @@
                 <div class="row justify-center q-pa-md">
                   <q-card class="bordes" style="width:100%; border-radius:10px">
                     <div class="text-center text-primary text-h6">{{esGeneral ? 'Test General' : esByTema ? 'Test por tema' : esTema ? test.tema_name : esExamen ? test.examen_name : test.type_name}}</div>
-                    <div class="bg-primary text-white row justify-between items-center q-pa-md">
-                      <div>
+                    <div class="bg-primary text-white row justify-between items-center no-wrap q-py-md q-px-sm">
+                      <div class="col-7">
                         <div v-if="esExamen && test.tiempo">
                           <div class="text-subtitle2">Duración del test</div>
                           <div>{{minutos + ':' + segundos}}</div>
                         </div>
-                        <div v-if="!esGeneral && !esByTema && item.examData !== null && item.examData !== undefined" style="width: 50%; border-radius: 20px" class="bg-green text-h6 row q-py-xs q-px-sm">
-                          <div class="ellipsis">{{item.examData.name ? item.examData.name : ''}}</div>
+                        <div v-if="item.examData !== null && item.examData !== undefined" style="width: 100%;" class="q-pr-sm q-pt-md" :class="{ 'truncate-chip-labels': true }">
+                          <q-chip color="green" text-color="white" :label="item.examData.name ? item.examData.name : ''" :title="item.examData.name ? item.examData.name : ''" />
                         </div>
                       </div>
-                      <q-btn v-if="!esExamen" :loading="loading" rounded no-caps color="white" text-color="primary" label="Terminar test" class="q-px-sm" @click="terminado = true, !listo ? responder(true, item) : ''">
+                      <div>
+                        <q-btn v-if="!esExamen" :loading="loading" rounded no-caps color="white" text-color="primary" label="Terminar test" class="q-px-sm" @click="terminado = true, !listo ? responder(true, item) : ''">
                             <template v-slot:loading>
                               <q-spinner-hourglass class="on-left" />
                               Procesando...
                             </template>
                           </q-btn>
+                      </div>
                     </div>
                   </q-card>
+                  <div v-if="esGeneral || esTema" class="col-12 row no-wrap items-center q-pt-sm">
+                    <q-chip color="primary" text-color="white">
+                      {{quesCount}} / {{preguntas.length}}
+                    </q-chip>
+                    <q-chip color="green" text-color="white" icon="check_circle">
+                      {{goodCount}}
+                    </q-chip>
+                    <q-chip color="red" text-color="white" icon="cancel">
+                      {{badCount}}
+                    </q-chip>
+                  </div>
                 </div>
 
                 <div class="q-pa-md">
@@ -115,6 +128,9 @@ export default {
       minutos: 0,
       segundos: 0,
       timeTest: 0,
+      quesCount: 0,
+      goodCount: 0,
+      badCount: 0,
       user: {},
       test: {},
       infoSelec: {},
@@ -234,6 +250,7 @@ export default {
       }
       pregunta.isActive = true
       opcion.isActive = true
+      this.quesCount += 1
       if (opcion.isCorrect) {
         pregunta.selected = true
       } else {
@@ -242,7 +259,7 @@ export default {
       this.responder(bool, pregunta)
     },
     responder (bool, pregunta) {
-      this.$q.loading.show()
+      // this.$q.loading.show()
       if (bool) {
         this.loading = true
       }
@@ -257,8 +274,13 @@ export default {
         } else {
           vm.listo = true
         }
+        if (pregunta.selected) {
+          vm.goodCount += 1
+        } else {
+          vm.badCount += 1
+        }
         clearInterval(vm.timeCounter1)
-        vm.$q.loading.hide()
+        // vm.$q.loading.hide()
         vm.timeCounter2 = setInterval(timer, 3000)
         return true
       }

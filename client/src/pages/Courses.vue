@@ -7,17 +7,22 @@
       </q-header>
 
       <q-drawer v-model="drawer" style="width: 175px;">
-        <div class="fit bg-primary">
-          <div class="column items-center justify-center" style="background: linear-gradient(to right, #002938, #004e6d); height: 200px; width: 100%;">
-            <div class="column items-center q-pt-xl q-pb-xs">
-              <q-img src="gymtest 1.png" style="width: 200px"/>
+        <div class="fit bg-primary column justify-between no-wrap">
+          <div>
+            <div class="column items-center justify-center" style="background: linear-gradient(to right, #002938, #004e6d); height: 200px; width: 100%;">
+              <div class="column items-center q-pt-xl q-pb-xs">
+                <q-img src="gymtest 1.png" style="width: 200px"/>
+              </div>
+              <div class="text-center text-bold text-h5 text-white">Admin</div>
             </div>
-            <div class="text-center text-bold text-h5 text-white">Admin</div>
+            <q-list class="q-mt-lg q-pa-sm">
+              <q-btn icon="add" color="white" outline rounded style="width: 100%" label="Nueva categoría" class="q-mb-md" no-caps @click="newCategorie()"/>
+              <q-btn icon="add" color="white" outline rounded style="width: 100%" label="Nuevo Curso" no-caps @click="newCourse()"/>
+            </q-list>
           </div>
-          <q-list class="q-mt-lg q-pa-sm">
-            <q-btn icon="add" color="white" outline rounded style="width: 100%" label="Nueva categoría" class="q-mb-md" no-caps @click="newCategorie()"/>
-            <q-btn icon="add" color="white" outline rounded style="width: 100%" label="Nuevo Curso" no-caps @click="newCourse()"/>
-          </q-list>
+          <div class="text-white row justify-center q-pb-xl">
+            <q-btn no-caps rounded color="white" text-color="primary" label="Cerrar sesión" style="width:90%" @click="cerrarSesion()" />
+          </div>
         </div>
       </q-drawer>
 
@@ -123,6 +128,7 @@
 </template>
 <script>
 import { required, requiredIf } from 'vuelidate/lib/validators'
+import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
@@ -170,6 +176,7 @@ export default {
     this.getData()
   },
   methods: {
+    ...mapMutations('generals', ['logout']),
     getData () {
       this.$api.get('cat_by_courses').then(res => {
         if (res) {
@@ -299,6 +306,10 @@ export default {
       this.formCat = { ...item }
       this.$v.formCat.$reset()
       this.showCat = true
+    },
+    cerrarSesion () {
+      this.logout()
+      this.$router.push('/login')
     }
   }
 }

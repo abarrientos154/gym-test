@@ -188,9 +188,9 @@ class TypeController {
       let type = (await TypeTest.query().where({_id: id}).first()).toJSON()
       let questions = (await Question.query().where({ type: type.type_name }).with('answers').with('leyInfo').fetch()).toJSON()
       for (let i = 0; i < questions.length; i++) {
-        if (questions[i].exam !== '') {
+        if (questions[i].exam !== '' && questions[i].exam !== 0) {
           const id = Number(questions[i].exam)
-          const exam = (await Examen.query().where({ id: id }).first()).toJSON()
+          const exam = (await Examen.query().where({ id: id }).first())
           questions[i].examData = exam
         }
         if (questions[i].answers[0].order === null || questions[i].answers[0].order === '') {
