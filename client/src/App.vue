@@ -7,6 +7,7 @@
 import { mapMutations } from 'vuex'
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
+import { QSpinnerPuff } from 'quasar'
 Vue.use(Vuelidate)
 export default {
   name: 'App',
@@ -17,6 +18,14 @@ export default {
     }
   },
   mounted () {
+    this.$q.loading.setDefaults({
+      spinner: QSpinnerPuff,
+      spinnerColor: 'black',
+      spinnerSize: 140,
+      backgroundColor: 'primary',
+      message: '¡Estamos cargando tu información!... Estamos por terminar',
+      messageColor: 'black'
+    })
     this.universal()
   },
   methods: {
