@@ -7,7 +7,7 @@
 import { mapMutations } from 'vuex'
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
-import { QSpinnerPuff } from 'quasar'
+import { QSpinnerHourglass } from 'quasar'
 Vue.use(Vuelidate)
 export default {
   name: 'App',
@@ -19,7 +19,7 @@ export default {
   },
   mounted () {
     this.$q.loading.setDefaults({
-      spinner: QSpinnerPuff,
+      spinner: QSpinnerHourglass,
       spinnerColor: 'black',
       spinnerSize: 140,
       backgroundColor: 'primary',
