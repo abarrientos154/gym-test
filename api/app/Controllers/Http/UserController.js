@@ -5,12 +5,15 @@ const mkdirp = use('mkdirp')
 // const fs = require('fs')
 const User = use("App/Models/User")
 const Community = use("App/Models/Community")
+const ExamenTest = use("App/Models/ExamenTest")
+const TypeTest = use("App/Models/TypeTest")
 const Place = use("App/Models/Place")
 const Email = use("App/Functions/Email")
 const Role = use("App/Models/Role")
 var randomize = require('randomatic');
 const Mail = use("App/Functions/Email")
 var ObjectId = require('mongodb').ObjectId;
+const moment = require('moment')
 // const { validate } = use("Validator")
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
@@ -34,6 +37,38 @@ class UserController {
     const user = (await auth.getUser()).toJSON()
     let users = (await User.query().where({roles: [2]}).fetch()).toJSON()
     users = users.filter(v => v._id !== user._id)
+    response.send(users);
+  }
+
+  async statisticUsers({ request, response, auth }) {
+    let users = (await User.query().where({roles: [2]}).fetch()).toJSON()
+    for (let i = 0; i < users.length; i++) {
+      let examenes = (await ExamenTest.query().where({user_id: users[i]._id}).with('examenInfo').fetch()).toJSON()
+      let gym = (await TypeTest.query().where({user_id: users[i]._id}).with('typeInfo').fetch()).toJSON()
+      examenes = examenes.map(v => {
+        return {
+          ...v,
+          type_data: 'Examen',
+          fecha: moment(v.created_at).format('DD/MM/YYYY')
+        }
+      })
+      gym = gym.map(v => {
+        return {
+          ...v,
+          type_data: 'Rutina de entrenamiento',
+          fecha: moment(v.created_at).format('DD/MM/YYYY')
+        }
+      })
+      let allData = examenes.concat(gym)
+      users[i].data = allData.sort((a, b) => {
+        if (a.created_at > b.created_at) {
+          return -1
+        } else if (a.created_at < b.created_at) {
+          return 1
+        }
+        return 0
+      })
+    }
     response.send(users);
   }
 

@@ -74,6 +74,7 @@ addPrefixToGroup(
     Route.get("user_info", "UserController.userInfo")
     Route.get("all_user", "UserController.index")
     Route.get("getUsers", "UserController.indexListable")
+    Route.get("estadistic_users", "UserController.statisticUsers")
     Route.put('updateUser/:id', 'UserController.update')
     Route.put('update_user_info/:id', 'UserController.updateUserInfo')
     Route.put('update_perfilImg', 'UserController.updatePerfilImg')

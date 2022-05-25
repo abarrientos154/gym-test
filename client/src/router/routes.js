@@ -11,6 +11,7 @@ const routes = [
     children: [
       // Admin
       { path: '/administrador', component: () => import('pages/admin/Inicio.vue') },
+      { path: '/estadisticas_admin', component: () => import('pages/admin/Statistics.vue') },
       { path: '/topics', component: () => import('pages/admin/Topics.vue') },
       { path: '/questions', component: () => import('pages/admin/Question.vue') },
       { path: '/articles', component: () => import('pages/admin/Articles.vue') },

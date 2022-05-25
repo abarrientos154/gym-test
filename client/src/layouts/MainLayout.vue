@@ -197,6 +197,13 @@ export default {
         {
           src: '',
           src2: '',
+          label: 'Control de uso',
+          icon: 'query_stats',
+          ruta: '/estadisticas_admin'
+        },
+        {
+          src: '',
+          src2: '',
           label: 'Fallos',
           icon: 'feedback',
           ruta: '/faults'
