@@ -37,6 +37,7 @@ const routes = [
       { path: '/perfil', component: () => import('pages/user/Perfil.vue') },
       { path: '/ver/:title', component: () => import('pages/user/Temas.vue') },
       { path: '/news_user', component: () => import('pages/user/News.vue') },
+      { path: '/estadisticas', component: () => import('pages/user/Statistics.vue') },
       { path: '/publicidad/:id', name: 'publicidad', component: () => import('pages/user/PublicidadBlog.vue') },
       { path: '/forum/:id', name: 'foro', component: () => import('pages/user/Forum.vue') },
       { path: '/question/:id', name: 'foroQuestion', component: () => import('pages/user/Question.vue') },

@@ -249,7 +249,7 @@ class TopicController {
 
   async getTestResult ({ request, response, params, auth }) {
     const user = (await auth.getUser()).toJSON()
-    let tests = (await TopicTest.query().where({tema_id: params.id, user_id: user._id}).fetch()).toJSON()
+    let tests = (await TopicTest.query().where({tema_id: Number(params.id), user_id: user._id}).fetch()).toJSON()
     let totalQuest = 0
     let correctas = 0
     for (let i = 0; i < tests.length; i++) {

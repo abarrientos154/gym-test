@@ -141,8 +141,6 @@ export default {
       baseu: '',
       baseuTy: '',
       baseuEx: '',
-      id: '',
-      root: '',
       courseId: ''
     }
   },
@@ -153,20 +151,14 @@ export default {
     this.baseuEx = env.apiUrl + 'exams_img/'
     this.getUser()
     if (this.$route.params.idTema) {
-      this.id = this.$route.params.idTema
-      this.root = 'topic_test_by_id/'
       this.esTema = true
       this.getTema()
     } else if (this.$route.params.idExamen) {
       this.esExamen = true
       this.getExamen()
-      this.id = this.$route.params.idExamen
-      this.root = 'examen_test_by_id/'
     } else if (this.$route.params.idType) {
       this.esGym = true
       this.getType()
-      this.id = this.$route.params.idType
-      this.root = 'type_test_by_id/'
     } else if (this.$route.params.general) {
       this.esGeneral = true
     } else if (this.$route.params.tema) {
@@ -175,22 +167,6 @@ export default {
     }
   },
   methods: {
-    async getTestById (id) {
-      this.$q.loading.show({
-        message: 'Preparando Datos...'
-      })
-      await this.$api.get(this.root + id).then(res => {
-        if (res) {
-          this.esTema ? this.$router.push('/tema/test/' + id) : this.esGym ? this.$router.push('/gym/test/' + id) : this.$router.push('/examen/test/' + id)
-        } else {
-          this.$q.loading.hide()
-          this.$q.notify({
-            color: 'negative',
-            message: 'Aún faltan algunos datos en este test, por favor intente luego.'
-          })
-        }
-      })
-    },
     async getUser () {
       await this.$api.get('user_info').then(res => {
         if (res) {
@@ -310,7 +286,7 @@ export default {
         }
         await this.$api.post('topic_test', data).then(async res => {
           if (res) {
-            await this.getTestById(res._id)
+            this.$router.push('/tema/test/' + res._id)
             this.$q.loading.hide()
           } else {
             this.$q.loading.hide()
@@ -336,7 +312,7 @@ export default {
         }
         await this.$api.post('type_test', data).then(async res => {
           if (res) {
-            await this.getTestById(res._id)
+            this.$router.push('/gym/test/' + res._id)
             this.$q.loading.hide()
           } else {
             this.$q.loading.hide()
@@ -431,7 +407,7 @@ export default {
       }
       await this.$api.post('examen_test', data).then(async res => {
         if (res) {
-          await this.getTestById(res._id)
+          this.$router.push('/examen/test/' + res._id)
           this.$q.loading.hide()
         } else {
           this.$q.loading.hide()

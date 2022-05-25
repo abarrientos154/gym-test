@@ -155,7 +155,7 @@ class TypeController {
           return v.typeInfo.course_id === courseId
         }
       })
-      data = allData.reverse().slice(0, 4)
+      data = allData.reverse()
       data = data.map(v => {
         return {
           ...v,

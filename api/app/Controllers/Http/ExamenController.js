@@ -114,7 +114,7 @@ class ExamenController {
     let data = []
     if (allData.length) {
       allData = allData.filter(v => v.examenInfo.course_id === courseId)
-      data = allData.reverse().slice(0, 4)
+      data = allData.reverse()
       data = data.map(v => {
         return {
           ...v,

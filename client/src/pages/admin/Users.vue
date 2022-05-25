@@ -10,7 +10,7 @@
 
     <div class="row justify-between">
       <q-btn color="primary" label="Nuevo Usuario" icon="add" dense no-caps size="md" class="q-ml-md" @click="newUser()"/>
-      <q-btn color="red" label="Eliminar Usuarios" icon="delete" dense no-caps size="md" class="q-mr-md" @click="deleteAllUsers()"/>
+     <!--  <q-btn color="red" label="Eliminar Usuarios" icon="delete" dense no-caps size="md" class="q-mr-md" @click="deleteAllUsers()"/> -->
     </div>
 
     <div class="row justify-center" style="height: 70%">

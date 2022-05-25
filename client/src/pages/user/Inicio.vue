@@ -35,45 +35,11 @@
           </div>
         </q-card>
 
-        <q-scroll-area horizontal class="q-mt-md" :thumb-style="thumbStyle" style="height: 150px; width: 100%;">
-          <div class="row items-center no-wrap q-gutter-md q-pr-sm q-py-sm" style="height:100%">
-              <q-card class="bordes q-pa-none" style="width: 320px; height:100%">
-                <div class="row items-center justify-between q-py-xs q-px-xs" style="height:20%">
-                  <div class="text-primary">Mis Exámenes</div>
-                  <div class="text-grey-9 text-caption text-italic">Historial de resultados</div>
-                </div>
-                <div class="bg-primary q-py-sm q-px-xs q-ma-none" style="height:80%">
-                  <div v-if="rutinaExamen.length">
-                    <div class="row justify-between text-white text-caption q-pb-xs" v-for="(item, index) in rutinaExamen" :key="index">
-                      <div class="col-5 text-center ellipsis">{{item.examen_name}}</div>
-                      <div class="col-3 text-center">{{item.fecha}}</div>
-                      <div class="col-4 text-center">{{item.all_quest}} / {{item.correctas}}</div>
-                    </div>
-                  </div>
-                  <div v-else class="text-white text-caption text-center">Aún no tienes resultados</div>
-                </div>
-              </q-card>
+        <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/estadisticas')">
+          <div class="text-right text-h5 text-bold">Estadísticas</div>
+        </q-card>
 
-              <q-card class="bordes q-pa-none" style="width: 320px;height:100%">
-                <div class="row items-center justify-between q-py-xs q-px-xs" style="height:20%">
-                    <div class="text-primary">Rutinas de Entrenamiento</div>
-                    <div class="text-grey-9 text-caption text-italic">Historial de resultados</div>
-                </div>
-                <div class="bg-primary q-py-sm q-px-xs q-ma-none" style="height:80%">
-                  <div v-if="rutinaGym.length">
-                    <div class="row justify-between text-white text-caption q-pb-xs" v-for="(item, index) in rutinaGym" :key="index">
-                      <div class="col-4 text-center ellipsis">{{item.type_name}}</div>
-                      <div class="col-4 text-center">{{item.fecha}}</div>
-                      <div class="col-4 text-center">{{item.total_quest}} / {{item.correctas}}</div>
-                    </div>
-                  </div>
-                  <div v-else class="text-white text-caption text-center">Aún no tienes resultados</div>
-                </div>
-              </q-card>
-            </div>
-        </q-scroll-area>
-
-        <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md" style="border-radius: 10px" @click="$router.push('/news_user')">
+        <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/news_user')">
           <div class="text-right text-h5 text-bold">Noticias</div>
         </q-card>
 
@@ -125,10 +91,7 @@ export default {
         backgroundColor: '#027be3',
         width: '8px',
         opacity: 0
-      },
-      rutinaExamen: [],
-      rutinaGym: [],
-      blogs: []
+      }
     }
   },
   mounted () {
@@ -136,7 +99,6 @@ export default {
     this.baseuPerfil = env.apiUrl + 'perfil_img/'
     this.getUser()
     this.getCourse()
-    this.getRutinas()
   },
   methods: {
     getUser () {
@@ -160,18 +122,6 @@ export default {
       this.$api.get('get_License_course/' + this.courseId).then(res => {
         if (res) {
           this.licenseTime = res.days
-        }
-      })
-    },
-    getRutinas () {
-      this.$api.get('mis_examenes/' + this.courseId).then(v => {
-        if (v) {
-          this.rutinaExamen = v
-        }
-      })
-      this.$api.get('mis_rutinas/' + this.courseId).then(v => {
-        if (v) {
-          this.rutinaGym = v
         }
       })
     }
