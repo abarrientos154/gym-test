@@ -126,8 +126,9 @@ class ExamenController {
   }
   
   async examById ({ request, response, view, params }) {
+    const course = new ObjectId(params.course)
     let datos = (await Examen.find(params.id)).toJSON()
-    let questions = (await Question.query().where({exam: datos.id}).with('answers').fetch()).toJSON()
+    let questions = (await Question.query().where({exam: datos.id, course_id: course}).with('answers').fetch()).toJSON()
     for (let i = 0; i < questions.length; i++) {
       questions[i].answers = questions[i].answers.map(v => {
         questions[i].selected = false

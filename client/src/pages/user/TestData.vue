@@ -230,7 +230,7 @@ export default {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      this.$api.get('ExamById/' + this.$route.params.idExamen).then(res => {
+      this.$api.get('ExamById/' + this.$route.params.idExamen + '/' + this.courseId).then(res => {
         if (res) {
           this.tema = res
           this.preguntas = res.questions

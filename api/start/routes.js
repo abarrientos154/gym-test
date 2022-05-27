@@ -170,7 +170,7 @@ addPrefixToGroup(
     Route.get('examen', 'ExamenController.index')
     Route.get('getExamByCourse/:id', 'ExamenController.indexByCourse')
     Route.get('mis_examenes/:courseId', 'ExamenController.misExamenes')
-    Route.get('ExamById/:id', 'ExamenController.examById')
+    Route.get('ExamById/:id/:course', 'ExamenController.examById')
     Route.post('examen_test', 'ExamenController.testCreate')
     Route.put('examen_test/:id', 'ExamenController.testUpdate')
     Route.get('examen_test_by_id/:id', 'ExamenController.getTestById')
