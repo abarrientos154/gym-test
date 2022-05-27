@@ -25,7 +25,7 @@
     <div class="row q-pa-md">
       <div v-for="(item, index) in topics" :key="index" class="q-px-md q-pb-md col-6">
         <div>{{item.name}}</div>
-        <q-input type="number" dense outlined :hint="'Preguntas Disponibles:' + item.questions.length"
+        <q-input type="number" dense outlined :hint="'Preguntas Disponibles:' + item.questions"
         v-model.number="topics[index].cant" label="Número de preguntas"
         :error="$v.topics.$each[index].cant.$error"
         error-message="Exede la cantidad disponible de preguntas en el tema"
@@ -40,7 +40,7 @@
 import { numeric } from 'vuelidate/lib/validators'
 const priceGreater = (value, vm) => {
   let val
-  if (value > vm.questions.length) {
+  if (value > vm.questions) {
     val = false
   } else {
     val = true

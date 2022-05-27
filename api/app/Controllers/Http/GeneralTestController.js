@@ -100,9 +100,9 @@ class GeneralTestController {
   }
   async verifyQuestions ({ response, params }) {
     const id = new ObjectId(params.id)
-    let data = (await Question.query().where({ course_id: id }).fetch()).toJSON()
+    let data = await Question.where('course_id', id ).count()
     var isValid = false
-    if (data.length >= 100) {
+    if (data >= 100) {
       isValid = true
     }
     isValid = true
@@ -125,6 +125,14 @@ class GeneralTestController {
     }
     data = data.sort(function(a, b) {
       return a.id - b.id
+    }).map(v=> {
+      return {
+        cant: v.cant ? v.cant : 0,
+        _id: v._id,
+        topic: v.topic,
+        questions: v.questions.length,
+        name: v.name
+      }
     })
     response.send(data)
   }
