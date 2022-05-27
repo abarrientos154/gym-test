@@ -152,21 +152,21 @@ export default {
     if (this.$route.params.idTema) {
       this.idTest = this.$route.params.idTema
       this.esTema = true
-      this.getTestById('topic_test_by_id/', this.idTest)
+      this.getTestById('topic_test_by_id/', this.idTest, this.courseId)
     } else if (this.$route.params.idType) {
       this.idTest = this.$route.params.idType
-      this.getTestById('type_test_by_id/', this.idTest)
+      this.getTestById('type_test_by_id/', this.idTest, this.courseId)
     } else if (this.$route.params.idExamen) {
       this.idTest = this.$route.params.idExamen
       this.esExamen = true
-      this.getTestById('examen_test_by_id/', this.idTest)
+      this.getTestById('examen_test_by_id/', this.idTest, this.courseId)
     } else if (this.$route.params.test) {
       this.esGeneral = true
       this.getGeneralTest()
     } else if (this.$route.params.idByTema) {
       this.esByTema = true
       this.idTest = this.$route.params.idByTema
-      this.getTestById('test_by_topic_by_id/', this.idTest)
+      this.getTestById('test_by_topic_by_id/', this.idTest, this.courseId)
     }
   },
   methods: {
@@ -177,11 +177,11 @@ export default {
         }
       })
     },
-    async getTestById (ruta, id) {
+    async getTestById (ruta, id, course) {
       this.$q.loading.show({
         message: 'Cargando Datos...'
       })
-      await this.$api.get(ruta + id).then(res => {
+      await this.$api.get(ruta + id + '/' + course).then(res => {
         if (res) {
           this.test = res
           this.preguntas = this.test.questions.sort(() => Math.random() - 0.5)

@@ -195,7 +195,7 @@ export default {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      this.$api.get('topic_by_id/' + this.$route.params.idTema).then(res => {
+      this.$api.get('topic_by_id/' + this.$route.params.idTema + '/' + this.courseId).then(res => {
         if (res) {
           this.tema = res
           this.preguntas = res.questions
@@ -213,7 +213,7 @@ export default {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      this.$api.get('type_by_id/' + this.$route.params.idType).then(res => {
+      this.$api.get('type_by_id/' + this.$route.params.idType + '/' + this.courseId).then(res => {
         if (res) {
           this.tema = res
           this.preguntas = res.questions

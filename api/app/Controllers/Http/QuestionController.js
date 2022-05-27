@@ -97,7 +97,8 @@ class QuestionController {
   }
 
   async getQuestionsByTopic ({ params, response }) {
-    const data = (await Question.query().where({ topic: Number(params.id) }).fetch()).toJSON()
+    const course = new ObjectId(params.course)
+    const data = (await Question.query().where({ topic: Number(params.id), course_id: course }).fetch()).toJSON()
     response.send(data)
   }
 
@@ -111,11 +112,6 @@ class QuestionController {
     }
   }
  */
-
-  async getQuestionsbyExam ({ request, response, view, params }) {
-    let data = (await Question.query().where({ examen_id: params.id }).fetch()).toJSON()
-    response.send(data)
-  }
 
   async getFullQuestions ({ response }) {
     /*try {

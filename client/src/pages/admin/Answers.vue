@@ -161,7 +161,7 @@ export default {
       this.$q.loading.show({
         message: 'Cargando datos...'
       })
-      await this.$api.get('getQuestionsByTopic/' + topic).then(res => {
+      await this.$api.get('getQuestionsByTopic/' + topic + '/' + this.courseId).then(res => {
         if (res) {
           this.questions = res
           this.$q.loading.hide()

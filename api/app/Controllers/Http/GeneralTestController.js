@@ -34,7 +34,7 @@ class GeneralTestController {
         // traemos las preguntas que tendra el test general
         for (let i = 0; i < test.config.length; i++) {
           let element = test.config[i]
-          let questByTopic = (await Question.query().where({ topic: element.topic }).with('answers').with('leyInfo').fetch()).toJSON()
+          let questByTopic = (await Question.query().where({ topic: element.topic, course_id: id }).with('answers').with('leyInfo').fetch()).toJSON()
           questByTopic = questByTopic.sort(() => Math.random() - 0.5)
           let length = questByTopic.length >= element.number ? element.number : questByTopic.length
           for (let q = 0; q < length; q++) {

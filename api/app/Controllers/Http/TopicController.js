@@ -90,13 +90,14 @@ class TopicController {
 
   async getTestByTopic ({ request, response, params }) {
     try {
+      const course = new ObjectId(params.course)
       let test = (await ByTopicTest.query().where({_id: params.id}).first()).toJSON()
       let questions = []
       let cantQuest = Math.floor(test.cant_questions / test.temas.length)
       // traemos las preguntas que tendra el test general
       for (let i = 0; i < test.temas.length; i++) {
         let element = test.temas[i]
-        let questByTopic = (await Question.query().where({ topic: element }).with('answers').with('leyInfo').fetch()).toJSON()
+        let questByTopic = (await Question.query().where({ topic: element, course_id: course }).with('answers').with('leyInfo').fetch()).toJSON()
         questByTopic = questByTopic.sort(() => Math.random() - 0.5)
         let quests = []
         if (i === (test.temas.length - 1)) {
@@ -149,6 +150,7 @@ class TopicController {
   }
 
   async getTopicById ({ request, response, params }) {
+    const course = new ObjectId(params.course)
     let tema = (await Topic.query().where({_id: params.id}).with('subTemas').first()).toJSON()
     let arr = []
     for (const i in tema.subTemas) {
@@ -160,7 +162,7 @@ class TopicController {
       arr[j] = arr[j].join(' ')
       tema.subTemas[j].process = arr[j]
     }
-    let questions = (await Question.query().where({topic: tema.topic}).with('answers').fetch()).toJSON()
+    let questions = (await Question.query().where({topic: tema.topic, course_id: course}).with('answers').fetch()).toJSON()
     for (let i = 0; i < questions.length; i++) {
       questions[i].answers = questions[i].answers.map(v => {
         questions[i].selected = false
@@ -188,8 +190,9 @@ class TopicController {
 
   async getTestById ({ request, response, params }) {
     try {
+      const course = new ObjectId(params.course)
       let tema = (await TopicTest.query().where({_id: params.id}).first()).toJSON()
-      let allQuestions = (await Question.query().where({ topic: tema.tema_id }).with('answers').with('leyInfo').fetch()).toJSON()
+      let allQuestions = (await Question.query().where({ topic: tema.tema_id, course_id: course }).with('answers').with('leyInfo').fetch()).toJSON()
       let questions = []
       if (tema.subTemas.length) {
         questions = allQuestions.filter(v => {
@@ -456,20 +459,6 @@ class TopicController {
     try {
       const id = new ObjectId(params.id)
       const test = (await Nivele.query().where({ family_id: id }).fetch()).toJSON()
-      response.send(test)
-    } catch (error) {
-      console.error(error.name + '1: ' + error.message)
-    }
-  }
-
-  async testExamById ({ request, response, params }) {
-    try {
-      let test = (await Nivele.with('exam').with('questions').find(params.id)).toJSON()
-      if (test.hasExamId) {
-        const questionsFromExam = (await Question.query().where({ exam_id: test.id }).fetch()).toJSON()
-        const questions = [...test.questions]
-        test.questions = [...questions, ...questionsFromExam]
-      }
       response.send(test)
     } catch (error) {
       console.error(error.name + '1: ' + error.message)

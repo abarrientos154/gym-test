@@ -167,8 +167,9 @@ class TypeController {
   }
 
   async getTypeById ({ request, response, view, params }) {
+    const course = new ObjectId(params.course)
     let datos = (await Type.find(params.id)).toJSON()
-    let questions = (await Question.query().where({type: datos.type_name}).with('answers').fetch()).toJSON()
+    let questions = (await Question.query().where({type: datos.type_name, course_id: course}).with('answers').fetch()).toJSON()
     for (let i = 0; i < questions.length; i++) {
       questions[i].answers = questions[i].answers.map(v => {
         questions[i].selected = false
@@ -184,9 +185,10 @@ class TypeController {
 
   async getTestById ({ request, response, params }) {
     try {
+      const course = new ObjectId(params.course)
       const id = new ObjectId(params.id)
       let type = (await TypeTest.query().where({_id: id}).first()).toJSON()
-      let questions = (await Question.query().where({ type: type.type_name }).with('answers').with('leyInfo').fetch()).toJSON()
+      let questions = (await Question.query().where({ type: type.type_name, course_id: course }).with('answers').with('leyInfo').fetch()).toJSON()
       for (let i = 0; i < questions.length; i++) {
         if (questions[i].exam !== '' && questions[i].exam !== 0) {
           const id = Number(questions[i].exam)

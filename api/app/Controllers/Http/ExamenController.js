@@ -144,8 +144,9 @@ class ExamenController {
 
   async getTestById ({ request, response, params }) {
     try {
+      const course = new ObjectId(params.course)
       let examen = (await ExamenTest.query().where({_id: params.id}).first()).toJSON()
-      let questions = (await Question.query().where({exam: examen.examen_id}).with('answers').with('leyInfo').fetch()).toJSON()
+      let questions = (await Question.query().where({exam: examen.examen_id, course_id: course}).with('answers').with('leyInfo').fetch()).toJSON()
       for (let i = 0; i < questions.length; i++) {
         if (questions[i].answers[0].order === null || questions[i].answers[0].order === '') {
           questions[i].answers = questions[i].answers.sort(() => Math.random() - 0.5)
