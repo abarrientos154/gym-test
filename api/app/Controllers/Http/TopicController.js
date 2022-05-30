@@ -379,7 +379,8 @@ class TopicController {
   }
 
   async getTopicByNum ({ params, response }) {
-    let data = (await Topic.where({topic: params.id}).first()).toJSON()
+    console.log(params.id)
+    let data = (await Topic.where({topic: Number(params.id)}).first()).toJSON()
     response.send(data)
   }
   

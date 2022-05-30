@@ -57,7 +57,7 @@ class AudioController {
     response.send(data)
   }
   async audiosByTopic ({ response, params }) {
-    let data = (await Audio.query().where({ topic: params.id }).fetch()).toJSON()
+    let data = (await Audio.query().where({ topic: Number(params.id) }).fetch()).toJSON()
     let send = []
     if (data !== []) {
       for (const i in data) {
