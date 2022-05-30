@@ -30,7 +30,7 @@
               <q-icon name="edit" color="primary"/>
             </template>
           </q-input>
-          <q-select outlined v-model="form.topic" label="Escoga un tema" dense :options="topics" :error="$v.form.topic.$error" error-message="Este campo es requerido"  @blur="$v.form.topic.$touch()" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="topic" clearable></q-select>
+          <q-select outlined v-model="form.topic" label="Escoga un tema" dense :options="topics" :error="$v.form.topic.$error" error-message="Este campo es requerido"  @blur="$v.form.topic.$touch()" map-options emit-value option-value="topic" options-selected-class="text-primary" option-label="name" clearable></q-select>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" v-close-popup @click="decartarCamb()" no-caps/>
@@ -89,7 +89,7 @@ export default {
   },
   methods: {
     async getTopics () {
-      await this.$api.get('getTopics').then(res => {
+      await this.$api.get('getTopicsByCourse/' + this.courseId).then(res => {
         if (res) {
           this.topics = res
         }
