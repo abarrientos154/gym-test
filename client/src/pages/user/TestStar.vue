@@ -310,13 +310,19 @@ export default {
         if (bool) {
           clearInterval(vm.timeCounter2)
           clearInterval(vm.timeCounter)
-          if (vm.esByTema) {
-            vm.$api.put('test_by_tema/' + vm.idTest, { correctas: vm.goodCount }).then(res => {
+          if (vm.esGeneral) {
+            vm.$api.post('test_general/' + vm.courseId, { total_quest: vm.quesCount, correctas: vm.goodCount }).then(res => {
               if (res) {
                 vm.theEndDialog = true
               }
             })
-          } else if (!vm.esGeneral && pregunta.isActive) {
+          } else if (vm.esByTema) {
+            vm.$api.put('test_by_tema/' + vm.idTest, { total_quest: vm.quesCount, correctas: vm.goodCount }).then(res => {
+              if (res) {
+                vm.theEndDialog = true
+              }
+            })
+          } else if (pregunta.isActive) {
             vm.$api.put(vm.esTema ? 'topic_test/' + vm.idTest : vm.esExamen ? 'examen_test/' + vm.idTest : 'type_test/' + vm.idTest, pregunta).then(res => {
               if (res) {
                 vm.theEndDialog = true

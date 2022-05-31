@@ -31,9 +31,9 @@
                      {{index2 + 1}}) {{item2}}
                   </div>
                 </div>
-                <div class="col-5 text-center" v-else>{{type === 1 ? item.tema_name : type === 3 ? item.type_name : item.examen_name}}</div>
+                <div class="col-5 text-center" v-else>{{type === 1 ? item.tema_name : type === 3 ? 'Test general' : type === 4 ? item.type_name : item.examen_name}}</div>
                 <div class="col-3 text-center">{{item.fecha}}</div>
-                <div class="col-4 text-center">{{item.correctas}} / {{type === 1 || type === 3 ? item.total_quest : type === 2 ? item.cant_questions : item.all_quest}}</div>
+                <div class="col-4 text-center">{{item.correctas}} / {{type !== 5 ? item.total_quest : item.all_quest}}</div>
             </q-card>
           </div>
         </div>
@@ -58,14 +58,16 @@ export default {
       },
       rutinaTest: [],
       rutinaTestByTopic: [],
+      rutinaTestGeneral: [],
       rutinaExamen: [],
       rutinaGym: [],
       data: [],
       types: [
         { value: 1, label: 'Tests' },
         { value: 2, label: 'Tests por temas' },
-        { value: 3, label: 'Rutinas de Entrenamiento' },
-        { value: 4, label: 'Mis Exámenes' }
+        { value: 3, label: 'Tests general' },
+        { value: 4, label: 'Rutinas de Entrenamiento' },
+        { value: 5, label: 'Mis Exámenes' }
       ]
     }
   },
@@ -83,6 +85,11 @@ export default {
       await this.$api.get('mis_test_by_temas/' + this.courseId).then(v => {
         if (v) {
           this.rutinaTestByTopic = v
+        }
+      })
+      await this.$api.get('mis_test_general/' + this.courseId).then(v => {
+        if (v) {
+          this.rutinaTestGeneral = v
         }
       })
       await this.$api.get('mis_examenes/' + this.courseId).then(v => {
@@ -104,8 +111,10 @@ export default {
       } else if (val === 2) {
         this.data = this.rutinaTestByTopic
       } else if (val === 3) {
-        this.data = this.rutinaGym
+        this.data = this.rutinaTestGeneral
       } else if (val === 4) {
+        this.data = this.rutinaGym
+      } else if (val === 5) {
         this.data = this.rutinaExamen
       }
     }

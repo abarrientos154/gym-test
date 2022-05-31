@@ -2,8 +2,6 @@
 const Question = use("App/Models/Question")
 const Answer = use("App/Models/Answer")
 const Law = use("App/Models/Law")
-// const Asignatura = use("App/Models/Asignatura")
-// const Niveles = use("App/Models/Nivele")
 const Helpers = use('Helpers')
 const mkdirp = use('mkdirp')
 var ObjectId = require('mongodb').ObjectId;
@@ -102,26 +100,6 @@ class QuestionController {
     response.send(data)
   }
 
-  /* async getQuestionsbyTest ({ response, params }) {
-    const id = parseInt(params.id)
-    try {
-      const data = (await Question.query().where({ test_id: id }).fetch()).toJSON()
-      response.send(data)
-    } catch (e) {
-      console.error(e.name + ': ' + e.message)
-    }
-  }
- */
-
-  async getFullQuestions ({ response }) {
-    /*try {
-      let data = (await Asignatura.query().where({}).with('tests.questions').fetch()).toJSON()
-      response.send(data)
-    } catch (error) {
-      console.error(error.name + 'fullQuestions: ' + error.message);
-    }*/
-  }
-
   /**
    * Render a form to be used for creating a new question.
    * GET questions/create
@@ -148,23 +126,6 @@ class QuestionController {
     body.id = (await Question.query().where({}).count()) +1
     const save = await Question.create(body)
     response.send(save)
-  }
-
-  async multiplesQuestions ({ request, response }) {
-    /*try {
-      let { multiple, id, _id } = request.all()
-      let test = await Niveles.find(_id)
-      test.hasExamId = true
-      test.merge()
-      await test.save()
-      for (let i in multiple) {
-        multiple[i].exam_id = id
-        const update = await Question.where('_id', multiple[i]._id).update(multiple[i])
-      }
-      response.send(true)
-    } catch (error) {
-      console.error(error.name + ' multiplesQuestions: ' + error.message);
-    }*/
   }
 
   /**

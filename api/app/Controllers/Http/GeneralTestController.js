@@ -1,10 +1,12 @@
 'use strict'
+const General = use("App/Models/General")
 const GeneralTest = use("App/Models/GeneralTest")
 const Topic = use("App/Models/Topic")
 const Question = use("App/Models/Question")
 const Articulos = use("App/Models/Article")
 const Parrafos = use("App/Models/Paragraph")
 var ObjectId = require('mongodb').ObjectId
+const moment = require('moment')
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -28,7 +30,7 @@ class GeneralTestController {
   async getTestGeneral ({ request, response, params }) {
     try {
       const id = new ObjectId(params.idCourse)
-      let test = (await GeneralTest.findBy('course_id', id)).toJSON()
+      let test = (await General.findBy('course_id', id)).toJSON()
       if (test) {
         let questions = []
         // traemos las preguntas que tendra el test general
@@ -96,8 +98,30 @@ class GeneralTestController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async create ({ request, response, view }) {
+  async create ({ params, request, response, auth }) {
+    const user = (await auth.getUser()).toJSON()
+    let data = request.all()
+    data.user_id = user._id
+    data.course_id = new ObjectId(params.idCourse)
+    let test = await GeneralTest.create(data)
+    response.send(test)
   }
+
+  async misTestGeneral({ params, response, auth }) {
+    let courseId = new ObjectId(params.courseId)
+    const user = (await auth.getUser()).toJSON()
+    let allData = (await GeneralTest.query().where({user_id: user._id, course_id: courseId}).fetch()).toJSON()
+    let data = []
+    data = allData.reverse()
+    data = data.map(v => {
+      return {
+        ...v,
+        fecha: moment(v.created_at).format('DD/MM/YYYY')
+      }
+    })
+    response.send(data)
+  }
+
   async verifyQuestions ({ response, params }) {
     const id = new ObjectId(params.id)
     let data = await Question.where('course_id', id ).count()
@@ -112,7 +136,7 @@ class GeneralTestController {
   async topicsWithQuestions ({ response, params }) {
     const id = new ObjectId(params.id)
     let data = (await Topic.query().where({ course_id: id }).with('questions').fetch()).toJSON()
-    let config = (await GeneralTest.query().where({ course_id: id }).first())
+    let config = (await General.query().where({ course_id: id }).first())
     if (config) {
       for (let x = 0; x < data.length; x++) {
         const element = data[x]
@@ -160,11 +184,11 @@ class GeneralTestController {
     }
     guardar.config = data
     let general 
-    let config = (await GeneralTest.query().where({ course_id: guardar.course_id }).first())
+    let config = (await General.query().where({ course_id: guardar.course_id }).first())
     if (config) {
-      general = await GeneralTest.where({ course_id: guardar.course_id }).update(guardar)
+      general = await General.where({ course_id: guardar.course_id }).update(guardar)
     } else {
-      general = await GeneralTest.create(guardar)
+      general = await General.create(guardar)
     }
     response.send(general)
   }

@@ -354,12 +354,11 @@ class TopicController {
   }
 
   async misTestByTopic ({ params, response, auth }) {
-    let courseId = params.courseId
+    let courseId = new ObjectId(params.courseId)
     const user = (await auth.getUser()).toJSON()
-    let allData = (await ByTopicTest.query().where({user_id: user._id}).fetch()).toJSON()
+    let allData = (await ByTopicTest.query().where({user_id: user._id, course_id: courseId}).fetch()).toJSON()
     let data = []
     if (allData.length) {
-      allData = allData.filter(v => v.course_id === courseId)
       for (let i in allData) {
         let temasInfo = []
         for (let t in allData[i].temas) {
@@ -495,30 +494,6 @@ class TopicController {
     let course_id = new ObjectId(params.id)
     const data = await Topic.where({course_id: course_id}).delete()
     response.send(data)
-  }
-
-  async testByCourse ({ request, response, params }) {
-    /* let data = (await Nivele.query().where({ family_id: params.id }).fetch()).toJSON()
-    response.send(data) */
-  }
-
-  async testById ({ request, response, params }) {
-    try {
-      let test = (await Nivele.with('course').with('questions').find(params.id)).toJSON()
-      response.send(test)
-    } catch (error) {
-      console.error(error.name + '1: ' + error.message)
-    }
-  }
-
-  async testByCourseId ({ request, response, params }) {
-    try {
-      const id = new ObjectId(params.id)
-      const test = (await Nivele.query().where({ family_id: id }).fetch()).toJSON()
-      response.send(test)
-    } catch (error) {
-      console.error(error.name + '1: ' + error.message)
-    }
   }
 }
 

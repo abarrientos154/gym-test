@@ -10,10 +10,15 @@ const TypeTest = use("App/Models/TypeTest")
 const Place = use("App/Models/Place")
 const Email = use("App/Functions/Email")
 const Role = use("App/Models/Role")
+const GeneralTest = use("App/Models/GeneralTest")
+const TopicTest = use("App/Models/TopicTest")
+const Topic = use("App/Models/Topic")
+const ByTopicTest = use("App/Models/ByTopicTest")
 var randomize = require('randomatic');
 const Mail = use("App/Functions/Email")
 var ObjectId = require('mongodb').ObjectId;
 const moment = require('moment')
+const Course = use('App/Models/Course')
 // const { validate } = use("Validator")
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
@@ -43,8 +48,35 @@ class UserController {
   async statisticUsers({ request, response, auth }) {
     let users = (await User.query().where({roles: [2]}).fetch()).toJSON()
     for (let i = 0; i < users.length; i++) {
+      let tests = (await TopicTest.query().where({user_id: users[i]._id}).with('testInfo').fetch()).toJSON()
+      let testByTema = (await ByTopicTest.query().where({user_id: users[i]._id}).fetch()).toJSON()
+      let testGeneral = (await GeneralTest.query().where({user_id: users[i]._id}).fetch()).toJSON()
       let examenes = (await ExamenTest.query().where({user_id: users[i]._id}).with('examenInfo').fetch()).toJSON()
       let gym = (await TypeTest.query().where({user_id: users[i]._id}).with('typeInfo').fetch()).toJSON()
+
+      tests = tests.map(v => {
+        return {
+          ...v,
+          type_data: 'Test',
+          fecha: moment(v.created_at).format('DD/MM/YYYY')
+        }
+      })
+      for (let i in testByTema) {
+        let temasInfo = []
+        for (let t in testByTema[i].temas) {
+          let tema = (await Topic.findBy('id', testByTema[i].temas[t])).name
+          temasInfo.push(tema)
+        }
+        testByTema[i].temasInfo = temasInfo
+        testByTema[i].type_data = 'Test por tema'
+        testByTema[i].fecha = moment(testByTema[i].created_at).format('DD/MM/YYYY')
+      }
+      for (let i in testGeneral) {
+        testGeneral[i].type_data = 'Test general'
+        let idC = new ObjectId(testGeneral[i].course_id)
+        testGeneral[i].test_name = (await Course.query().find(idC)).name
+        testGeneral[i].fecha = moment(testGeneral[i].created_at).format('DD/MM/YYYY')
+      }
       examenes = examenes.map(v => {
         return {
           ...v,
@@ -59,7 +91,9 @@ class UserController {
           fecha: moment(v.created_at).format('DD/MM/YYYY')
         }
       })
-      let allData = examenes.concat(gym)
+
+      let allData = tests.concat(testByTema, testGeneral, examenes, gym)
+
       users[i].data = allData.sort((a, b) => {
         if (a.created_at > b.created_at) {
           return -1
