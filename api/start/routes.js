@@ -135,7 +135,6 @@ addPrefixToGroup(
     Route.post('excel_type', 'UploadController.excelType')
     Route.get('types', 'TypeController.index')
     Route.get('getTypesByCourse/:id', 'TypeController.indexByCourse')
-    Route.get('mis_rutinas/:courseId', 'TypeController.misRutinas')
     Route.post('type_test', 'TypeController.testCreate')
     Route.put('type_test/:id', 'TypeController.testUpdate')
     Route.get('type_by_id/:id/:course', 'TypeController.getTypeById')
@@ -169,7 +168,6 @@ addPrefixToGroup(
     
     Route.get('examen', 'ExamenController.index')
     Route.get('getExamByCourse/:id', 'ExamenController.indexByCourse')
-    Route.get('mis_examenes/:courseId', 'ExamenController.misExamenes')
     Route.get('ExamById/:id/:course', 'ExamenController.examById')
     Route.post('examen_test', 'ExamenController.testCreate')
     Route.put('examen_test/:id', 'ExamenController.testUpdate')
@@ -257,6 +255,13 @@ addPrefixToGroup(
     Route.get('verifyQuestions/:id', 'GeneralTestController.verifyQuestions')
     Route.post('setConfig', 'GeneralTestController.store')
     Route.get('test_general/:idCourse', 'GeneralTestController.getTestGeneral')
+
+    /* Estadisticas */
+    Route.get('mis_rutinas/:courseId', 'TypeController.misRutinas')
+    Route.get('mis_examenes/:courseId', 'ExamenController.misExamenes')
+    Route.get('mis_test/:courseId', 'TopicController.misTests')
+    Route.get('mis_test_by_temas/:courseId', 'TopicController.misTestByTopic')
+    Route.put('test_by_tema/:id', 'TopicController.testByTemaUpdate')
     
   }).middleware("auth")
   );

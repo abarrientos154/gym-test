@@ -36,39 +36,39 @@
         </q-card>
 
         <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/estadisticas')">
-          <div class="text-right text-h5 text-bold">Estadísticas</div>
+          <div class="text-center text-h5 text-bold">Estadísticas</div>
         </q-card>
 
         <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/news_user')">
-          <div class="text-right text-h5 text-bold">Noticias</div>
+          <div class="text-center text-h5 text-bold">Noticias</div>
         </q-card>
 
         <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/ver/Temas')">
-          <div class="text-right text-h5 text-bold">Tests</div>
+          <div class="text-center text-h5 text-bold">Tests</div>
         </q-card>
 
         <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/ver/Gym')">
-          <div class="text-right text-h5 text-bold">Gym</div>
+          <div class="text-center text-h5 text-bold">Gym</div>
         </q-card>
 
         <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/test_por/tema')">
-          <div class="text-right text-h5 text-bold">Test por tema</div>
+          <div class="text-center text-h5 text-bold">Test por tema</div>
         </q-card>
 
         <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/test/general')">
-          <div class="text-right text-h5 text-bold">Test general</div>
+          <div class="text-center text-h5 text-bold">Test general</div>
         </q-card>
 
         <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/ver/Examenes')">
-          <div class="text-right text-h5 text-bold">Examenes</div>
+          <div class="text-center text-h5 text-bold">Exámenes</div>
         </q-card>
 
         <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/audios')">
-          <div class="text-right text-h5 text-bold">Audios</div>
+          <div class="text-center text-h5 text-bold">Audios</div>
         </q-card>
 
         <q-card clickable v-ripple class="bg-grey-5 q-py-lg q-px-md q-mt-md" style="border-radius: 10px" @click="$router.push('/forums')">
-          <div class="text-right text-h5 text-bold">Foros</div>
+          <div class="text-center text-h5 text-bold">Foros</div>
         </q-card>
       </div>
   </div>

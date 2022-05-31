@@ -23,13 +23,21 @@
           </div>
         </q-scroll-area>
 
-        <div class="q-pt-md" v-for="(item, index) in data" :key="index">
-            <q-card class="bordes q-pa-sm row justify-between text-primary text-bold text-caption" style="width: 100%">
-                <div class="col-5 text-center ellipsis">{{type === 2 ? item.type_name : item.examen_name}}</div>
+        <div v-if="data.length">
+          <div class="q-pt-md" v-for="(item, index) in data" :key="index">
+            <q-card class="bordes q-pa-sm row justify-between items-center text-primary text-bold text-caption" style="width: 100%">
+                <div v-if="type === 2" class="col-5">
+                  <div v-for="(item2, index2) in item.temasInfo" :key="index2" class="ellipsis">
+                     {{index2 + 1}}) {{item2}}
+                  </div>
+                </div>
+                <div class="col-5 text-center" v-else>{{type === 1 ? item.tema_name : type === 3 ? item.type_name : item.examen_name}}</div>
                 <div class="col-3 text-center">{{item.fecha}}</div>
-                <div class="col-4 text-center">{{item.correctas}} / {{type === 2 ? item.total_quest : item.all_quest}}</div>
+                <div class="col-4 text-center">{{item.correctas}} / {{type === 1 || type === 3 ? item.total_quest : type === 2 ? item.cant_questions : item.all_quest}}</div>
             </q-card>
+          </div>
         </div>
+        <div v-else class="text-center text-italic text-primary q-py-lg">Sin tests presentados</div>
       </div>
   </div>
 </template>
@@ -40,7 +48,7 @@ export default {
   data () {
     return {
       courseId: '',
-      type: 2,
+      type: 1,
       thumbStyle: {
         right: '5px',
         borderRadius: '8px',
@@ -48,22 +56,35 @@ export default {
         width: '8px',
         opacity: 0
       },
+      rutinaTest: [],
+      rutinaTestByTopic: [],
       rutinaExamen: [],
       rutinaGym: [],
       data: [],
       types: [
-        // { value: 1, label: 'Tests' },
-        { value: 2, label: 'Rutinas de Entrenamiento' },
-        { value: 3, label: 'Mis Exámenes' }
+        { value: 1, label: 'Tests' },
+        { value: 2, label: 'Tests por temas' },
+        { value: 3, label: 'Rutinas de Entrenamiento' },
+        { value: 4, label: 'Mis Exámenes' }
       ]
     }
   },
-  mounted () {
+  created () {
     this.courseId = localStorage.getItem('course_id')
     this.getRutinas()
   },
   methods: {
     async getRutinas () {
+      await this.$api.get('mis_test/' + this.courseId).then(v => {
+        if (v) {
+          this.rutinaTest = v
+        }
+      })
+      await this.$api.get('mis_test_by_temas/' + this.courseId).then(v => {
+        if (v) {
+          this.rutinaTestByTopic = v
+        }
+      })
       await this.$api.get('mis_examenes/' + this.courseId).then(v => {
         if (v) {
           this.rutinaExamen = v
@@ -78,9 +99,13 @@ export default {
     },
     selecType (val) {
       this.type = val
-      if (val === 2) {
-        this.data = this.rutinaGym
+      if (val === 1) {
+        this.data = this.rutinaTest
+      } else if (val === 2) {
+        this.data = this.rutinaTestByTopic
       } else if (val === 3) {
+        this.data = this.rutinaGym
+      } else if (val === 4) {
         this.data = this.rutinaExamen
       }
     }

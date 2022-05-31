@@ -4,6 +4,9 @@
 const Model = use('Model')
 
 class TopicTest extends Model {
+    testInfo () {
+        return this.hasOne('App/Models/Topic', 'tema_id', 'id')
+    }
 }
 
 module.exports = TopicTest

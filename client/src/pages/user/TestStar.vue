@@ -30,7 +30,7 @@
                       </div>
                     </div>
                   </q-card>
-                  <div v-if="esGeneral || esTema" class="col-12 row no-wrap items-center q-pt-sm">
+                  <div class="col-12 row no-wrap items-center q-pt-sm">
                     <q-chip color="primary" text-color="white">
                       {{quesCount}} / {{preguntas.length}}
                     </q-chip>
@@ -103,6 +103,26 @@
             </q-card-actions>
           </q-card>
         </q-dialog>
+
+        <q-dialog v-model="theEndDialog" persistent>
+          <q-card class="q-pa-md bordes" style="width: 100%; border-radius: 15px">
+            <div class="text-bold text-h6 text-center q-pb-xl">Resultado</div>
+            <div>Preguntas realizadas: {{quesCount}}</div>
+            <div>
+              <q-chip color="green" text-color="white" icon="check_circle">
+                {{goodCount}}
+              </q-chip>
+            </div>
+            <div>
+              <q-chip color="red" text-color="white" icon="cancel">
+                {{badCount}}
+              </q-chip>
+            </div>
+            <q-card-actions class="q-pt-lg" align="right">
+              <q-btn rounded no-caps label="Terminar" color="primary" @click="$router.go(-1)" style="width: 50%"/>
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
   </div>
 </template>
 
@@ -116,6 +136,7 @@ export default {
       timeCounter2: null,
       listo: false,
       terminado: false,
+      theEndDialog: false,
       atras: false,
       loading: false,
       verLey: false,
@@ -289,14 +310,20 @@ export default {
         if (bool) {
           clearInterval(vm.timeCounter2)
           clearInterval(vm.timeCounter)
-          if (!vm.esGeneral && !vm.esByTema && pregunta.isActive) {
+          if (vm.esByTema) {
+            vm.$api.put('test_by_tema/' + vm.idTest, { correctas: vm.goodCount }).then(res => {
+              if (res) {
+                vm.theEndDialog = true
+              }
+            })
+          } else if (!vm.esGeneral && pregunta.isActive) {
             vm.$api.put(vm.esTema ? 'topic_test/' + vm.idTest : vm.esExamen ? 'examen_test/' + vm.idTest : 'type_test/' + vm.idTest, pregunta).then(res => {
               if (res) {
-                vm.$router.go(-1)
+                vm.theEndDialog = true
               }
             })
           } else {
-            vm.$router.go(-1)
+            vm.theEndDialog = true
           }
         } else {
           clearInterval(vm.timeCounter2)

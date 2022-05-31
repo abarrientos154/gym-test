@@ -324,6 +324,61 @@ class TopicController {
     }
   }
 
+  async testByTemaUpdate ({ params, request, response }) {
+    try {
+      var correctas = request.all()
+      let testBy = await ByTopicTest.query().where({_id: params.id}).update(correctas)
+
+      response.send(testBy)
+    } catch (error) {
+      console.error('metodo testByTemaUpdate:' + error.name + ':' + error.message);
+    }
+  }
+
+  async misTests ({ params, response, auth }) {
+    let courseId = params.courseId
+    const user = (await auth.getUser()).toJSON()
+    let allData = (await TopicTest.query().where({user_id: user._id}).with('testInfo').fetch()).toJSON()
+    let data = []
+    if (allData.length) {
+      allData = allData.filter(v => v.testInfo.course_id === courseId)
+      data = allData.reverse()
+      data = data.map(v => {
+        return {
+          ...v,
+          fecha: moment(v.created_at).format('DD/MM/YYYY')
+        }
+      })
+    }
+    response.send(data)
+  }
+
+  async misTestByTopic ({ params, response, auth }) {
+    let courseId = params.courseId
+    const user = (await auth.getUser()).toJSON()
+    let allData = (await ByTopicTest.query().where({user_id: user._id}).fetch()).toJSON()
+    let data = []
+    if (allData.length) {
+      allData = allData.filter(v => v.course_id === courseId)
+      for (let i in allData) {
+        let temasInfo = []
+        for (let t in allData[i].temas) {
+          let tema = (await Topic.findBy('id', allData[i].temas[t])).name
+          temasInfo.push(tema)
+        }
+        allData[i].temasInfo = temasInfo
+      }
+      data = allData.reverse()
+      data = data.map(v => {
+        return {
+          ...v,
+          fecha: moment(v.created_at).format('DD/MM/YYYY')
+        }
+      })
+    }
+    response.send(data)
+  }
+
   /**
    * Create/save a new test.
    * POST tests
