@@ -36,7 +36,7 @@ class ForumController {
   async QuestionsForum ({ response, params }) {
     const id = (params.id)
     let data = (await Question.query().where({ forum_id: id }).with('user').fetch()).toJSON()
-    data = data.sort((a, b) => a.created_at < b.created_at)
+    data = data.sort((a, b) => a.created_at < b.created_at).filter(v => v.active != false)
     data = data.map(v => {
       return {
         ...v,
@@ -45,11 +45,21 @@ class ForumController {
     })
     response.send(data)
   }
+   async deleteQuestionForum ({ response, params }) {
+    const id = (params.id)
+    let data = await Question.query().where({ _id: id }).update({ active: false })
+    response.send(data)
+  }
+  async deleteResponseQuestion ({ response, params }) {
+    const id = (params.id)
+    let data = await Respon.query().where({ _id: id }).update({ active: false })
+    response.send(data)
+  }
   async questionAndResponses ({ response, params }) {
     const id = (params.id)
     let data = (await Question.query().where({ _id: id }).with(['user', 'forum']).with('responses.user').first()).toJSON()
     data.date = moment(data.created_at).format('DD/MM/YYYY')
-    data.responses = data.responses.map(v => {
+    data.responses = data.responses.filter(v => v.active != false).map(v => {
       return {
         ...v,
         date: moment(v.created_at).format('DD/MM/YYYY')
