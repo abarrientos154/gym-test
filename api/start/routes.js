@@ -262,6 +262,8 @@ addPrefixToGroup(
     Route.get('mis_test/:courseId', 'TopicController.misTests')
     Route.get('mis_test_by_temas/:courseId', 'TopicController.misTestByTopic')
     Route.put('test_by_tema/:id', 'TopicController.testByTemaUpdate')
+    Route.put('deleteQuestionForum/:id', 'ForumController.deleteQuestionForum')
+    Route.put('deleteResponseQuestion/:id', 'ForumController.deleteResponseQuestion')
     
   }).middleware("auth")
   );

@@ -16,6 +16,7 @@
           <div class="bg-primary text-white text-h6 q-pa-sm row justify-between items-center">
             <div>{{item.title}}</div>
             <div class="row">
+              <q-btn color="white" flat round dense icon="visibility" @click="active = item._id; view = true"/>
               <q-btn color="white" flat round dense icon="edit" @click="setEditForum(item)"/>
               <q-btn color="white" flat round dense icon="delete" @click="deleteForum(item._id)"/>
             </div>
@@ -24,7 +25,20 @@
         </q-card>
       </div>
     </div>
-
+    <q-dialog persistent v-model="view" @hide="active = null">
+      <q-card style="width: 100%">
+        <!-- <q-card-section>
+          <div class="text-h6 text-center text-primary text-italic">{{edit ? 'Editar Foro' : 'Crear Foro'}}</div>
+        </q-card-section> -->
+        <q-card-section class="q-pt-none">
+          <Forum :id="active"></Forum>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat label="Cerrar" color="primary" v-close-popup @click="active = null" no-caps/>
+          <!-- <q-btn :label="edit ? 'Actualizar' :  'Crear'" color="primary" @click="edit ? updateForum() : setForum()" no-caps/> -->
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
     <q-dialog v-model="show" @hide="decartarCamb()">
       <q-card style="width: 100%">
         <q-card-section>
@@ -64,7 +78,9 @@
 
 <script>
 import { required } from 'vuelidate/lib/validators'
+import Forum from '../admin/forum/Forum.vue'
 export default {
+  components: { Forum },
   data () {
     return {
       edit: false,
@@ -73,7 +89,9 @@ export default {
       show: false,
       textEdit: '',
       courseId: '',
-      isWrittren: null
+      isWrittren: null,
+      view: false,
+      active: null
     }
   },
   validations: {
