@@ -268,6 +268,8 @@ addPrefixToGroup(
     Route.get('mis_test_general/:courseId', 'GeneralTestController.misTestGeneral')
 
     Route.get("estadistic_users", "UserController.statisticUsers")
+
+    Route.delete('deleteAllCourse/:id', 'CourseController.deleteAllCourse')
     
   }).middleware("auth")
   );

@@ -2,6 +2,20 @@
 const Course = use('App/Models/Course')
 const ObjectId = require('mongodb').ObjectId
 const Category = use("App/Models/Category")
+const Answer = use("App/Models/Answer")
+const Audio = use('App/Models/Audio')
+const Examen = use("App/Models/Examen")
+const Forum = use('App/Models/Forum')
+const GeneralTest = use("App/Models/GeneralTest")
+const Question = use("App/Models/Question")
+const Law = use("App/Models/Law")
+const SubTopic = use("App/Models/SubTopic")
+const Articulos = use("App/Models/Article")
+const Parrafos = use("App/Models/Paragraph")
+const Topic = use("App/Models/Topic")
+const Type = use("App/Models/Type")
+const News = use('App/Models/News')
+
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -100,7 +114,23 @@ class CourseController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async edit ({ params, request, response, view }) {
+  async deleteAllCourse ({ params, request, response, view }) {
+    var id = new ObjectId(params.id)
+    const answers = await Answer.where('course_id', id).delete()
+    const audios = await Audio.where('course_id', id).delete()
+    const examenes = await Examen.where('course_id', id).delete()
+    const foros = await Forum.where('course_id', id).delete()
+    const generalTest = await GeneralTest.where('course_id', id).delete()
+    const questions = await Question.where('course_id', id).delete()
+    const sub_topics = await SubTopic.where('course_id', id).delete()
+    const topics = await Topic.where('course_id', id).delete()
+    const types = await Type.where('course_id', id).delete()
+    const laws = await Law.where('course_id', id).delete()
+    const parrafos = await Parrafos.where('course_id', id).delete()
+    const articulos = await Articulos.where('course_id', id).delete()
+    const noticias = await News.where('course_id', id).delete()
+    const curso = await Course.where('_id', id).delete()
+    response.send(true)
   }
 
   /**
