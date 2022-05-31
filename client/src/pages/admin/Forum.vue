@@ -1,7 +1,6 @@
 <template>
   <div>
     <div style="background: linear-gradient(to right, #002938, #004e6d); height: 200px; width: 100%;"></div>
-    <!-- <q-img src="noimg.png" style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; height: 265px; width: 100%;"/> -->
     <div class="column q-pa-lg no-wrap" style="margin-top: -200px">
       <div class="text-h4 text-white text-bold q-mb-xl q-px-xl">Foro</div>
       <div>
@@ -25,20 +24,16 @@
         </q-card>
       </div>
     </div>
+
     <q-dialog persistent v-model="view" @hide="active = null">
-      <q-card style="width: 100%">
-        <!-- <q-card-section>
-          <div class="text-h6 text-center text-primary text-italic">{{edit ? 'Editar Foro' : 'Crear Foro'}}</div>
-        </q-card-section> -->
-        <q-card-section class="q-pt-none">
-          <Forum :id="active"></Forum>
-        </q-card-section>
+      <q-card class="q-pa-none" style="width: 100%; border-radius: 15px">
+        <Forum :id="active"></Forum>
         <q-card-actions align="right">
-          <q-btn flat label="Cerrar" color="primary" v-close-popup @click="active = null" no-caps/>
-          <!-- <q-btn :label="edit ? 'Actualizar' :  'Crear'" color="primary" @click="edit ? updateForum() : setForum()" no-caps/> -->
+          <q-btn flat label="Cerrar foro" color="primary" v-close-popup @click="active = null"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
+
     <q-dialog v-model="show" @hide="decartarCamb()">
       <q-card style="width: 100%">
         <q-card-section>

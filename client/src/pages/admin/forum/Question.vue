@@ -37,11 +37,13 @@
           </div>
           <div class="q-pa-sm">
             <div class="absolute-right q-pa-sm">
-              <q-btn color="negative" flat dense icon="visibility" label="Eliminar" @click="deleteResponse(item._id)"/>
               <div class="text-primary text-subtitle2 text-right">Fecha de publicación</div>
               <div class="text-grey-8 text-right">{{item.date}}</div>
             </div>
-            <div class="q-mt-xl text-italic"> {{item.response}}</div>
+            <div class="q-my-xl text-italic"> {{item.response}}</div>
+            <div class="row absolute-bottom-right q-pa-sm">
+                <q-btn color="negative" flat dense no-caps label="Eliminar" icon="delete" @click="deleteResponse(item._id)"/>
+            </div>
           </div>
         </q-card>
       </div>

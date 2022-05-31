@@ -1,6 +1,5 @@
 <template>
   <div>
-   <!--  <q-btn class="absolute-top-left" round flat color="white" icon="arrow_back" @click="$router.go(-1)" style="z-index: 5" /> -->
     <q-img src="fondo.png" style="height: 180px; width: 100%;">
         <div class="bg-transparent q-mt-lg" style="width:100%">
           <q-img src="gymtest 1.png" style="width: 150px"/>
@@ -14,8 +13,7 @@
         <q-btn color="primary" no-caps size="lg" @click="question = true" label="Realizar Pregunta" style="width:100%; border-radius:10px" />
       </div> -->
       <div v-if="questions.length" class="q-py-md">
-        <q-card v-for="(item, index) in questions" :key="index" class="row no-wrap bordes q-mb-md" style="width: 100%; border-radius: 10px"
-         >
+        <q-card v-for="(item, index) in questions" :key="index" class="row no-wrap bordes q-mb-md" style="width: 100%; border-radius: 10px">
           <div class="bg-primary q-pa-md column justify-center" style="border-bottom-left-radius:10px; border-top-right-radius:0">
             <q-avatar size="70px">
               <q-img :src="item.user.perfile ? baseuPerfil + item.user._id : 'avatar gris 1.png'" style="height: 100%;"/>
@@ -24,16 +22,14 @@
           </div>
           <div class="q-pa-sm">
             <div class="absolute-right q-pa-sm">
-               <q-btn color="negative" flat dense icon="visibility" label="Eliminar" @click="deleteQuestion(item._id)"/>
-                <q-btn color="primary" flat dense icon="visibility" label="Ver Pregunta" @click="active = item._id;view = true"/>
               <div class="text-primary text-subtitle2 text-right">Fecha de publicación</div>
               <div class="text-grey-8 text-right">{{item.date}}</div>
             </div>
-            <div class="q-mt-xl text-italic"> {{item.question}}</div>
-                <!-- <div class="row">
-                <q-btn color="white" flat round dense icon="edit" @click="setEditForum(item)"/>
-                <q-btn color="white" flat round dense icon="delete" @click="deleteForum(item._id)"/>
-                </div> -->
+            <div class="q-my-xl text-italic"> {{item.question}}</div>
+            <div class="row absolute-bottom-right q-pa-sm">
+                <q-btn color="primary" flat dense no-caps label="Ver pregunta" icon="visibility" @click="active = item._id;view = true"/>
+                <q-btn color="negative" flat dense no-caps label="Eliminar" icon="delete" @click="deleteQuestion(item._id)"/>
+            </div>
           </div>
         </q-card>
       </div>
@@ -54,17 +50,12 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+
     <q-dialog persistent v-model="view" @hide="active = null">
-      <q-card style="width: 100%">
-        <!-- <q-card-section>
-          <div class="text-h6 text-center text-primary text-italic">{{edit ? 'Editar Foro' : 'Crear Foro'}}</div>
-        </q-card-section> -->
-        <q-card-section class="q-pt-none">
-          <Question :id="active"></Question>
-        </q-card-section>
+      <q-card class="q-pa-none" style="width: 100%; border-radius: 15px">
+        <Question :id="active"></Question>
         <q-card-actions align="right">
-          <q-btn flat label="Cerrar" color="primary" v-close-popup @click="active = null" no-caps/>
-          <!-- <q-btn :label="edit ? 'Actualizar' :  'Crear'" color="primary" @click="edit ? updateForum() : setForum()" no-caps/> -->
+          <q-btn flat label="Cerrar" color="primary" v-close-popup @click="active = null"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
