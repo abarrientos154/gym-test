@@ -38,6 +38,7 @@
                 <div class="row items-center justify-between bg-primary q-pa-xs">
                   <div class="row items-start">
                     <q-btn class="q-ml-xs" icon="edit" flat round color="white" @click="setUpdate(item2)"/>
+                    <q-btn class="q-ml-xs" icon="delete" flat round color="negative" @click="deleteAll(item2)"/>
                     <div class="text-white">
                       <div class="text-h6 text-bold">{{item2.name}}</div>
                       <div v-if="!item2.free" class="row q-gutter-x-md">
@@ -183,6 +184,26 @@ export default {
           this.courses = res
           this.getCategories()
         }
+      })
+    },
+    deleteAll (item) {
+      this.$q.dialog({
+        title: 'Confirmar',
+        message: '¿Seguro deseas eliminar este Curso? Esta es una acción que no puede deshacerse, proceda con cuidado',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$api.delete('deleteAllCourse/' + item._id).then(res => {
+          if (res) {
+            this.$q.notify({
+              color: 'positive',
+              message: 'Eliminado Correctamente'
+            })
+            this.getData()
+          }
+        })
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
       })
     },
     getCategories () {

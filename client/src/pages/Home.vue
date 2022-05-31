@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import env from '../env'
 export default {
   name: 'MainLayout',
@@ -87,9 +88,11 @@ export default {
   mounted () {
     this.baseuNews = env.apiUrl + 'news_img/'
     this.getNews()
+    this.logout()
     this.getForum()
   },
   methods: {
+    ...mapMutations('generals', ['logout']),
     getNews () {
       this.$api.get('news').then(res => {
         if (res) {
