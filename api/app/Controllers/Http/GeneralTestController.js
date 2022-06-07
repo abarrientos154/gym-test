@@ -76,6 +76,8 @@ class GeneralTestController {
           })
         }
 
+        questions = questions.sort(() => Math.random() - 0.5)
+
         if (questions.length < 100) {
           response.send(false)
         } else {

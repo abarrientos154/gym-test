@@ -297,7 +297,7 @@ export default {
         }
         if (pregunta.selected) {
           vm.goodCount += 1
-        } else {
+        } else if (pregunta.isActive) {
           vm.badCount += 1
         }
         clearInterval(vm.timeCounter1)
