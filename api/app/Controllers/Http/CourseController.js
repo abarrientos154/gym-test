@@ -47,17 +47,34 @@ class CourseController {
 
   async indexClient ({ response }) {
     let allData = (await Category.query().where({}).with('courses').fetch()).toJSON()
-    const data = []
+    let data = []
     for (let i = 0; i < allData.length; i++) {
-      let filterCour = allData[i].courses.filter(v => v.isEnabled)
+      let filterCour = allData[i].courses.filter(v => v.isEnabled).sort(function (a, b) {
+        if (a.order < b.order) {
+          return -1
+        }
+        if (a.order > b.order) {
+          return 1
+        }
+        return 0
+      })
       if (filterCour.length) {
         let catFilter = {
           ...allData[i],
-          courses: allData[i].courses.filter(v => v.isEnabled)
+          courses: filterCour
         }
         data.push(catFilter)
       }
     }
+    data = data.sort(function (a, b) {
+      if (a.order < b.order) {
+        return -1
+      }
+      if (a.order > b.order) {
+        return 1
+      }
+      return 0
+    })
     response.send(data)
   }
 
@@ -83,9 +100,20 @@ class CourseController {
    */
   async store ({ request, response }) {
     const body = request.all()
+
+    let courses = (await Course.query().where({category_id: body.category_id}).fetch()).toJSON()
+    let mayor = 0
+    for (let i in courses) {
+			if (courses[i].order && courses[i].order > mayor) {
+				mayor = courses[i].order
+			}
+		}
+    body.order = mayor + 1
+
     const course = await Course.create(body)
     response.send(course)
   }
+
   async update ({ params, request, response }) {
     let body = request.only(Course.fillable)
     const id = new ObjectId(params.id)

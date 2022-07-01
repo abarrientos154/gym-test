@@ -213,6 +213,8 @@ addPrefixToGroup(
     /* Categorías */
     Route.resource("category", "CategoryController").apiOnly()
     Route.get('cat_by_courses', 'CategoryController.catByCourses')
+    Route.put('order_category', 'CategoryController.orderCategory')
+    Route.put('order_course', 'CategoryController.orderCourse')
 
     /* Noticias */
     Route.get('newsByCourse/:id', 'NewsController.indexByCourse')

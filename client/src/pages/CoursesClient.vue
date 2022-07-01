@@ -9,7 +9,28 @@
           <q-btn v-else flat dense icon="arrow_back" color="white" class="absolute-top-left q-mx-sm" @click="$router.go(-1)" />
 
           <div v-for="(item, index) in courses" :key="index" class="q-pt-md">
-            <div class="text-h5 text-center text-white text-weight-medium q-my-xs">{{item.name}}</div>
+            <q-expansion-item
+              class="bg-transparent overflow-hidden"
+              header-class="bg-white"
+              style="border-radius:15px"
+            >
+              <template v-slot:header>
+                <div class="text-primary text-h6 full-width text-center q-ma-md">{{item.name}}</div>
+              </template>
+              <q-card class="bg-transparent">
+                <q-card class="q-pa-md q-mt-sm" style="border-radius: 10px" clickable v-ripple @click="login ? verifyLicense(item2) : seeDetails(item2)"
+                  v-for="(item2, index2) in item.courses" :key="index2">
+                  <div class="text-primary text-subtitle1 text-bold">{{item2.name}}</div>
+                  <div class="q-pt-sm q-mb-lg">
+                    <div v-html="item2.description" class="ellipsis-3-lines"></div>
+                  </div>
+                  <div v-if="item2.free" class="row justify-end absolute-bottom q-pa-xs">
+                    <q-chip color="green" text-color="white" dense class="q-px-md">Curso gratuito</q-chip>
+                  </div>
+                </q-card>
+              </q-card>
+            </q-expansion-item>
+            <!-- <div class="text-h5 text-center text-white text-weight-medium q-my-xs">{{item.name}}</div>
             <q-card class="q-pa-md q-mt-sm" style="border-radius: 10px" clickable v-ripple @click="login ? verifyLicense(item2) : seeDetails(item2)"
               v-for="(item2, index2) in item.courses" :key="index2">
               <div class="text-primary text-subtitle1 text-bold">{{item2.name}}</div>
@@ -19,7 +40,7 @@
               <div v-if="item2.free" class="row justify-end absolute-bottom q-pa-xs">
                 <q-chip color="green" text-color="white" dense class="q-px-md">Curso gratuito</q-chip>
               </div>
-            </q-card>
+            </q-card> -->
           </div>
 
           <q-dialog v-model="details" persistent maximized>

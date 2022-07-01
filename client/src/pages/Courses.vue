@@ -32,6 +32,10 @@
             <div class="row items-center justify-center">
               <q-btn icon="edit" size="lg" flat round color="primary" @click="catUpdate(item)"/>
               <div class="text-h3 text-primary text-weight-medium">{{item.name}}</div>
+              <div class="row">
+                <q-btn icon="north" color="primary" size="lg" flat round @click="index > 0 ? orderCat(true, item, index) : ''" />
+                <q-btn icon="south" color="primary" size="lg" flat round @click="index < courses.length - 1 ? orderCat(false, item, index) : ''" />
+              </div>
             </div>
             <div v-if="item.courses && item.courses.length">
               <q-card class="q-mt-sm" style="border-radius: 10px" v-for="(item2, index2) in item.courses" :key="index2">
@@ -51,7 +55,11 @@
                       </div>
                     </div>
                   </div>
-                  <q-btn class="q-ml-xs" icon="arrow_forward" flat round color="white" @click="selectCourse(item2._id)"/>
+                  <div class="row">
+                    <q-btn icon="north" color="white" flat round @click="index2 > 0 ? orderCourse(true, item2, index, index2) : ''" />
+                    <q-btn class="q-mx-xs" icon="south" color="white" flat round @click="index2 < item.courses.length - 1 ? orderCourse(false, item2, index, index2) : ''" />
+                    <q-btn icon="login" flat round color="white" @click="selectCourse(item2._id)"/>
+                  </div>
                 </div>
                 <div class="q-pa-md">
                   <div v-html="item2.description" class="ellipsis-3-lines"></div>
@@ -179,10 +187,55 @@ export default {
   methods: {
     ...mapMutations('generals', ['logout']),
     getData () {
+      this.$q.loading.show({})
       this.$api.get('cat_by_courses').then(res => {
         if (res) {
           this.courses = res
           this.getCategories()
+          this.$q.loading.hide()
+        } else {
+          this.$q.loading.hide()
+        }
+      })
+    },
+    getCategories () {
+      this.$api.get('category').then(res => {
+        if (res) {
+          this.categories = res
+        }
+      })
+    },
+    orderCat (bool, data1, index) {
+      this.$q.loading.show({})
+      const record = {
+        id1: data1._id,
+        id2: bool ? this.courses[index - 1]._id : this.courses[index + 1]._id,
+        order1: bool ? this.courses[index - 1].order : this.courses[index + 1].order,
+        order2: data1.order
+      }
+      this.$api.put('order_category', record).then(res => {
+        if (res) {
+          this.getData()
+          this.$q.loading.hide()
+        } else {
+          this.$q.loading.hide()
+        }
+      })
+    },
+    orderCourse (bool, data1, indexCat, index) {
+      this.$q.loading.show({})
+      const record = {
+        id1: data1._id,
+        id2: bool ? this.courses[indexCat].courses[index - 1]._id : this.courses[indexCat].courses[index + 1]._id,
+        order1: bool ? this.courses[indexCat].courses[index - 1].order : this.courses[indexCat].courses[index + 1].order,
+        order2: data1.order
+      }
+      this.$api.put('order_course', record).then(res => {
+        if (res) {
+          this.getData()
+          this.$q.loading.hide()
+        } else {
+          this.$q.loading.hide()
         }
       })
     },
@@ -204,13 +257,6 @@ export default {
         })
       }).onCancel(() => {
         // console.log('>>>> Cancel')
-      })
-    },
-    getCategories () {
-      this.$api.get('category').then(res => {
-        if (res) {
-          this.categories = res
-        }
       })
     },
     setCourse () {
