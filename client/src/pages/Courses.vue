@@ -31,7 +31,7 @@
           <div v-for="(item, index) in courses" :key="index" class="q-pb-lg">
             <div class="row items-center justify-center">
               <q-btn icon="edit" size="lg" flat round color="primary" @click="catUpdate(item)"/>
-              <div class="text-h3 text-primary text-weight-medium">{{item.name}}</div>
+              <div class="text-h3 text-primary text-center text-weight-medium">{{item.name}}</div>
               <div class="row">
                 <q-btn icon="north" color="primary" size="lg" flat round @click="index > 0 ? orderCat(true, item, index) : ''" />
                 <q-btn icon="south" color="primary" size="lg" flat round @click="index < courses.length - 1 ? orderCat(false, item, index) : ''" />
