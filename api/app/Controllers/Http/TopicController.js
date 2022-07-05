@@ -341,7 +341,7 @@ class TopicController {
     let allData = (await TopicTest.query().where({user_id: user._id}).with('testInfo').fetch()).toJSON()
     let data = []
     if (allData.length) {
-      allData = allData.filter(v => v.testInfo.course_id === courseId)
+      allData = allData.filter(v => v.testInfo ? v.testInfo.course_id : '' === courseId)
       data = allData.reverse()
       data = data.map(v => {
         return {
@@ -363,6 +363,7 @@ class TopicController {
         let temasInfo = []
         for (let t in allData[i].temas) {
           let tema = (await Topic.findBy('id', allData[i].temas[t])).name
+          tema = tema.name ? tema.name : ''
           temasInfo.push(tema)
         }
         allData[i].temasInfo = temasInfo
