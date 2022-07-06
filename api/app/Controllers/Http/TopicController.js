@@ -362,7 +362,7 @@ class TopicController {
       for (let i in allData) {
         let temasInfo = []
         for (let t in allData[i].temas) {
-          let tema = (await Topic.findBy('id', allData[i].temas[t])).name
+          let tema = (await Topic.findBy('id', allData[i].temas[t]))
           tema = tema.name ? tema.name : ''
           temasInfo.push(tema)
         }
