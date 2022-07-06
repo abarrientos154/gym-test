@@ -358,12 +358,15 @@ class TopicController {
     const user = (await auth.getUser()).toJSON()
     let allData = (await ByTopicTest.query().where({user_id: user._id, course_id: courseId}).fetch()).toJSON()
     let data = []
+    console.log(allData)
     if (allData.length) {
       for (let i in allData) {
         let temasInfo = []
         for (let t in allData[i].temas) {
           let tema = (await Topic.findBy('id', allData[i].temas[t]))
-          tema = tema.name ? tema.name : ''
+          if (tema) {
+            tema = tema.name
+          }
           temasInfo.push(tema)
         }
         allData[i].temasInfo = temasInfo
