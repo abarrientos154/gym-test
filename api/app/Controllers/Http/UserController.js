@@ -64,8 +64,10 @@ class UserController {
       for (let i in testByTema) {
         let temasInfo = []
         for (let t in testByTema[i].temas) {
-          let tema = (await Topic.findBy('id', testByTema[i].temas[t])).name
-          temasInfo.push(tema)
+          let tema = (await Topic.findBy('id', testByTema[i].temas[t]))
+          if (tema) {
+            temasInfo.push(tema.name)
+          }
         }
         testByTema[i].temasInfo = temasInfo
         testByTema[i].type_data = 'Test por tema'
